@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import loginRoutes from "../routes/login.mjs";
+import loginRoutes from "./routes/login.mjs";
 
 const PORT = process.env.PORT || 5050;
 const app = express();
