@@ -1,11 +1,15 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
-import db from '../db/conn.mjs'; 
+import jwt from 'jsonwebtoken';
+import db from '../db/conn.mjs'; // Adjust the path if needed
 
 const router = express.Router();
 
+// Secret key for JWT signing and encryption
+const JWT_SECRET = process.env.JWT_SECRET || "SECRET_KEY"; 
+
 // Login Route
-router.post("/", async (req, res) => {
+router.post("/login", async (req, res) => {
     const { email, password } = req.body; // Get email and password from request body
     
     // Check if email and password were provided
@@ -15,7 +19,7 @@ router.post("/", async (req, res) => {
 
     try {
         // Find the student by email in the database
-        const student = await db.collection("students").findOne({ email });
+        const student = await db.collection("users").findOne({ email });
 
         // If no student is found with the given email
         if (!student) {
@@ -30,13 +34,21 @@ router.post("/", async (req, res) => {
             return res.status(401).json({ message: "Invalid email or password." });
         }
 
-        // If login is successful, send a success response
+        // If login is successful, create a JWT token
+        const token = jwt.sign(
+            { id: student._id, email: student.email },
+            JWT_SECRET,
+            { expiresIn: '1h' } // Token expires in 1 hour
+        );
+
+        // Send the token and user details back in the response
         res.status(200).json({
             message: "Login successful",
+            token, // Send the token
             student: {
                 email: student.email,
-                name: student.name
-            }
+                name: student.name,
+            },
         });
 
     } catch (error) {
