@@ -14,7 +14,7 @@ router.post("/login", async (req, res) => {
     
     // Check if email and password were provided
     if (!email || !password) {
-        return res.status(400).json({ message: "Email and password are required." });
+        return res.status(400).json({ message: "Email and password are required!" });
     }
 
     try {
