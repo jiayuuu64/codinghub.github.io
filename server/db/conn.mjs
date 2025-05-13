@@ -18,5 +18,5 @@ const db = conn.db("codehub");
 client.on('serverOpening', () => console.log('MongoDB server connection opened'));
 client.on('serverClosed', () => console.log('MongoDB server connection closed'));
 client.on('serverDescriptionChanged', (event) => console.log('MongoDB server description changed:', event));
- 
+
 export default db;
