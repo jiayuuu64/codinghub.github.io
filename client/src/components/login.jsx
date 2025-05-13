@@ -1,84 +1,84 @@
 import React, { useState } from 'react';
-import './Login.css'; // Add custom styles
- 
+import './Login.css';
+
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
- 
-    // Handle email change
+
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
     };
- 
-    // Handle password change
+
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
     };
- 
-    // Handle form submit
+
     const handleSubmit = async (e) => {
         e.preventDefault();
- 
+
         if (!email || !password) {
             setError('Email and password are required!');
             return;
         }
- 
+
         try {
-            const response = await fetch('http://localhost:5050/login', {
+            const response = await fetch('http://localhost:5050/api/users/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email, password }),
             });
- 
+
             const data = await response.json();
- 
-            // If the login was successful
+
             if (response.ok) {
+                // ✅ Login successful
                 console.log('Login successful:', data);
-                // Handle the response, e.g., storing JWT token or redirecting
+                localStorage.setItem('token', data.token); // Store JWT
+                localStorage.setItem('email', data.email); // Optional
+                setError('');
+                // window.location.href = '/dashboard'; // Redirect after login
             } else {
-                setError(data.message || 'Login failed');
+                setError(data.message || 'Login failed. Please check your credentials.');
             }
         } catch (err) {
-            setError('An error occurred. Please try again.');
-            console.error(err);
+            console.error('Login error:', err);
+            setError('An error occurred. Please try again later.');
         }
     };
- 
+
     return (
-<div className="login-container">
-<div className="login-form">
-<h1>Coding Hub</h1>
-<form onSubmit={handleSubmit}>
-<div className="form-group">
-<input
+        <div className="login-container">
+            <div className="login-form">
+                <h1>Coding Hub</h1>
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <input
                             type="email"
                             placeholder="Your e-mail"
                             value={email}
                             onChange={handleEmailChange}
                             required
                         />
-</div>
-<div className="form-group">
-<input
+                    </div>
+                    <div className="form-group">
+                        <input
                             type="password"
                             placeholder="Your password"
                             value={password}
                             onChange={handlePasswordChange}
                             required
                         />
-</div>
+                    </div>
                     {error && <p className="error">{error}</p>}
-<button type="submit">Login</button>
-</form>
-<p>Don't have an account? <a href="/signup">Sign up</a></p>
-</div>
-</div>
+                    <button type="submit">Login</button>
+                </form>
+                <p>Don't have an account? <a href="/signup">Sign up</a></p>
+            </div>
+        </div>
     );
 };
- 
+
 export default Login;
