@@ -1,0 +1,82 @@
+.preference-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    gap: 25px;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+}
+
+.progress-bar {
+    width: 80%;
+    height: 10px;
+    background-color: #e0e0e0;
+    border-radius: 20px;
+    margin: 20px 0;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background-color: #007bff;
+    border-radius: 20px;
+    transition: width 0.4s ease;
+}
+
+h2 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.preference-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.preference-item {
+    background-color: #fff;
+    color: #333;
+    border: 2px solid #007bff;
+    border-radius: 12px;
+    padding: 20px 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    min-width: 200px;
+    max-width: 250px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.preference-item:hover {
+    background-color: #f0f8ff;
+}
+
+.preference-item.selected {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.save-button {
+    padding: 14px 20px;
+    font-size: 1.2rem;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.save-button:hover {
+    background-color: #005bb5;
+}
+
+.message {
+    margin-top: 10px;
+    color: #ff4d4d;
+}
