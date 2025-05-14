@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../utils/auth';
+import logo from '../assets/images/coding.png';
 import '../styles/Navbar.css';
 
 const Navbar = () => {
@@ -14,7 +15,7 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <div className="navbar-left">
-                <span className="logo">💻</span>
+                <img src={logo} alt="Coding Hub Logo" className="logo-img" />
                 <span className="brand">Coding Hub</span>
             </div>
 
