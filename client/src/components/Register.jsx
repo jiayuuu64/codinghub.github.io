@@ -25,8 +25,6 @@ const Register = () => {
             if (response.ok) {
                 setSuccess('Registration successful! Redirecting to login...');
                 setError('');
-
-                // Show the success message for 2 seconds, then redirect to login
                 setTimeout(() => {
                     navigate('/');
                 }, 2000);
@@ -40,32 +38,47 @@ const Register = () => {
 
     return (
         <div className="register-container">
-            <h1>Sign Up</h1>
+            <div className="logo">Coding Hub</div>
+            <h1 className="start-learning">Start learning to code today!</h1>
             <form onSubmit={handleSubmit}>
-                <input 
-                    type="text" 
-                    placeholder="Name" 
-                    value={name} 
-                    onChange={(e) => setName(e.target.value)} 
-                    required 
-                />
-                <input 
-                    type="email" 
-                    placeholder="Email" 
-                    value={email} 
-                    onChange={(e) => setEmail(e.target.value)} 
-                    required 
-                />
-                <input 
-                    type="password" 
-                    placeholder="Password" 
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)} 
-                    required 
-                />
+                <div className="input-container">
+                    <label htmlFor="name" className="label-left">Name</label>
+                    <input
+                        id="name"
+                        type="text"
+                        placeholder="Your name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="input-container">
+                    <label htmlFor="email" className="label-left">Email</label>
+                    <input
+                        id="email"
+                        type="email"
+                        placeholder="Your e-mail"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="input-container">
+                    <label htmlFor="password" className="label-left">Password</label>
+                    <input
+                        id="password"
+                        type="password"
+                        placeholder="Your password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                </div>
                 {success && <p className="success">{success}</p>}
                 {error && <p className="error">{error}</p>}
-                <button type="submit">Register</button>
+                <div className="button-container">
+                    <button type="submit">Register</button>
+                </div>
             </form>
             <p className="link">
                 Already have an account? <Link to="/">Login</Link>
