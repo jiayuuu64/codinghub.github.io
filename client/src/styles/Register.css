@@ -1,58 +1,118 @@
-.register-container {
-    width: 480px;
-    margin: auto;
-    margin-top: 100px;
-    text-align: center;
-    background-color: #f4f4f4;
-    padding: 50px;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-image: url('/src/assets/images/codingbg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
 }
 
-h1 {
-    margin-bottom: 30px;
-    font-size: 2.4rem;
-    color: #333;
+.register-container {
+    width: 480px;
+    background-color: rgba(30, 30, 48, 0.9);
+    padding: 50px 60px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    text-align: center;
+}
+
+.logo {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: #00BFFF; /* Light Blue */
+    font-weight: bold;
+}
+
+h1,
+.welcome-text {
+    font-size: 2.8rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.start-learning {
+    font-size: 2rem;
+    margin: 10px 0 20px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+label {
+    margin: 10px 0 5px;
+    font-size: 1rem;
+    color: #fff;
+}
+
+.label-left {
+    text-align: left;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.input-container {
+    margin: 15px 0;
 }
 
 input {
-    margin: 20px 0;
-    padding: 16px;
+    margin: 5px 0;
+    padding: 14px;
     width: 100%;
-    border-radius: 12px;
-    border: 1px solid #ddd;
+    border-radius: 10px;
+    border: none;
+    background-color: #3a3a50;
+    color: #fff;
+    font-size: 1rem;
     transition: all 0.3s ease;
 }
 
+input::placeholder {
+    color: #888;
+}
+
 input:focus {
-    border-color: #007bff;
+    border-color: #00BFFF;
     outline: none;
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+    box-shadow: 0 0 8px rgba(0, 191, 255, 0.5); /* Light Blue Glow */
+}
+
+.button-container {
+    margin: 20px 0 10px;
 }
 
 button {
-    padding: 16px;
-    margin-top: 20px;
+    padding: 14px;
     width: 100%;
-    background-color: #007bff;
+    background: #00BFFF; /* Light Blue */
     color: #fff;
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: background 0.3s ease;
 }
 
 button:hover {
-    background-color: #005bb5;
+    background: #1E90FF; /* Slightly darker blue */
 }
 
 .link {
-    margin-top: 20px;
+    margin-top: 15px;
+    color: #00BFFF;
+    font-size: 0.9rem;
 }
 
 .link a {
-    color: #007bff;
+    color: #00BFFF;
     text-decoration: none;
+    font-weight: bold;
 }
 
 .link a:hover {
