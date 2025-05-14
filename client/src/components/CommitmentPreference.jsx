@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/Personalize.css';
 
 const commitments = [
-    "5 min per day (Easygoing)", 
-    "15 min per day (Standard)", 
-    "30 min per day (Committed)", 
+    "5 min per day (Easygoing)",
+    "15 min per day (Standard)",
+    "30 min per day (Committed)",
     "60 min per day (Immersive)"
 ];
 
@@ -55,12 +55,12 @@ const CommitmentPreference = () => {
                     </button>
                 ))}
             </div>
-            <button 
-                onClick={handleSave} 
-                disabled={!selected} 
-                className="save-button"
+            <button
+                onClick={handleSave}
+                disabled={!selected}
+                className={`save-button ${selected ? 'enabled' : ''}`}
             >
-                Save Commitment
+                Continue
             </button>
             {message && <p className="message">{message}</p>}
         </div>
