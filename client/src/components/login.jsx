@@ -23,20 +23,12 @@ const Login = () => {
             const data = await response.json();
 
             if (response.ok) {
-                console.log(data);
+                // Store only the token and email
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('email', data.email);
 
-                // Check for preferences in localStorage
-                const languagePreference = data.languagePreference;
-                const experiencePreference = data.experiencePreference;
-                const commitmentPreference = data.commitmentPreference;
-
-                if (languagePreference && experiencePreference && commitmentPreference) {
-                    localStorage.setItem('languagePreference', languagePreference);
-                    localStorage.setItem('experience', experiencePreference);
-                    localStorage.setItem('commitment', commitmentPreference);
-                    localStorage.setItem('personalized', 'true');
+                // Check preferences from the response directly
+                if (data.languagePreference && data.experiencePreference && data.commitmentPreference) {
                     navigate('/home');
                 } else {
                     navigate('/language-preference');
@@ -52,43 +44,43 @@ const Login = () => {
     };
 
     return (
-        <div className="login-container">
-            <div className="logo">Coding Hub</div>
-            <h1 className="welcome-text">Welcome back!</h1>
-            <form onSubmit={handleSubmit}>
-                <div className="input-container">
-                    <label htmlFor="email" className="label-left">Email</label>
-                    <input
-                        id="email"
-                        type="email"
-                        placeholder="Your e-mail"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="input-container">
-                    <label htmlFor="password" className="label-left">Password</label>
-                    <input
-                        id="password"
-                        type="password"
-                        placeholder="Your password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                {error && <p className="error">{error}</p>}
-                <div className="button-container">
-                    <button type="submit">Log in</button>
-                </div>
-            </form>
-            <p className="link">
-                Don't have an account? <Link to="/signup">Create an account</Link>
-            </p>
-            <p className="link">
-                <a href="#">Reset your password</a>
-            </p>
+        <div className="full-screen-bg" style={{ backgroundImage: `url('/src/assets/images/codingbg.jpg')` }}>
+            <div className="login-container">
+                <div className="logo">Coding Hub</div>
+                <h1 className="welcome-text">Welcome back!</h1>
+                <form onSubmit={handleSubmit}>
+                    <div className="input-container">
+                        <label className="label-left">Email</label>
+                        <input
+                            type="email"
+                            placeholder="Your e-mail"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="input-container">
+                        <label className="label-left">Password</label>
+                        <input
+                            type="password"
+                            placeholder="Your password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    {error && <p className="error">{error}</p>}
+                    <div className="button-container">
+                        <button type="submit">Log in</button>
+                    </div>
+                </form>
+                <p className="link">
+                    Don't have an account? <Link to="/signup">Create an account</Link>
+                </p>
+                <p className="link">
+                    <a href="#">Reset your password</a>
+                </p>
+            </div>
         </div>
     );
 };
