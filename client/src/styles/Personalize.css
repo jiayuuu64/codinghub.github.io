@@ -2,9 +2,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 40px;
-    gap: 25px;
+    justify-content: flex-start;
+    padding: 30px;
+    gap: 20px;
     min-height: 100vh;
     background-color: #f9f9f9;
 }
@@ -14,7 +14,7 @@
     height: 10px;
     background-color: #e0e0e0;
     border-radius: 20px;
-    margin: 20px 0;
+    margin: 15px 0;
 }
 
 .progress-bar-fill {
@@ -25,16 +25,16 @@
 }
 
 h2 {
-    font-size: 1.8rem;
+    font-size: 2rem;
     color: #333;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .preference-list {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(200px, 250px));
+    gap: 15px;
     justify-content: center;
-    gap: 20px;
 }
 
 .preference-item {
@@ -64,12 +64,17 @@ h2 {
 .save-button {
     padding: 14px 20px;
     font-size: 1.2rem;
-    background-color: #007bff;
+    background-color: #cccccc;
     color: #fff;
     border: none;
     border-radius: 8px;
-    cursor: pointer;
+    cursor: not-allowed;
     transition: background-color 0.3s ease;
+}
+
+.save-button.enabled {
+    background-color: #007bff;
+    cursor: pointer;
 }
 
 .save-button:hover {

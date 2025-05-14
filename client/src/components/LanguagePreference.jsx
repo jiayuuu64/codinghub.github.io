@@ -50,12 +50,12 @@ const LanguagePreference = () => {
                     </button>
                 ))}
             </div>
-            <button 
-                onClick={handleSave} 
-                disabled={!selected} 
-                className="save-button"
+            <button
+                onClick={handleSave}
+                disabled={!selected}
+                className={`save-button ${selected ? 'enabled' : ''}`}
             >
-                Save Preference
+                Continue
             </button>
             {message && <p className="message">{message}</p>}
         </div>
