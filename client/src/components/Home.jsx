@@ -1,21 +1,16 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { logout } from '../utils/auth';
+import Navbar from '../components/Navbar'; // Import the Navbar
+
 
 const Home = () => {
-    const navigate = useNavigate();
-
-    const handleLogout = () => {
-        logout();
-        navigate('/');
-    };
-
     return (
-        <div>
-            <h1>Welcome back, {localStorage.getItem('email') || "User"}!</h1>
-            <p>This is the home page.</p>
-            <button onClick={handleLogout}>Logout</button>
-        </div>
+        <>
+            <Navbar />
+            <div className="home-container">
+                <h1>Welcome back, {localStorage.getItem('email') || "User"}!</h1>
+                <p>This is the home page.</p>
+            </div>
+        </>
     );
 };
 
