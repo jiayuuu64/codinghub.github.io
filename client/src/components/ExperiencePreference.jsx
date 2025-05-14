@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/Personalize.css';
 
 const experienceLevels = [
-    "Complete Beginner", 
-    "Some Experience", 
-    "Confident Coder", 
+    "Complete Beginner",
+    "Some Experience",
+    "Confident Coder",
     "Expert"
 ];
 
@@ -55,12 +55,12 @@ const ExperiencePreference = () => {
                     </button>
                 ))}
             </div>
-            <button 
-                onClick={handleSave} 
-                disabled={!selected} 
-                className="save-button"
+            <button
+                onClick={handleSave}
+                disabled={!selected}
+                className={`save-button ${selected ? 'enabled' : ''}`}
             >
-                Save Experience
+                Continue
             </button>
             {message && <p className="message">{message}</p>}
         </div>
