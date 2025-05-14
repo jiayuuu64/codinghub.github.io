@@ -14,29 +14,35 @@ const Login = () => {
         try {
             const response = await fetch('http://localhost:5050/api/users/login', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify({ email, password }),
             });
 
             const data = await response.json();
 
             if (response.ok) {
+                console.log(data);
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('email', data.email);
-                setError('');
 
-                // Check for preferences and navigate accordingly
-                if (data.languagePreference && data.experiencePreference && data.commitmentPreference) {
+                // Check for preferences in localStorage
+                const languagePreference = data.languagePreference;
+                const experiencePreference = data.experiencePreference;
+                const commitmentPreference = data.commitmentPreference;
+
+                if (languagePreference && experiencePreference && commitmentPreference) {
+                    localStorage.setItem('languagePreference', languagePreference);
+                    localStorage.setItem('experience', experiencePreference);
+                    localStorage.setItem('commitment', commitmentPreference);
+                    localStorage.setItem('personalized', 'true');
                     navigate('/home');
                 } else {
-                    if (!data.languagePreference) {
-                        navigate('/language-preference');
-                    } else if (!data.experiencePreference) {
-                        navigate('/experience-preference');
-                    } else {
-                        navigate('/commitment-preference');
-                    }
+                    navigate('/language-preference');
                 }
+
+                setError('');
             } else {
                 setError(data.message || 'Login failed.');
             }
@@ -47,15 +53,41 @@ const Login = () => {
 
     return (
         <div className="login-container">
-            <h1>Login</h1>
+            <div className="logo">Coding Hub</div>
+            <h1 className="welcome-text">Welcome back!</h1>
             <form onSubmit={handleSubmit}>
-                <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                <div className="input-container">
+                    <label htmlFor="email" className="label-left">Email</label>
+                    <input
+                        id="email"
+                        type="email"
+                        placeholder="Your e-mail"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="input-container">
+                    <label htmlFor="password" className="label-left">Password</label>
+                    <input
+                        id="password"
+                        type="password"
+                        placeholder="Your password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                </div>
                 {error && <p className="error">{error}</p>}
-                <button type="submit">Login</button>
+                <div className="button-container">
+                    <button type="submit">Log in</button>
+                </div>
             </form>
             <p className="link">
-                Don't have an account? <Link to="/signup">Sign Up</Link>
+                Don't have an account? <Link to="/signup">Create an account</Link>
+            </p>
+            <p className="link">
+                <a href="#">Reset your password</a>
             </p>
         </div>
     );
