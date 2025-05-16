@@ -1,22 +1,19 @@
 import { MongoClient } from "mongodb";
- 
-const client = new MongoClient("mongodb://localhost:27017");
- 
+import dotenv from "dotenv";
+dotenv.config();
+
+const client = new MongoClient(process.env.MONGO_URI);
+
 let conn;
 try {
-    console.log("Connecting to Local MongoDB");
+    console.log("Connecting to MongoDB Atlas...");
     conn = await client.connect();
-    console.log("Connected successfully to MongoDB")
+    console.log("Connected successfully to MongoDB Atlas");
 } catch (e) {
-    console.error("Failed to connect to MongoDB", e);
+    console.error("Failed to connect to MongoDB Atlas", e);
     process.exit(1);
 }
- 
-const db = conn.db("codehub");
 
-// optional: use event listeners to monitor status
-client.on('serverOpening', () => console.log('MongoDB server connection opened'));
-client.on('serverClosed', () => console.log('MongoDB server connection closed'));
-client.on('serverDescriptionChanged', (event) => console.log('MongoDB server description changed:', event));
+const db = conn.db("codehub");
 
 export default db;
