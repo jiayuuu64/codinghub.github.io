@@ -109,3 +109,35 @@ p {
     width: 320px;
     color: white;
 }
+
+@media (max-width: 768px) {
+    .home-container {
+        padding: 15px;
+        min-height: calc(100vh - 100px);
+    }
+
+    h1, .home-container h1 {
+        font-size: 20px;
+        margin-left: 10px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+
+    .course-cards, .recommended-cards {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .course-card, .recommended-card {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .progress-section h2, .recommended-section h2 {
+        font-size: 20px;
+        margin-left: 10px;
+    }
+}
+

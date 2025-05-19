@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Personalize.css';
+import API_URL from '../utils/config';
+
 
 const commitments = [
     "5 min per day (Easygoing)",
@@ -20,7 +22,7 @@ const CommitmentPreference = () => {
 
     const handleSave = async () => {
         try {
-            const response = await fetch('http://localhost:5050/api/users/commitment-preference', {
+            const response = await fetch(`${API_URL}/commitment-preference`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, preference: selected }),
