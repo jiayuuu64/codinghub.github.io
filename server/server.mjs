@@ -6,10 +6,12 @@ const PORT = process.env.PORT || 10000;
 const app = express();
 
 app.use(cors({
-    origin: ['https://jiayuuu64.github.io', 'https://codinghub-r3bn.onrender.com'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
+    origin: ['https://codinghub.github.io', 'https://codinghub-r3bn.onrender.com'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 app.use(express.json());
 
 // Mount user routes at /api/users
