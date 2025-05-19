@@ -74,3 +74,24 @@
     background-color: darkblue;
 }
 
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .navbar-left, .navbar-center {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .brand {
+        font-size: 20px;
+    }
+
+    .logout-button {
+        width: 100%;
+        margin: 10px 0;
+    }
+}
+

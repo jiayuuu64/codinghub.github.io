@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Personalize.css';
+import API_URL from '../utils/config';
 
 const languages = ["Python", "JavaScript", "HTML", "SQL", "CSS", "Java", "C++", "PHP", "Dart"];
 
@@ -15,7 +16,7 @@ const LanguagePreference = () => {
 
     const handleSave = async () => {
         try {
-            const response = await fetch('http://localhost:5050/api/users/language-preference', {
+            const response = await fetch(`${API_URL}/language-preference`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, preference: selected }),

@@ -1,6 +1,5 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
-import logo from '../assets/images/coding.png';
 import '../styles/Home.css';
 
 const Home = () => {

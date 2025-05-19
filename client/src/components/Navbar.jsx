@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../utils/auth';
-import logo from '../assets/images/coding.png';
 import '../styles/Navbar.css';
+
+const logo = `${process.env.PUBLIC_URL}/assets/images/coding.png`;
+
+
 
 const Navbar = () => {
     const navigate = useNavigate();
