@@ -6,6 +6,7 @@ import API_URL from '../utils/config';
 const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [name, setName] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -15,6 +16,12 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (password !== confirmPassword) {
+            setError("Passwords do not match.");
+            return;
+        }
+
         setLoading(true); // Start loading
 
         try {
@@ -29,7 +36,7 @@ const Register = () => {
             if (response.ok) {
                 setSuccess('Registration successful! Redirecting...');
                 setError('');
-                setIsRegistered(true); 
+                setIsRegistered(true);
                 setLoading(false);
                 setTimeout(() => navigate('/'), 1000);
             } else {
@@ -77,6 +84,17 @@ const Register = () => {
                             placeholder="Your password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            required
+                            disabled={isRegistered}
+                        />
+                    </div>
+                    <div className="input-container">
+                        <label className="label-left">Confirm Password</label>
+                        <input
+                            type="password"
+                            placeholder="Confirm your password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
                             required
                             disabled={isRegistered}
                         />
