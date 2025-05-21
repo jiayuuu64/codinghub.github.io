@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <title>Redirecting...</title>
     <script>
-      // redirect all routes to index.html (only works on GitHub Pages)
+      // Redirect unknown routes to / (React takes over)
       if (location.pathname !== "/" && !location.pathname.includes(".")) {
-        location.replace("/index.html" + location.search + location.hash);
+        location.replace("/" + location.search + location.hash);
       }
     </script>
   </head>
