@@ -1,11 +1,44 @@
-// Users Login
 import db from "../db/conn.mjs";
 import bcrypt from "bcryptjs";
 import { ObjectId } from "mongodb";
 import { generateToken } from "../utils/token.mjs";
-import { sendPasswordResetEmail } from "../utils/emailService.mjs"; 
-import { validatePasswordStrength } from "../utils/passwordValidator.mjs";
+import nodemailer from "nodemailer";
+import crypto from "crypto";
 
+// OPTIONAL: Basic password strength checker
+const validatePasswordStrength = (password) => {
+    const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    return strongRegex.test(password) ? 'strong' : 'weak';
+};
+
+// Email sender inline function
+const sendPasswordResetEmail = async (email, token) => {
+    const resetLink = `https://your-app-url/reset-password?token=${token}`;
+
+    const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+        },
+    });
+
+    const mailOptions = {
+        from: '"Coding Hub Support" <no-reply@codinghub.com>',
+        to: email,
+        subject: "Reset Your Password",
+        html: `
+            <p>Hello,</p>
+            <p>We received a request to reset your password. Click below to reset it:</p>
+            <a href="${resetLink}">${resetLink}</a>
+            <p>This link is valid for 1 hour. If you didn’t request this, you can ignore this email.</p>
+        `
+    };
+
+    await transporter.sendMail(mailOptions);
+};
+
+// === Password Reset Functions ===
 export const initiatePasswordRecovery = async (req, res) => {
     const { email } = req.body;
     if (!email) return res.status(400).json({ message: "Email is required." });
@@ -38,8 +71,7 @@ export const resetPassword = async (req, res) => {
 
     if (validatePasswordStrength(newPassword) !== "strong") {
         return res.status(400).json({
-            message:
-                "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.",
+            message: "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.",
         });
     }
 
@@ -67,7 +99,7 @@ export const resetPassword = async (req, res) => {
     return res.status(200).json({ message: "Password reset successful." });
 };
 
-// Users Login
+// === User Authentication ===
 export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -78,10 +110,8 @@ export const loginUser = async (req, res) => {
             return res.status(403).json({ message: "Invalid email or password" });
         }
 
-        // Generate token
         const token = generateToken({ id: user._id, email: user.email });
 
-        // Check preferences from database
         const languagePreference = user.languagePreference || null;
         const experiencePreference = user.experiencePreference || null;
         const commitmentPreference = user.commitmentPreference || null;
@@ -98,7 +128,6 @@ export const loginUser = async (req, res) => {
         res.status(500).json({ message: "Something went wrong. Please try again." });
     }
 };
-
 
 export const registerUser = async (req, res) => {
     try {
@@ -128,12 +157,12 @@ export const registerUser = async (req, res) => {
             password: hashedPassword,
         };
 
-        const result = await usersCollection.insertOne(newUser); // 👈 get result
-        const insertedId = result.insertedId; // 👈 this is the ObjectId
+        const result = await usersCollection.insertOne(newUser);
+        const insertedId = result.insertedId;
 
         res.status(201).json({
             message: "Registered successfully",
-            userId: insertedId.toString() // Optional: send as string
+            userId: insertedId.toString()
         });
 
     } catch (err) {
@@ -141,7 +170,7 @@ export const registerUser = async (req, res) => {
     }
 };
 
-// Save Language Preference
+// === User Preferences ===
 export const languagePreference = async (req, res) => {
     const { email, preference } = req.body;
     try {
@@ -158,7 +187,6 @@ export const languagePreference = async (req, res) => {
     }
 };
 
-// Save Experience Preference
 export const experiencePreference = async (req, res) => {
     const { email, preference } = req.body;
     try {
@@ -175,7 +203,6 @@ export const experiencePreference = async (req, res) => {
     }
 };
 
-// Save Commitment Preference
 export const commitmentPreference = async (req, res) => {
     const { email, preference } = req.body;
     try {
