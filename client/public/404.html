@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <title>Redirecting...</title>
     <script>
-      const redirectUrl = "./index.html#" + location.pathname + location.search + location.hash;
-      location.replace(redirectUrl);
+      const hashPath = "#" + location.pathname + location.search + location.hash;
+      window.location.replace("/" + hashPath);
     </script>
   </head>
   <body>
