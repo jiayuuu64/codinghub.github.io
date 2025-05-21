@@ -178,6 +178,23 @@ export const registerUser = async (req, res) => {
 };
 
 
+// === User Preferences ===
+export const languagePreference = async (req, res) => {
+    const { email, preference } = req.body;
+    try {
+        const result = await db.collection("users").updateOne(
+            { email },
+            { $set: { languagePreference: preference } }
+        );
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.status(200).json({ message: "Language preference saved" });
+    } catch (err) {
+        res.status(500).json({ message: "Failed to save language preference" });
+    }
+};
+
 export const experiencePreference = async (req, res) => {
     const { email, preference } = req.body;
     try {
