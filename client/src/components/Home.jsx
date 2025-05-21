@@ -8,7 +8,7 @@ const Home = () => {
             <Navbar />
             <div className="home-container">
 
-                <h1>Welcome back, {localStorage.getItem('name') || "User"}!</h1>
+                <h1>Welcome, {localStorage.getItem('name') || "User"}!</h1>
 
                 <section className="progress-section">
                     <h2>Your Progress</h2>
