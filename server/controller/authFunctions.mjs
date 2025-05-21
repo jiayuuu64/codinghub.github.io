@@ -3,6 +3,69 @@ import db from "../db/conn.mjs";
 import bcrypt from "bcryptjs";
 import { ObjectId } from "mongodb";
 import { generateToken } from "../utils/token.mjs";
+import { sendPasswordResetEmail } from "../utils/emailService.mjs"; 
+import { validatePasswordStrength } from "../utils/passwordValidator.mjs";
+
+export const initiatePasswordRecovery = async (req, res) => {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: "Email is required." });
+
+    const usersCollection = db.collection("users");
+    const user = await usersCollection.findOne({ email });
+
+    if (user) {
+        const token = crypto.randomBytes(20).toString("hex");
+        const expires = Date.now() + 3600000; // 1 hour
+
+        await usersCollection.updateOne(
+            { email },
+            { $set: { resetToken: token, resetTokenExpires: expires } }
+        );
+
+        await sendPasswordResetEmail(email, token);
+    }
+
+    return res.status(200).json({
+        message: "If that email exists, a reset link will be sent.",
+    });
+};
+
+export const resetPassword = async (req, res) => {
+    const { token, newPassword } = req.body;
+
+    if (!token || !newPassword)
+        return res.status(400).json({ message: "All fields are required." });
+
+    if (validatePasswordStrength(newPassword) !== "strong") {
+        return res.status(400).json({
+            message:
+                "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.",
+        });
+    }
+
+    const usersCollection = db.collection("users");
+    const user = await usersCollection.findOne({
+        resetToken: token,
+        resetTokenExpires: { $gt: Date.now() },
+    });
+
+    if (!user) return res.status(400).json({ message: "Invalid or expired token." });
+
+    const isSame = await bcrypt.compare(newPassword, user.password);
+    if (isSame) return res.status(400).json({ message: "Use a different password." });
+
+    const hashed = await bcrypt.hash(newPassword, 12);
+
+    await usersCollection.updateOne(
+        { email: user.email },
+        {
+            $set: { password: hashed },
+            $unset: { resetToken: "", resetTokenExpires: "" },
+        }
+    );
+
+    return res.status(200).json({ message: "Password reset successful." });
+};
 
 // Users Login
 export const loginUser = async (req, res) => {
