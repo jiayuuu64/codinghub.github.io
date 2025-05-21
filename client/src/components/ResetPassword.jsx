@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import '../styles/Login.css'; // reuse styles
+import '../styles/Login.css';
 import API_URL from '../utils/config';
 
 const ResetPassword = () => {
@@ -8,6 +8,7 @@ const ResetPassword = () => {
     const token = searchParams.get("token");
 
     const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -16,6 +17,13 @@ const ResetPassword = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
+
+        if (newPassword !== confirmPassword) {
+            setError("Passwords do not match.");
+            setLoading(false);
+            return;
+        }
+
         try {
             const response = await fetch(`${API_URL}/reset-password`, {
                 method: "POST",
@@ -24,8 +32,10 @@ const ResetPassword = () => {
             });
 
             const data = await response.json();
+
             if (response.ok) {
                 setMessage(data.message);
+                setError('');
                 setTimeout(() => navigate('/'), 2000);
             } else {
                 setError(data.message);
@@ -33,6 +43,7 @@ const ResetPassword = () => {
         } catch (err) {
             setError("Something went wrong.");
         }
+
         setLoading(false);
     };
 
@@ -49,6 +60,16 @@ const ResetPassword = () => {
                             placeholder="Enter new password"
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="input-container">
+                        <label className="label-left">Confirm Password</label>
+                        <input
+                            type="password"
+                            placeholder="Confirm new password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
                             required
                         />
                     </div>
