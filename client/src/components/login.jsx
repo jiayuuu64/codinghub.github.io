@@ -85,7 +85,7 @@ const Login = () => {
                     Don't have an account? <Link to="/signup">Create an account</Link>
                 </p>
                 <p className="link">
-                    <a href="#">Reset your password</a>
+                    <Link to="/forgot-password">Reset your password</Link>
                 </p>
             </div>
         </div>

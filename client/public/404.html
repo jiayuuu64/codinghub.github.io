@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting...</title>
+    <script>
+      // redirect all routes to index.html (only works on GitHub Pages)
+      if (location.pathname !== "/" && !location.pathname.includes(".")) {
+        location.replace("/index.html" + location.search + location.hash);
+      }
+    </script>
+  </head>
+  <body>
+    <p>Redirecting...</p>
+  </body>
+</html>
