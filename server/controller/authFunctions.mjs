@@ -5,15 +5,16 @@ import { generateToken } from "../utils/token.mjs";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 
-// Password strength checker
+// OPTIONAL: Basic password strength checker
 const validatePasswordStrength = (password) => {
     const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     return strongRegex.test(password) ? 'strong' : 'weak';
 };
 
-// Send password reset email
+// Email sender inline function
 const sendPasswordResetEmail = async (email, token) => {
-    const resetLink = `https://jiayuuu64.github.io/#/reset-password?token=${token}`;
+    const resetLink = `https://jiayuuu64.github.io/reset-password?token=${token}`;
+
     const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
@@ -37,6 +38,7 @@ const sendPasswordResetEmail = async (email, token) => {
     await transporter.sendMail(mailOptions);
 };
 
+// === Password Reset Functions ===
 export const initiatePasswordRecovery = async (req, res) => {
     const { email } = req.body;
     if (!email) return res.status(400).json({ message: "Email is required." });
@@ -46,7 +48,7 @@ export const initiatePasswordRecovery = async (req, res) => {
 
     if (user) {
         const token = crypto.randomBytes(20).toString("hex");
-        const expires = Date.now() + 3600000;
+        const expires = Date.now() + 3600000; // 1 hour
 
         await usersCollection.updateOne(
             { email },
@@ -97,6 +99,36 @@ export const resetPassword = async (req, res) => {
     return res.status(200).json({ message: "Password reset successful." });
 };
 
+// === User Authentication ===
+export const loginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const usersCollection = db.collection("users");
+        const user = await usersCollection.findOne({ email });
+
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            return res.status(403).json({ message: "Invalid email or password" });
+        }
+
+        const token = generateToken({ id: user._id, email: user.email });
+
+        const languagePreference = user.languagePreference || null;
+        const experiencePreference = user.experiencePreference || null;
+        const commitmentPreference = user.commitmentPreference || null;
+
+        res.status(200).json({
+            token,
+            email: user.email,
+            languagePreference,
+            experiencePreference,
+            commitmentPreference,
+            message: "Login successful",
+        });
+    } catch (err) {
+        res.status(500).json({ message: "Something went wrong. Please try again." });
+    }
+};
+
 export const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -105,15 +137,16 @@ export const registerUser = async (req, res) => {
             return res.status(400).json({ message: "All fields are required" });
         }
 
-        if (validatePasswordStrength(password) !== "strong") {
-            return res.status(400).json({
-                message: "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.",
-            });
-        }
-
         const nameRegex = /^[A-Za-z\s]+$/;
         if (!nameRegex.test(name)) {
             return res.status(400).json({ message: "Name must contain letters only." });
+        }
+
+        // ✅ Password strength validation
+        if (validatePasswordStrength(password) !== "strong") {
+            return res.status(400).json({
+                message: "Password must be at least 8 characters and include at least one uppercase letter, one lowercase letter, one number, and one special character.",
+            });
         }
 
         const usersCollection = db.collection("users");
@@ -125,7 +158,11 @@ export const registerUser = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = { name, email, password: hashedPassword };
+        const newUser = {
+            name,
+            email,
+            password: hashedPassword,
+        };
 
         const result = await usersCollection.insertOne(newUser);
         const insertedId = result.insertedId;
@@ -137,5 +174,38 @@ export const registerUser = async (req, res) => {
 
     } catch (err) {
         res.status(500).json({ message: err.message });
+    }
+};
+
+
+export const experiencePreference = async (req, res) => {
+    const { email, preference } = req.body;
+    try {
+        const result = await db.collection("users").updateOne(
+            { email },
+            { $set: { experiencePreference: preference } }
+        );
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.status(200).json({ message: "Experience preference saved" });
+    } catch (err) {
+        res.status(500).json({ message: "Failed to save experience preference" });
+    }
+};
+
+export const commitmentPreference = async (req, res) => {
+    const { email, preference } = req.body;
+    try {
+        const result = await db.collection("users").updateOne(
+            { email },
+            { $set: { commitmentPreference: preference } }
+        );
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.status(200).json({ message: "Commitment preference saved" });
+    } catch (err) {
+        res.status(500).json({ message: "Failed to save commitment preference" });
     }
 };
