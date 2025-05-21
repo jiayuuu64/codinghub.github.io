@@ -13,7 +13,7 @@ const validatePasswordStrength = (password) => {
 
 // Email sender inline function
 const sendPasswordResetEmail = async (email, token) => {
-    const resetLink = `https://your-app-url/reset-password?token=${token}`;
+    const resetLink = `https://jiayuuu64.github.io/reset-password?token=${token}`;
 
     const transporter = nodemailer.createTransport({
         service: "gmail",
