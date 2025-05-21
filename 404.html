@@ -4,9 +4,10 @@
     <meta charset="UTF-8" />
     <title>Redirecting...</title>
     <script>
-      // Preserve full path and query (for React Router to handle)
-      const redirectUrl = "/index.html#" + location.pathname + location.search + location.hash;
-      location.replace(redirectUrl);
+      // redirect all routes to index.html (only works on GitHub Pages)
+      if (location.pathname !== "/" && !location.pathname.includes(".")) {
+        location.replace("/index.html" + location.search + location.hash);
+      }
     </script>
   </head>
   <body>
