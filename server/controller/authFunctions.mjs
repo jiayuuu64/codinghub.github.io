@@ -128,3 +128,24 @@ export const commitmentPreference = async (req, res) => {
         res.status(500).json({ message: "Failed to save commitment preference" });
     }
 };
+
+// Get user preferences and name
+export const getUserPreferences = async (req, res) => {
+    const { email } = req.query;
+    try {
+        const user = await db.collection("users").findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.status(200).json({
+            name: user.name || '',
+            languagePreference: user.languagePreference || '',
+            experiencePreference: user.experiencePreference || '',
+            commitmentPreference: user.commitmentPreference || ''
+        });
+    } catch (err) {
+        res.status(500).json({ message: "Failed to retrieve preferences" });
+    }
+};
+
