@@ -1,8 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Personalize.css';
+import API_URL from '../utils/config';
 
-const languages = ["Python", "JavaScript", "HTML", "SQL", "CSS", "Java", "C++", "PHP", "Dart"];
+const languages = [
+    { name: "Python", logo: "https://img.icons8.com/color/48/000000/python.png" },
+    { name: "JavaScript", logo: "https://img.icons8.com/color/48/000000/javascript.png" },
+    { name: "HTML", logo: "https://img.icons8.com/color/48/000000/html-5--v1.png" },
+    { name: "SQL", logo: "https://img.icons8.com/ios-filled/50/ffffff/sql.png" },
+    { name: "CSS", logo: "https://img.icons8.com/color/48/000000/css3.png" },
+    { name: "Java", logo: "https://img.icons8.com/color/48/000000/java-coffee-cup-logo.png" },
+    { name: "C++", logo: "https://img.icons8.com/color/48/000000/c-plus-plus-logo.png" },
+    { name: "PHP", logo: "https://img.icons8.com/officel/48/000000/php-logo.png" },
+    { name: "Dart", logo: "https://img.icons8.com/color/48/000000/dart.png" }
+];
 
 const LanguagePreference = () => {
     const [selected, setSelected] = useState('');
@@ -10,12 +21,11 @@ const LanguagePreference = () => {
     const navigate = useNavigate();
     const email = localStorage.getItem('email');
 
-    // Progress calculation for Language step
     const progress = selected ? 33 : 0;
 
     const handleSave = async () => {
         try {
-            const response = await fetch('http://localhost:5050/api/users/language-preference', {
+            const response = await fetch(`${API_URL}/language-preference`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, preference: selected }),
@@ -42,11 +52,12 @@ const LanguagePreference = () => {
             <div className="preference-list">
                 {languages.map((lang) => (
                     <button
-                        key={lang}
-                        className={`preference-item ${selected === lang ? 'selected' : ''}`}
-                        onClick={() => setSelected(lang)}
+                        key={lang.name}
+                        className={`preference-item ${selected === lang.name ? 'selected' : ''}`}
+                        onClick={() => setSelected(lang.name)}
                     >
-                        {lang}
+                        <img src={lang.logo} alt={`${lang.name} logo`} className="lang-logo" />
+                        {lang.name}
                     </button>
                 ))}
             </div>

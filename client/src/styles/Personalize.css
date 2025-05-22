@@ -6,7 +6,13 @@
     padding: 30px;
     gap: 20px;
     min-height: 100vh;
-    background-color: #f9f9f9;
+    background-color: #1e1e1e;
+}
+
+.preference-container h2 {
+    font-size: 2rem;
+    color: #ffffff;
+    margin-bottom: 10px;
 }
 
 .progress-bar {
@@ -26,7 +32,7 @@
 
 h2 {
     font-size: 2rem;
-    color: #333;
+    color: #ffffff; 
     margin-bottom: 10px;
 }
 
@@ -38,14 +44,17 @@ h2 {
 }
 
 .preference-item {
-    background-color: #fff;
-    color: #333;
-    border: 2px solid #007bff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #007bff; 
+    color: #ffffff; 
+    border: 2px solid #1A2C73; 
     border-radius: 12px;
     padding: 20px 30px;
     font-size: 1.2rem;
     cursor: pointer;
-    text-align: center;
+    text-align: left;
     transition: all 0.3s ease;
     min-width: 200px;
     max-width: 250px;
@@ -53,12 +62,19 @@ h2 {
 }
 
 .preference-item:hover {
-    background-color: #f0f8ff;
+    background-color: #e0e0e0;
+    color: #1A2C73;
 }
 
 .preference-item.selected {
-    background-color: #007bff;
+    background-color: #1A2C73; 
     color: #fff;
+}
+
+.lang-logo {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
 }
 
 .save-button {
@@ -73,15 +89,44 @@ h2 {
 }
 
 .save-button.enabled {
-    background-color: #007bff;
+    background-color: #1A2C73; 
     cursor: pointer;
 }
 
-.save-button:hover {
-    background-color: #005bb5;
+.save-button.enabled:hover {
+    background-color: #0e1a4c; 
+}
+
+.save-button.enabled:active {
+    background-color: #0b153d; 
 }
 
 .message {
     margin-top: 10px;
     color: #ff4d4d;
+}
+
+@media (max-width: 768px) {
+    .preference-container {
+        padding: 20px;
+    }
+
+    .preference-list {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .preference-item {
+        padding: 15px;
+        font-size: 1rem;
+    }
+
+    .save-button {
+        font-size: 1rem;
+        padding: 12px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
 }
