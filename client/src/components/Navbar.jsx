@@ -1,11 +1,9 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { logout } from '../utils/auth';
 import '../styles/Navbar.css';
 
-const logo = `${process.env.PUBLIC_URL}/assets/images/coding.png`;
-
-
+const logo = '/assets/images/coding.png';
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -23,11 +21,11 @@ const Navbar = () => {
             </div>
 
             <div className="navbar-center">
-                <Link to="/" className="nav-link active">Home</Link>
+                <NavLink to="/" className="nav-link" end>Home</NavLink>
                 <span className="divider">|</span>
-                <Link to="/courses" className="nav-link">Courses</Link>
+                <NavLink to="/courses" className="nav-link">Courses</NavLink>
                 <span className="divider">|</span>
-                <Link to="/profile" className="nav-link">Profile</Link>
+                <NavLink to="/profile" className="nav-link">Profile</NavLink>
             </div>
 
             <button className="logout-button" onClick={handleLogout}>Logout</button>
