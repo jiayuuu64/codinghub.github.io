@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Login from './components/login';
+import Login from './components/Logins';
 import Register from './components/Register';
 import ResetPassword from './components/ResetPassword';
 import ForgotPassword from './components/ForgotPassword';
@@ -8,6 +8,7 @@ import Home from './components/Home';
 import LanguagePreference from './components/LanguagePreference';
 import ExperiencePreference from './components/ExperiencePreference';
 import CommitmentPreference from './components/CommitmentPreference';
+import Profile from './components/Profile';
 import { isAuthenticated } from './utils/auth';
 
 const ProtectedRoute = ({ children }) => {
@@ -28,6 +29,7 @@ const App = () => {
             <Route path="/language-preference" element={<LanguagePreference />} />
             <Route path="/experience-preference" element={<ExperiencePreference />} />
             <Route path="/commitment-preference" element={<CommitmentPreference />} />
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         </Routes>
     );
 };
