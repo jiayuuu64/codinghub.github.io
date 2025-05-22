@@ -240,7 +240,8 @@ export const getUserPreferences = async (req, res) => {
             name: user.name || '',
             languagePreference: user.languagePreference || '',
             experiencePreference: user.experiencePreference || '',
-            commitmentPreference: user.commitmentPreference || ''
+            commitmentPreference: user.commitmentPreference || '',
+            avatar: user.avatar || ''
         });
     } catch (err) {
         res.status(500).json({ message: "Failed to retrieve preferences" });
