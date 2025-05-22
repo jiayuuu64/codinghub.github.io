@@ -247,3 +247,23 @@ export const getUserPreferences = async (req, res) => {
     }
 };
 
+// Save user profile picture (Base64)
+export const updateAvatar = async (req, res) => {
+    const { email, avatarBase64 } = req.body;
+    if (!email || !avatarBase64) {
+        return res.status(400).json({ message: "Email and avatar required." });
+    }
+
+    try {
+        const result = await db.collection("users").updateOne(
+            { email },
+            { $set: { avatar: avatarBase64 } }
+        );
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.status(200).json({ message: "Profile picture updated successfully" });
+    } catch (err) {
+        res.status(500).json({ message: "Failed to update avatar" });
+    }
+};

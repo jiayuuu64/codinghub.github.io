@@ -1,5 +1,5 @@
 import express from "express";
-import { loginUser, registerUser, experiencePreference, commitmentPreference, languagePreference, initiatePasswordRecovery, resetPassword, getUserPreferences } from "../controller/authFunctions.mjs";
+import { loginUser, registerUser, experiencePreference, commitmentPreference, languagePreference, initiatePasswordRecovery, resetPassword, getUserPreferences, updateAvatar } from "../controller/authFunctions.mjs";
 
 const router = express.Router();
 
@@ -11,6 +11,7 @@ router.post("/commitment-preference", commitmentPreference);
 router.post("/recover-password", initiatePasswordRecovery);
 router.post("/reset-password", resetPassword);
 router.get('/user-preferences', getUserPreferences);
+router.post('/update-avatar', updateAvatar);
 
 
 export default router;
