@@ -16,7 +16,8 @@ app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
-app.use(express.json());
+app.use(express.json({ limit: '5mb' })); 
+
 
 // Mount user routes at /api/users
 app.use("/api/users", userRouter);
