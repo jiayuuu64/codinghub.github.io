@@ -6,8 +6,15 @@
     padding: 30px;
     gap: 20px;
     min-height: 100vh;
-    background-color: #f9f9f9;
+    background-color: #1e1e1e;
 }
+
+.preference-container h2 {
+  font-size: 2rem;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
 
 .progress-bar {
     width: 80%;
@@ -26,9 +33,10 @@
 
 h2 {
     font-size: 2rem;
-    color: #333;
+    color: #ffffff; 
     margin-bottom: 10px;
 }
+
 
 .preference-list {
     display: grid;
@@ -38,9 +46,9 @@ h2 {
 }
 
 .preference-item {
-    background-color: #fff;
-    color: #333;
-    border: 2px solid #007bff;
+    background-color: #007bff; 
+    color: #ffffff; 
+    border: 2px solid #1A2C73; 
     border-radius: 12px;
     padding: 20px 30px;
     font-size: 1.2rem;
@@ -53,13 +61,14 @@ h2 {
 }
 
 .preference-item:hover {
-    background-color: #f0f8ff;
+    background-color: #e0e0e0;
 }
 
 .preference-item.selected {
-    background-color: #007bff;
+    background-color: #1A2C73; 
     color: #fff;
 }
+
 
 .save-button {
     padding: 14px 20px;
@@ -73,13 +82,18 @@ h2 {
 }
 
 .save-button.enabled {
-    background-color: #007bff;
+    background-color: #1A2C73; 
     cursor: pointer;
 }
 
-.save-button:hover {
-    background-color: #005bb5;
+.save-button.enabled:hover {
+    background-color: #0e1a4c; 
 }
+
+.save-button.enabled:active {
+    background-color: #0b153d; 
+}
+
 
 .message {
     margin-top: 10px;
