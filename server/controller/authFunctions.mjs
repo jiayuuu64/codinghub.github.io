@@ -226,3 +226,45 @@ export const commitmentPreference = async (req, res) => {
         res.status(500).json({ message: "Failed to save commitment preference" });
     }
 };
+
+// Get user preferences and name
+export const getUserPreferences = async (req, res) => {
+    const { email } = req.query;
+    try {
+        const user = await db.collection("users").findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.status(200).json({
+            name: user.name || '',
+            languagePreference: user.languagePreference || '',
+            experiencePreference: user.experiencePreference || '',
+            commitmentPreference: user.commitmentPreference || '',
+            avatar: user.avatar || ''
+        });
+    } catch (err) {
+        res.status(500).json({ message: "Failed to retrieve preferences" });
+    }
+};
+
+// Save user profile picture (Base64)
+export const updateAvatar = async (req, res) => {
+    const { email, avatarBase64 } = req.body;
+    if (!email || !avatarBase64) {
+        return res.status(400).json({ message: "Email and avatar required." });
+    }
+
+    try {
+        const result = await db.collection("users").updateOne(
+            { email },
+            { $set: { avatar: avatarBase64 } }
+        );
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.status(200).json({ message: "Profile picture updated successfully" });
+    } catch (err) {
+        res.status(500).json({ message: "Failed to update avatar" });
+    }
+};
