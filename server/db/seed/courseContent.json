@@ -1,0 +1,190 @@
+{
+  "title": "Python",
+  "description": "Learn Python from the ground up, covering fundamentals, control flow, functions, and more.",
+  "sections": [
+    {
+      "title": "Python Basics",
+      "description": "Start with variables, data types, and basic operations.",
+      "lessons": [
+        {
+          "title": "Creating Variables",
+          "steps": [
+            {
+              "type": "text-video",
+              "text": "In Python, variables are created by assigning values with the '=' sign.",
+              "content": "https://www.youtube.com/embed/_uQrJ0TkZlc"
+            },
+            {
+              "type": "code",
+              "language": "python",
+              "content": "x = 10"
+            },
+            {
+              "type": "quiz",
+              "question": "Which line correctly assigns a value to a variable?",
+              "options": ["10 = x", "x == 10", "x = 10"],
+              "answer": "x = 10"
+            }
+          ]
+        },
+        {
+          "title": "Data Types",
+          "steps": [
+            {
+              "type": "text-video",
+              "text": "Python has several data types such as int, float, str, and bool.",
+              "content": "https://www.youtube.com/embed/khKv-8q7YmY"
+            },
+            {
+              "type": "code",
+              "language": "python",
+              "content": "a = 5  # int\nb = 3.14  # float\nc = 'Hello'  # string\nd = True  # boolean"
+            },
+            {
+              "type": "quiz",
+              "question": "What is the data type of 3.14?",
+              "options": ["int", "float", "str", "bool"],
+              "answer": "float"
+            }
+          ]
+        },
+        {
+          "title": "Basic Operations",
+          "steps": [
+            {
+              "type": "text-video",
+              "text": "Learn arithmetic operations in Python like addition, subtraction, multiplication, and division.",
+              "content": "https://www.youtube.com/embed/kqtD5dpn9C8"
+            },
+            {
+              "type": "code",
+              "language": "python",
+              "content": "x = 10 + 5\nprint(x)  # Output: 15"
+            },
+            {
+              "type": "quiz",
+              "question": "What will be the output of `10 - 2`?",
+              "options": ["8", "12", "102", "Error"],
+              "answer": "8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Control Flow",
+      "description": "Learn how to control the flow of your Python programs with conditions and loops.",
+      "lessons": [
+        {
+          "title": "If Statements",
+          "steps": [
+            {
+              "type": "text-video",
+              "text": "Use if, elif, and else to execute code based on conditions.",
+              "content": "https://www.youtube.com/embed/Z3b_JqJUe8o"
+            },
+            {
+              "type": "code",
+              "language": "python",
+              "content": "x = 10\nif x > 5:\n    print('x is greater than 5')\nelse:\n    print('x is 5 or less')"
+            },
+            {
+              "type": "quiz",
+              "question": "What will be printed if x=10?",
+              "options": ["x is greater than 5", "x is 5 or less", "Error", "Nothing"],
+              "answer": "x is greater than 5"
+            }
+          ]
+        },
+        {
+          "title": "Loops",
+          "steps": [
+            {
+              "type": "text-video",
+              "text": "For loops and while loops help you repeat code multiple times.",
+              "content": "https://www.youtube.com/embed/6iF8Xb7Z3wQ"
+            },
+            {
+              "type": "code",
+              "language": "python",
+              "content": "for i in range(3):\n    print(i)"
+            },
+            {
+              "type": "quiz",
+              "question": "What will be printed by this loop?",
+              "options": ["0 1 2", "1 2 3", "0 1 2 3", "Error"],
+              "answer": "0 1 2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Functions",
+      "description": "Define reusable blocks of code with functions.",
+      "lessons": [
+        {
+          "title": "Defining Functions",
+          "steps": [
+            {
+              "type": "text-video",
+              "text": "Functions let you encapsulate code for reuse.",
+              "content": "https://www.youtube.com/embed/NSbOtYzIQI0"
+            },
+            {
+              "type": "code",
+              "language": "python",
+              "content": "def greet(name):\n    print(f'Hello, {name}!')\n\ngreet('Alice')"
+            },
+            {
+              "type": "quiz",
+              "question": "How do you define a function in Python?",
+              "options": ["function greet()", "def greet()", "func greet()", "define greet()"],
+              "answer": "def greet()"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Summary Quiz",
+      "description": "Test your knowledge from all previous lessons.",
+      "lessons": [
+        {
+          "title": "Final Quiz",
+          "steps": [
+            {
+              "type": "quiz",
+              "question": "Which symbol is used to assign a value to a variable?",
+              "options": ["=", "==", ":", "+="],
+              "answer": "="
+            },
+            {
+              "type": "quiz",
+              "question": "What is the output of `print(2 + 3 * 4)`?",
+              "options": ["20", "14", "24", "None"],
+              "answer": "14"
+            },
+            {
+              "type": "quiz",
+              "question": "Which keyword starts a function definition?",
+              "options": ["function", "def", "func", "define"],
+              "answer": "def"
+            },
+            {
+              "type": "quiz",
+              "question": "What does the `if` statement do?",
+              "options": [
+                "Loops over items",
+                "Executes code conditionally",
+                "Defines a function",
+                "Creates a variable"
+              ],
+              "answer": "Executes code conditionally"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
