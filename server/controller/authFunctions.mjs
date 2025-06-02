@@ -241,3 +241,57 @@ export const updateAvatar = async (req, res) => {
         res.status(500).json({ message: "Failed to update avatar" });
     }
 };
+
+// Update user profile
+export const updateUserProfile = async (req, res) => {
+    const { email, name, languagePreference, experiencePreference, commitmentPreference } = req.body;
+    if (!email) return res.status(400).json({ message: "Email is required." });
+    try {
+        const result = await db.collection("users").updateOne(
+            { email },
+            {
+                $set: {
+                    name,
+                    languagePreference,
+                    experiencePreference,
+                    commitmentPreference
+                }
+            }
+        );
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ message: "User not found." });
+        }
+        res.status(200).json({ message: "Profile updated successfully." });
+    } catch (err) {
+        res.status(500).json({ message: "Failed to update profile." });
+    }
+};
+
+// Change password
+export const changePassword = async (req, res) => {
+    const { email, currentPassword, newPassword } = req.body;
+    if (!email || !currentPassword || !newPassword) {
+        return res.status(400).json({ message: "All fields are required." });
+    }
+
+    try {
+        const user = await db.collection("users").findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: "Current password is incorrect." });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await db.collection("users").updateOne(
+            { email },
+            { $set: { password: hashedPassword } }
+        );
+        res.status(200).json({ message: "Password changed successfully." });
+    } catch (err) {
+        res.status(500).json({ message: "Failed to change password." });
+    }
+};
