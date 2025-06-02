@@ -1,13 +1,18 @@
+// src/components/Lesson.jsx
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/Lesson.css';
 
 const Lesson = () => {
   const { lessonId } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
   const [lesson, setLesson] = useState(null);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+
+  const queryParams = new URLSearchParams(location.search);
+  const courseId = queryParams.get('courseId');
 
   useEffect(() => {
     const fetchLesson = async () => {
@@ -89,7 +94,10 @@ const Lesson = () => {
   return (
     <div className="lesson-fullscreen">
       <div className="lesson-top-bar">
-        <button className="lesson-exit-button" onClick={() => navigate(`/courses/${lesson.course}`)}>
+        <button
+          className="lesson-exit-button"
+          onClick={() => navigate(`/courses/${courseId}`)}
+        >
           ✕ Exit
         </button>
         <div className="lesson-progress-bar-wrapper">
