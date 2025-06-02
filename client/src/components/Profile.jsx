@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 import '../styles/Profile.css';
 import axios from 'axios';
 
+
 const Profile = () => {
+    const navigate = useNavigate();
     const email = localStorage.getItem('email');
 
     const [profile, setProfile] = useState({
@@ -108,7 +111,7 @@ const Profile = () => {
                 </div>
 
                 <div className="profile-footer">
-                    <button className="edit-btn">Edit Profile</button>
+                    <button className="edit-btn" onClick={() => navigate('/edit-profile')}>Edit Profile</button>
                 </div>
             </div>
         </>

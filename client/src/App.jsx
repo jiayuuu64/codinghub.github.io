@@ -10,8 +10,10 @@ import ExperiencePreference from './components/ExperiencePreference';
 import CommitmentPreference from './components/CommitmentPreference';
 import Profile from './components/Profile';
 import Courses from './components/Courses';
-import Sections from './components/Sections'; // ✅ NEW
-import Lesson from './components/Lesson';     // ✅ NEW
+import Sections from './components/Sections'; 
+import Lesson from './components/Lesson';  
+import EditProfile from './components/EditProfile';  
+import ChangePassword from './components/ChangePassword';
 import { isAuthenticated } from './utils/auth';
 
 const ProtectedRoute = ({ children }) => {
@@ -31,11 +33,13 @@ const App = () => {
             <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
             <Route path="/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
             <Route path="/courses/:courseId" element={<ProtectedRoute><Sections /></ProtectedRoute>} />
-            <Route path="/lesson/:lessonId" element={<ProtectedRoute><Lesson /></ProtectedRoute>} /> {/* ✅ NEW */}
+            <Route path="/lesson/:lessonId" element={<ProtectedRoute><Lesson /></ProtectedRoute>} /> 
             <Route path="/language-preference" element={<LanguagePreference />} />
             <Route path="/experience-preference" element={<ExperiencePreference />} />
             <Route path="/commitment-preference" element={<CommitmentPreference />} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
+            <Route path="/change-password" element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />
         </Routes>
     );
 };
