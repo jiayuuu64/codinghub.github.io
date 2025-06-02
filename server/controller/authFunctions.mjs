@@ -270,9 +270,14 @@ export const updateUserProfile = async (req, res) => {
 
 // Change password
 export const changePassword = async (req, res) => {
-    const { email, currentPassword, newPassword } = req.body;
-    if (!email || !currentPassword || !newPassword) {
+    const { email, currentPassword, newPassword, confirmPassword } = req.body;
+
+    if (!email || !currentPassword || !newPassword || !confirmPassword) {
         return res.status(400).json({ message: "All fields are required." });
+    }
+
+    if (newPassword !== confirmPassword) {
+        return res.status(400).json({ message: "New passwords do not match." });
     }
 
     if (validatePasswordStrength(newPassword) !== "strong") {
@@ -302,4 +307,5 @@ export const changePassword = async (req, res) => {
         res.status(500).json({ message: "Failed to change password." });
     }
 };
+
 
