@@ -9,6 +9,9 @@ import LanguagePreference from './components/LanguagePreference';
 import ExperiencePreference from './components/ExperiencePreference';
 import CommitmentPreference from './components/CommitmentPreference';
 import Profile from './components/Profile';
+import Courses from './components/Courses';
+import Sections from './components/Sections'; // ✅ NEW
+import Lesson from './components/Lesson';     // ✅ NEW
 import { isAuthenticated } from './utils/auth';
 
 const ProtectedRoute = ({ children }) => {
@@ -26,6 +29,9 @@ const App = () => {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+            <Route path="/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
+            <Route path="/courses/:courseId" element={<ProtectedRoute><Sections /></ProtectedRoute>} />
+            <Route path="/lesson/:lessonId" element={<ProtectedRoute><Lesson /></ProtectedRoute>} /> {/* ✅ NEW */}
             <Route path="/language-preference" element={<LanguagePreference />} />
             <Route path="/experience-preference" element={<ExperiencePreference />} />
             <Route path="/commitment-preference" element={<CommitmentPreference />} />

@@ -48,7 +48,7 @@ const Home = () => {
                     </div>
                 </section>
 
-                <section className="courses-section">
+                {/* <section className="courses-section">
                     <h2>Courses</h2>
                     <div className="course-cards">
                         {courses.map((course, idx) => (
@@ -60,7 +60,7 @@ const Home = () => {
                             </div>
                         ))}
                     </div>
-                </section>
+                </section> */}
             </div>
         </>
     );

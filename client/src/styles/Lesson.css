@@ -1,0 +1,131 @@
+/* src/styles/Lesson.css */
+
+.lesson-fullscreen {
+  background-color: #1b1f3a;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Top bar */
+.lesson-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem 0.5rem;
+  background-color: #25294d;
+}
+
+/* Exit Button */
+.lesson-exit-button {
+  width: 100px;
+  background: none;
+  color: #a78bfa;
+  border: none;
+  font-size: 1.3rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.lesson-exit-button:hover {
+  color: #d8b4fe;
+}
+
+/* Progress Bar */
+.lesson-progress-bar-wrapper {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+
+.lesson-progress-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lesson-progress-step {
+  height: 6px;
+  width: 40px;
+  border-radius: 5px;
+  background-color: #3c426d;
+  margin: 0 4px;
+  transition: background-color 0.3s ease;
+}
+
+.lesson-progress-step.active {
+  background-color: #a78bfa;
+}
+
+/* Content */
+.lesson-step-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.lesson-step-text {
+  font-size: 1.3rem;
+  max-width: 600px;
+}
+
+.lesson-step-code {
+  background-color: #2c3e50;
+  color: #7bdff2;
+  padding: 1rem;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  max-width: 600px;
+  overflow-x: auto;
+}
+
+.lesson-step-video {
+  max-width: 90%;
+  border-radius: 10px;
+  height: 300px;
+
+  border: none;
+}
+
+.lesson-step-quiz {
+  font-size: 1.2rem;
+  color: #ffed91;
+}
+
+/* Bottom Bar */
+.lesson-bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background-color: #25294d;
+}
+
+.lesson-nav-button {
+  background-color: #a78bfa;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.lesson-nav-button:hover {
+  background-color: #8b5cf6;
+}
+
+.lesson-nav-button:disabled {
+  background-color: #6b7280;
+  cursor: not-allowed;
+}
