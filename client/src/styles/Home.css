@@ -6,190 +6,133 @@ body {
 }
 
 .home-container {
-    padding: 30px;
-    min-height: calc(200vh - 200px);
+    padding: 40px 60px;
     background-color: #32458D;
-}
-
-p {
-    font-size: 16px;
+    min-height: 100vh;
     color: white;
 }
 
-/* Shared layout */
+/* ====== SECTION HEADINGS ====== */
+.progress-section h2,
+.recommended-section h2,
+.courses-section h2 {
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+
+/* Add top spacing to recommended section */
+.recommended-section {
+    margin-top: 60px; /* ✅ pushes this section lower */
+}
+
+/* ====== CARD GRIDS ====== */
 .progress-cards,
 .recommended-cards,
 .course-cards {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 20px;
-    padding: 0 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
 }
 
-/* ====== CARD INTERACTIVITY ====== */
-.progress-card,
-.recommended-card,
-.course-card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    cursor: pointer;
-}
-
-.progress-card:hover,
-.recommended-card:hover,
-.course-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-}
-
-.progress-card:active,
-.recommended-card:active,
-.course-card:active {
-    transform: scale(0.98);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-/* ====== PROGRESS SECTION ====== */
-.progress-section {
-    margin-top: 30px;
-    color: white;
-}
-
-.progress-section h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    margin-left: 20px;
-}
-
+/* ====== CARD STYLING ====== */
 .progress-card {
     background-color: #2a3872;
-    border: 1px solid #aaa;
-    border-radius: 15px;
-    padding: 30px;
-    width: 320px;
-    color: white;
+    border-radius: 16px;
+    padding: 24px 20px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    justify-content: space-between;
+    height: 160px;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
 }
 
-.progress-card .course-title {
+.progress-card:hover {
+    transform: translateY(-4px);
+}
+
+/* ====== BADGE (TOP RIGHT ICON) ====== */
+.course-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+}
+
+/* ====== COURSE INFO ====== */
+.course-type {
+    font-size: 12px;
     font-weight: bold;
-    text-align: center;
-    width: 100%;
+    color: #7fbaff;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
 }
 
+.course-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 4px 0 12px;
+}
+
+/* ====== PROGRESS BAR ====== */
 .progress-bar {
     background-color: #ccc;
     border-radius: 10px;
     overflow: hidden;
-    height: 12px;
-    width: 100%;
+    height: 8px;
+    margin-bottom: 8px;
 }
 
 .progress {
     height: 100%;
     background-color: #ffffff;
+    transition: width 0.4s ease-in-out;
+    border-radius: 10px;
 }
 
+/* ====== PROGRESS FOOTER ====== */
 .progress-info {
     display: flex;
     justify-content: space-between;
-    width: 100%;
-    font-size: 14px;
+    font-size: 13px;
     color: #ddd;
 }
 
-/* ====== RECOMMENDED SECTION ====== */
-.recommended-section {
-    margin-top: 30px;
-    color: white;
-}
-
-.recommended-section h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    margin-left: 20px;
-}
-
-.recommended-card {
-    background-color: #2a3872;
-    border: 1px solid #aaa;
-    border-radius: 15px;
-    padding: 70px;
-    width: 320px;
-    color: white;
-}
-
-/* ====== COURSES SECTION ====== */
-.courses-section {
-    margin-top: 40px;
-    color: white;
-}
-
-.courses-section h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    margin-left: 20px;
-}
-
+/* ====== RECOMMENDED / COURSE CARD BASE ====== */
+.recommended-card,
 .course-card {
     background-color: #2a3872;
-    border: 1px solid #aaa;
-    border-radius: 15px;
-    padding: 20px;
-    width: 320px;
+    border-radius: 16px;
+    padding: 24px;
+    height: 160px;
     color: white;
-    display: flex;
-    align-items: center;
 }
 
-.course-logo-title {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.course-logo {
-    width: 36px;
-    height: 36px;
-}
-
-.course-title {
-    font-weight: bold;
-    font-size: 16px;
-}
-
-/* RESPONSIVE */
+/* ====== RESPONSIVE ====== */
 @media (max-width: 768px) {
     .home-container {
-        padding: 15px;
-        min-height: calc(100vh - 100px);
-    }
-
-    p {
-        font-size: 14px;
+        padding: 20px;
     }
 
     .progress-section h2,
     .recommended-section h2,
     .courses-section h2 {
-        font-size: 20px;
-        margin-left: 10px;
-    }
-
-    .progress-cards,
-    .recommended-cards,
-    .course-cards {
-        flex-direction: column;
-        gap: 15px;
-        align-items: center;
+        font-size: 22px;
     }
 
     .progress-card,
     .recommended-card,
     .course-card {
-        width: 100%;
-        padding: 20px;
+        height: auto;
+    }
+
+    .progress-info {
+        font-size: 12px;
+    }
+
+    .recommended-section {
+        margin-top: 40px; /* slightly reduced for mobile */
     }
 }
