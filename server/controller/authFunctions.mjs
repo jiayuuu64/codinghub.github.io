@@ -269,6 +269,8 @@ export const updateUserProfile = async (req, res) => {
 
 
 // Change password
+import User from "../db/models/User.mjs"; // Make sure this is at the top
+
 export const changePassword = async (req, res) => {
     const { email, currentPassword, newPassword } = req.body;
     if (!email || !currentPassword || !newPassword) {
@@ -276,7 +278,7 @@ export const changePassword = async (req, res) => {
     }
 
     try {
-        const user = await db.collection("users").findOne({ email });
+        const user = await User.findOne({ email });
         if (!user) {
             return res.status(404).json({ message: "User not found." });
         }
@@ -287,12 +289,13 @@ export const changePassword = async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(newPassword, 10);
-        await db.collection("users").updateOne(
-            { email },
-            { $set: { password: hashedPassword } }
-        );
+        user.password = hashedPassword;
+        await user.save();
+
         res.status(200).json({ message: "Password changed successfully." });
     } catch (err) {
+        console.error("Change password error:", err);
         res.status(500).json({ message: "Failed to change password." });
     }
 };
+
