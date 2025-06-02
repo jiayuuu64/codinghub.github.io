@@ -134,7 +134,7 @@
             {
               "type": "code",
               "language": "python",
-              "content": "def greet(name):\n    print(f'Hello, {name}!')\n\ngreet('Alice')"
+              "content": "def greet(name):\n    print(`Hello, ${name}!`)\n\ngreet('Alice')"
             },
             {
               "type": "quiz",
@@ -181,6 +181,42 @@
                 "Creates a variable"
               ],
               "answer": "Executes code conditionally"
+            },
+            {
+              "type": "quiz",
+              "question": "Which of these is a valid variable name in Python?",
+              "options": ["first-name", "1stName", "_first_name", "first name"],
+              "answer": "_first_name"
+            },
+            {
+              "type": "quiz",
+              "question": "What will be the output of this code?\n\nprint(type(3.14))",
+              "options": ["<class 'int'>", "<class 'float'>", "<class 'str'>", "<class 'bool'>"],
+              "answer": "<class 'float'>"
+            },
+            {
+              "type": "quiz",
+              "question": "Which operator is used for exponentiation in Python?",
+              "options": ["^", "**", "%", "//"],
+              "answer": "**"
+            },
+            {
+              "type": "quiz",
+              "question": "What keyword is used to start a conditional statement in Python?",
+              "options": ["if", "for", "while", "def"],
+              "answer": "if"
+            },
+            {
+              "type": "quiz",
+              "question": "How do you define a function that takes no parameters?",
+              "options": ["def func:", "def func()", "function func()", "def func(void)"],
+              "answer": "def func()"
+            },
+            {
+              "type": "quiz",
+              "question": "What will this loop output?\n\nfor i in range(2):\n    print(i)",
+              "options": ["0 1 2", "1 2", "0 1", "1 2 3"],
+              "answer": "0 1"
             }
           ]
         }

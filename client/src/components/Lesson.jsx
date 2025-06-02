@@ -10,6 +10,8 @@ const Lesson = () => {
   const navigate = useNavigate();
   const [lesson, setLesson] = useState(null);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [isAnsweredCorrectly, setIsAnsweredCorrectly] = useState(false);
 
   const queryParams = new URLSearchParams(location.search);
   const courseId = queryParams.get('courseId');
@@ -19,6 +21,9 @@ const Lesson = () => {
       try {
         const res = await axios.get(`https://codinghub-r3bn.onrender.com/api/lessons/${lessonId}`);
         setLesson(res.data);
+        setCurrentStepIndex(0);
+        setSelectedOption(null);
+        setIsAnsweredCorrectly(false);
       } catch (err) {
         console.error('Failed to fetch lesson:', err);
       }
@@ -33,23 +38,34 @@ const Lesson = () => {
   const currentStep = lesson.steps[currentStepIndex];
 
   const handleNext = () => {
+    setSelectedOption(null);
+    setIsAnsweredCorrectly(false);
     if (currentStepIndex < lesson.steps.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1);
     }
   };
 
   const handleBack = () => {
+    setSelectedOption(null);
+    setIsAnsweredCorrectly(false);
     if (currentStepIndex > 0) {
       setCurrentStepIndex(currentStepIndex - 1);
     }
+  };
+
+  const handleOptionSelect = (option) => {
+    setSelectedOption(option);
+    setIsAnsweredCorrectly(option === currentStep.answer);
   };
 
   const renderStepContent = (step) => {
     switch (step.type) {
       case 'text':
         return <p className="lesson-step-text">{step.content}</p>;
+
       case 'code':
         return <pre className="lesson-step-code"><code>{step.content}</code></pre>;
+
       case 'video':
         return step.content.includes('youtube.com') ? (
           <iframe
@@ -65,8 +81,7 @@ const Lesson = () => {
             Your browser does not support the video tag.
           </video>
         );
-      case 'quiz':
-        return <div className="lesson-step-quiz">[Quiz goes here]</div>;
+
       case 'text-video':
         return (
           <div className="lesson-step-text-video">
@@ -86,6 +101,49 @@ const Lesson = () => {
             <p className="lesson-step-text" style={{ marginTop: '1rem' }}>{step.text}</p>
           </div>
         );
+
+      case 'quiz':
+        if (!step.options || !Array.isArray(step.options)) {
+          return (
+            <div className="lesson-step-quiz">
+              <h3>{step.question || "⚠️ Missing question"}</h3>
+              <p style={{ color: 'red' }}>⚠️ This quiz is missing its options array.</p>
+            </div>
+          );
+        }
+
+        return (
+          <div className="lesson-step-quiz">
+            <h3 className="quiz-question">{step.question}</h3>
+            <ul className="quiz-options">
+              {step.options.map((option, idx) => (
+                <li
+                  key={idx}
+                  className={`quiz-option ${
+                    selectedOption === option ? (isAnsweredCorrectly ? 'correct' : 'incorrect') : ''
+                  }`}
+                  onClick={() => !isAnsweredCorrectly && handleOptionSelect(option)}
+                  tabIndex={0}
+                  role="button"
+                  onKeyDown={(e) => {
+                    if ((e.key === 'Enter' || e.key === ' ') && !isAnsweredCorrectly) {
+                      handleOptionSelect(option);
+                    }
+                  }}
+                >
+                  <span className="option-text">{option}</span>
+                  {selectedOption === option && isAnsweredCorrectly && (
+                    <span className="option-feedback">✓</span>
+                  )}
+                  {selectedOption === option && !isAnsweredCorrectly && (
+                    <span className="option-feedback">✗</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+
       default:
         return <p>Unknown step type: {step.type}</p>;
     }
@@ -127,7 +185,7 @@ const Lesson = () => {
         <button
           className="lesson-nav-button"
           onClick={handleNext}
-          disabled={currentStepIndex === lesson.steps.length - 1}
+          disabled={!isAnsweredCorrectly && currentStep.type === 'quiz' || currentStepIndex === lesson.steps.length - 1}
         >
           Next →
         </button>
