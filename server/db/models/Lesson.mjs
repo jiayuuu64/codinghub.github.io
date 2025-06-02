@@ -3,21 +3,15 @@ import mongoose from 'mongoose';
 const stepSchema = new mongoose.Schema({
   type: {
     type: String,
-    enum: ['text', 'video', 'quiz', 'code', 'text-video'], // added 'text-video'
+    enum: ['text', 'video', 'quiz', 'code', 'text-video'], // supported step types
     required: true
   },
-  content: {
-    type: String,  // for video URL or text content (for text-only)
-  },
-  text: {
-    type: String   // for text content when type is 'text-video'
-  },
-  language: String,
-  quiz: {
-    question: String,
-    options: [String],
-    answer: String
-  }
+  content: String,     // For text, video, code, or text-video
+  text: String,        // For text-video
+  language: String,    // For code steps
+  question: String,    // For quiz steps
+  options: [String],   // For quiz steps
+  answer: String       // For quiz steps
 });
 
 const lessonSchema = new mongoose.Schema({
