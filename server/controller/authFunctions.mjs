@@ -269,8 +269,6 @@ export const updateUserProfile = async (req, res) => {
 
 
 // Change password
-import User from "../db/models/User.mjs"; // Make sure this is at the top
-
 export const changePassword = async (req, res) => {
     const { email, currentPassword, newPassword } = req.body;
     if (!email || !currentPassword || !newPassword) {
