@@ -242,7 +242,6 @@ export const updateAvatar = async (req, res) => {
     }
 };
 
-// Update user profile
 export const updateUserProfile = async (req, res) => {
     const { email, name, languagePreference, experiencePreference, commitmentPreference } = req.body;
     if (!email) return res.status(400).json({ message: "Email is required." });
