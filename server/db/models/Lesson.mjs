@@ -3,20 +3,20 @@ import mongoose from 'mongoose';
 const stepSchema = new mongoose.Schema({
   type: {
     type: String,
-    enum: ['text', 'video', 'quiz', 'code', 'text-video'], // supported step types
-    required: true
+    enum: ['text', 'video', 'quiz', 'code', 'text-video', 'text-code'], // Added 'text-code'
+    required: true,
   },
-  content: String,     // For text, video, code, or text-video
-  text: String,        // For text-video
-  language: String,    // For code steps
-  question: String,    // For quiz steps
-  options: [String],   // For quiz steps
-  answer: String       // For quiz steps
+  content: String, // Code snippet, video URL, or text content
+  text: String,    // Explanatory text (used for text-video and text-code)
+  language: String,
+  question: String,
+  options: [String],
+  answer: String,
 });
 
 const lessonSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  steps: [stepSchema]
+  steps: [stepSchema],
 });
 
 const Lesson = mongoose.model('Lesson', lessonSchema);

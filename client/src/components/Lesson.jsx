@@ -1,4 +1,3 @@
-// src/components/Lesson.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -99,6 +98,14 @@ const Lesson = () => {
               </video>
             )}
             <p className="lesson-step-text" style={{ marginTop: '1rem' }}>{step.text}</p>
+          </div>
+        );
+
+      case 'text-code':
+        return (
+          <div className="lesson-step-text-code">
+            <p className="lesson-step-text">{step.text}</p>
+            <pre className="lesson-step-code"><code>{step.content}</code></pre>
           </div>
         );
 

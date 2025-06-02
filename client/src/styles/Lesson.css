@@ -1,5 +1,3 @@
-/* src/styles/Lesson.css */
-
 .lesson-fullscreen {
   background-color: #1b1f3a;
   color: #ffed91;
@@ -155,6 +153,19 @@
   font-weight: bold;
   font-size: 1.2rem;
   margin-left: 1rem;
+}
+
+/* text-code step styling */
+.lesson-step-text-code {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.lesson-step-text-code .lesson-step-text {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  color: #ffed91;
 }
 
 /* Bottom Bar */
