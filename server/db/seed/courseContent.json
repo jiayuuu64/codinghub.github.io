@@ -15,7 +15,8 @@
               "content": "https://www.youtube.com/embed/_uQrJ0TkZlc"
             },
             {
-              "type": "code",
+              "type": "text-code",
+              "text": "This line creates a variable named 'x' and assigns it the integer value 10. Variables are like containers for data.",
               "language": "python",
               "content": "x = 10"
             },
@@ -36,7 +37,8 @@
               "content": "https://www.youtube.com/embed/khKv-8q7YmY"
             },
             {
-              "type": "code",
+              "type": "text-code",
+              "text": "Here we define variables of different types: an integer, a floating-point number, a string (text), and a boolean value (True/False). These types determine what kind of data each variable holds.",
               "language": "python",
               "content": "a = 5  # int\nb = 3.14  # float\nc = 'Hello'  # string\nd = True  # boolean"
             },
@@ -57,7 +59,8 @@
               "content": "https://www.youtube.com/embed/kqtD5dpn9C8"
             },
             {
-              "type": "code",
+              "type": "text-code",
+              "text": "This example adds 10 and 5, assigns the result to 'x', and prints the output. Python uses standard arithmetic operators like +, -, *, and /.",
               "language": "python",
               "content": "x = 10 + 5\nprint(x)  # Output: 15"
             },
@@ -84,7 +87,8 @@
               "content": "https://www.youtube.com/embed/Z3b_JqJUe8o"
             },
             {
-              "type": "code",
+              "type": "text-code",
+              "text": "This code checks if 'x' is greater than 5. If true, it prints one message; otherwise, it prints another. Conditional statements let your programs make decisions.",
               "language": "python",
               "content": "x = 10\nif x > 5:\n    print('x is greater than 5')\nelse:\n    print('x is 5 or less')"
             },
@@ -105,7 +109,8 @@
               "content": "https://www.youtube.com/embed/6iF8Xb7Z3wQ"
             },
             {
-              "type": "code",
+              "type": "text-code",
+              "text": "This for loop repeats the print statement for each number from 0 up to (but not including) 3. Loops let you run code multiple times efficiently.",
               "language": "python",
               "content": "for i in range(3):\n    print(i)"
             },
@@ -132,9 +137,10 @@
               "content": "https://www.youtube.com/embed/NSbOtYzIQI0"
             },
             {
-              "type": "code",
+              "type": "text-code",
+              "text": "This defines a function called 'greet' that takes a 'name' parameter and prints a greeting. You call the function by name and provide arguments.",
               "language": "python",
-              "content": "def greet(name):\n    print(`Hello, ${name}!`)\n\ngreet('Alice')"
+              "content": "def greet(name):\n    print(f'Hello, {name}!')\n\ngreet('Alice')"
             },
             {
               "type": "quiz",
