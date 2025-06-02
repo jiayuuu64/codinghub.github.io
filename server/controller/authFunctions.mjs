@@ -244,27 +244,29 @@ export const updateAvatar = async (req, res) => {
 
 export const updateUserProfile = async (req, res) => {
     const { email, name, languagePreference, experiencePreference, commitmentPreference } = req.body;
-    if (!email) return res.status(400).json({ message: "Email is required." });
+    if (!email) {
+        return res.status(400).json({ message: "Email is required." });
+    }
+
     try {
-        const result = await db.collection("users").updateOne(
-            { email },
-            {
-                $set: {
-                    name,
-                    languagePreference,
-                    experiencePreference,
-                    commitmentPreference
-                }
-            }
-        );
-        if (result.matchedCount === 0) {
+        const user = await User.findOne({ email });
+        if (!user) {
             return res.status(404).json({ message: "User not found." });
         }
+
+        user.name = name || user.name;
+        user.languagePreference = languagePreference || user.languagePreference;
+        user.experiencePreference = experiencePreference || user.experiencePreference;
+        user.commitmentPreference = commitmentPreference || user.commitmentPreference;
+
+        await user.save();
         res.status(200).json({ message: "Profile updated successfully." });
     } catch (err) {
+        console.error("Update profile error:", err);
         res.status(500).json({ message: "Failed to update profile." });
     }
 };
+
 
 // Change password
 export const changePassword = async (req, res) => {
