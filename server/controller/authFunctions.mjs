@@ -98,6 +98,7 @@ export const resetPassword = async (req, res) => {
 // === Login/Register ===
 export const loginUser = async (req, res) => {
     try {
+
         const { email, password } = req.body;
         const user = await User.findOne({ email });
 
@@ -306,6 +307,85 @@ export const changePassword = async (req, res) => {
         console.error("Change password error:", err);
         res.status(500).json({ message: "Failed to change password." });
     }
+};
+
+export const completeLesson = async (req, res) => {
+    const { courseId } = req.params;
+    const { email } = req.query;
+    const { lessonId } = req.body;
+
+    if (!email) {
+        return res.status(400).json({ message: 'Email is required.' });
+    }
+    try {
+        const user = await User.findOne({ email });
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        let progress = user.progress.find(p => p.courseId.equals(courseId));
+        if (!progress) {
+            progress = { courseId, completedLessons: [], completedQuiz: false };
+            user.progress.push(progress);
+        }
+        if (!progress.completedLessons.includes(lessonId)) {
+            progress.completedLessons.push(lessonId);
+        }
+
+        await user.save();
+        res.status(200).json({ message: 'Lesson marked as completed', progress });
+    } catch (err) {
+        res.status(500).json({ message: 'Failed to update progress', error: err.message });
+    }
+};
+
+
+export const completeQuiz = async (req, res) => {
+    const { email, courseId } = req.params;
+
+    try {
+        const user = await User.findOne({ email })
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        let progress = user.progress.find(p => p.courseId.equals(courseId));
+        if (!progress) {
+            progress = { courseId, completedLessons: [], completedQuiz: true };
+            user.progress.push(progress);
+        } else {
+            progress.completedQuiz = true;
+        }
+
+        await user.save();
+        res.status(200).json({ message: 'Quiz marked as completed', progress });
+    } catch (err) {
+        res.status(500).json({ message: 'Failed to update quiz completion', error: err.message });
+    }
+};
+
+export const getProgress = async (req, res) => {
+    const { email, courseId } = req.params;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        const progress = user.progress.find(p => p.courseId.equals(courseId));
+        res.status(200).json({ progress });
+    } catch (err) {
+        res.status(500).json({ message: 'Failed to fetch progress', error: err.message });
+    }
+};
+
+export const getAllUserProgress = async (req, res) => {
+  const { email } = req.params;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Return all progress
+    res.status(200).json(user.progress || []);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch progress', error: err.message });
+  }
 };
 
 
