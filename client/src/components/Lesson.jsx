@@ -11,11 +11,10 @@ const Lesson = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [isAnsweredCorrectly, setIsAnsweredCorrectly] = useState(false);
-  const [attemptCount, setAttemptCount] = useState(0);
-  const [showExplanation, setShowExplanation] = useState(false);
 
   const queryParams = new URLSearchParams(location.search);
   const courseId = queryParams.get('courseId');
+  const email = localStorage.getItem('email');
 
   useEffect(() => {
     const fetchLesson = async () => {
@@ -23,7 +22,8 @@ const Lesson = () => {
         const res = await axios.get(`https://codinghub-r3bn.onrender.com/api/lessons/${lessonId}`);
         setLesson(res.data);
         setCurrentStepIndex(0);
-        resetQuizState();
+        setSelectedOption(null);
+        setIsAnsweredCorrectly(false);
       } catch (err) {
         console.error('Failed to fetch lesson:', err);
       }
@@ -31,11 +31,45 @@ const Lesson = () => {
     fetchLesson();
   }, [lessonId]);
 
-  const resetQuizState = () => {
+  const handleNext = () => {
     setSelectedOption(null);
     setIsAnsweredCorrectly(false);
-    setAttemptCount(0);
-    setShowExplanation(false);
+    if (currentStepIndex < lesson.steps.length - 1) {
+      setCurrentStepIndex(currentStepIndex + 1);
+    }
+  };
+
+  const handleBack = () => {
+    setSelectedOption(null);
+    setIsAnsweredCorrectly(false);
+    if (currentStepIndex > 0) {
+      setCurrentStepIndex(currentStepIndex - 1);
+    }
+  };
+
+  const handleOptionSelect = (option) => {
+    setSelectedOption(option);
+    setIsAnsweredCorrectly(option === lesson.steps[currentStepIndex].answer);
+  };
+
+  const handleFinishLesson = async () => {
+    if (!email) {
+      console.error("Email not found in localStorage.");
+      alert("Please log in again.");
+      navigate('/login');
+      return;
+    }
+
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/progress/${courseId}/complete-lesson?email=${encodeURIComponent(email)}`,
+        { lessonId }
+      );
+      navigate(`/courses/${courseId}`);
+    } catch (err) {
+      console.error('Failed to mark lesson as complete:', err);
+      alert('Error: Could not mark lesson as complete. Please try again.');
+    }
   };
 
   if (!lesson) {
@@ -43,146 +77,6 @@ const Lesson = () => {
   }
 
   const currentStep = lesson.steps[currentStepIndex];
-
-  const handleNext = () => {
-    if (currentStepIndex < lesson.steps.length - 1) {
-      setCurrentStepIndex(currentStepIndex + 1);
-      resetQuizState();
-    }
-  };
-
-  const handleBack = () => {
-    if (currentStepIndex > 0) {
-      setCurrentStepIndex(currentStepIndex - 1);
-      resetQuizState();
-    }
-  };
-
-  const handleOptionSelect = (option) => {
-    if (isAnsweredCorrectly || showExplanation) return;
-
-    setSelectedOption(option);
-    if (option === currentStep.answer) {
-      setIsAnsweredCorrectly(true);
-    } else {
-      const newAttempts = attemptCount + 1;
-      setAttemptCount(newAttempts);
-      if (newAttempts >= 2) {
-        setShowExplanation(true);
-      }
-    }
-  };
-
-  const renderStepContent = (step) => {
-    switch (step.type) {
-      case 'text':
-        return <p className="lesson-step-text">{step.content}</p>;
-
-      case 'code':
-        return <pre className="lesson-step-code"><code>{step.content}</code></pre>;
-
-      case 'video':
-        return step.content.includes('youtube.com') ? (
-          <iframe
-            className="lesson-step-video"
-            src={step.content}
-            title="YouTube video"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
-        ) : (
-          <video controls className="lesson-step-video">
-            <source src={step.content} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        );
-
-      case 'text-video':
-        return (
-          <div className="lesson-step-text-video">
-            {step.content.includes('youtube.com') ? (
-              <iframe
-                className="lesson-step-video"
-                src={step.content}
-                title="YouTube video"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            ) : (
-              <video controls className="lesson-step-video">
-                <source src={step.content} type="video/mp4" />
-              </video>
-            )}
-            <p className="lesson-step-text" style={{ marginTop: '1rem' }}>{step.text}</p>
-          </div>
-        );
-
-      case 'text-code':
-        return (
-          <div className="lesson-step-text-code">
-            <p className="lesson-step-text">{step.text}</p>
-            <pre className="lesson-step-code"><code>{step.content}</code></pre>
-          </div>
-        );
-
-      case 'quiz':
-        if (!step.options || !Array.isArray(step.options)) {
-          return (
-            <div className="lesson-step-quiz">
-              <h3>{step.question || "⚠️ Missing question"}</h3>
-              <p style={{ color: 'red' }}>⚠️ This quiz is missing its options array.</p>
-            </div>
-          );
-        }
-
-        return (
-          <div className="lesson-step-quiz">
-            <h3 className="quiz-question">{step.question}</h3>
-            <ul className="quiz-options">
-              {step.options.map((option, idx) => (
-                <li
-                  key={idx}
-                  className={`quiz-option ${
-                    selectedOption === option
-                      ? isAnsweredCorrectly
-                        ? 'correct'
-                        : 'incorrect'
-                      : ''
-                  }`}
-                  onClick={() => handleOptionSelect(option)}
-                  tabIndex={0}
-                  role="button"
-                  onKeyDown={(e) => {
-                    if ((e.key === 'Enter' || e.key === ' ') && !isAnsweredCorrectly && !showExplanation) {
-                      handleOptionSelect(option);
-                    }
-                  }}
-                >
-                  <span className="option-text">{option}</span>
-                  {selectedOption === option && isAnsweredCorrectly && (
-                    <span className="option-feedback">✓</span>
-                  )}
-                  {selectedOption === option && !isAnsweredCorrectly && (
-                    <span className="option-feedback">✗</span>
-                  )}
-                </li>
-              ))}
-            </ul>
-            {isAnsweredCorrectly && <p className="quiz-feedback-correct">✅ Correct!</p>}
-            {showExplanation && (
-              <div className="quiz-feedback-explanation">
-                <p>❌ You've used all attempts.</p>
-                <p><strong>Correct answer:</strong> {step.answer}</p>
-                {step.explanation && <p>{step.explanation}</p>}
-              </div>
-            )}
-          </div>
-        );
-
-      default:
-        return <p>Unknown step type: {step.type}</p>;
-    }
-  };
 
   return (
     <div className="lesson-fullscreen">
@@ -206,7 +100,77 @@ const Lesson = () => {
       </div>
 
       <div className="lesson-step-container">
-        {renderStepContent(currentStep)}
+        {(() => {
+          switch (currentStep.type) {
+            case 'text':
+              return <p className="lesson-step-text">{currentStep.content}</p>;
+            case 'code':
+              return <pre className="lesson-step-code"><code>{currentStep.content}</code></pre>;
+            case 'video':
+              return currentStep.content.includes('youtube.com') ? (
+                <iframe
+                  className="lesson-step-video"
+                  src={currentStep.content}
+                  title="YouTube video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              ) : (
+                <video controls className="lesson-step-video">
+                  <source src={currentStep.content} type="video/mp4" />
+                </video>
+              );
+            case 'text-video':
+              return (
+                <div className="lesson-step-text-video">
+                  {currentStep.content.includes('youtube.com') ? (
+                    <iframe
+                      className="lesson-step-video"
+                      src={currentStep.content}
+                      title="YouTube video"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  ) : (
+                    <video controls className="lesson-step-video">
+                      <source src={currentStep.content} type="video/mp4" />
+                    </video>
+                  )}
+                  <p className="lesson-step-text" style={{ marginTop: '1rem' }}>{currentStep.text}</p>
+                </div>
+              );
+            case 'text-code':
+              return (
+                <div className="lesson-step-text-code">
+                  <p className="lesson-step-text">{currentStep.text}</p>
+                  <pre className="lesson-step-code"><code>{currentStep.content}</code></pre>
+                </div>
+              );
+            case 'quiz':
+              return (
+                <div className="lesson-step-quiz">
+                  <h3 className="quiz-question">{currentStep.question}</h3>
+                  <ul className="quiz-options">
+                    {currentStep.options.map((option, idx) => (
+                      <li
+                        key={idx}
+                        className={`quiz-option ${selectedOption === option ? (isAnsweredCorrectly ? 'correct' : 'incorrect') : ''}`}
+                        onClick={() => !isAnsweredCorrectly && handleOptionSelect(option)}
+                        tabIndex={0}
+                        role="button"
+                      >
+                        <span className="option-text">{option}</span>
+                        {selectedOption === option && isAnsweredCorrectly && <span className="option-feedback">✓</span>}
+                        {selectedOption === option && !isAnsweredCorrectly && <span className="option-feedback">✗</span>}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            default:
+              return <p>Unknown step type: {currentStep.type}</p>;
+          }
+        })()}
       </div>
 
       <div className="lesson-bottom-bar">
@@ -217,16 +181,23 @@ const Lesson = () => {
         >
           ← Back
         </button>
-        <button
-          className="lesson-nav-button"
-          onClick={handleNext}
-          disabled={
-            (currentStep.type === 'quiz' && !isAnsweredCorrectly && !showExplanation) ||
-            currentStepIndex === lesson.steps.length - 1
-          }
-        >
-          Next →
-        </button>
+        {currentStepIndex < lesson.steps.length - 1 ? (
+          <button
+            className="lesson-nav-button"
+            onClick={handleNext}
+            disabled={currentStep.type === 'quiz' && !isAnsweredCorrectly}
+          >
+            Next →
+          </button>
+        ) : (
+          <button
+            className="lesson-nav-button finish-button"
+            onClick={handleFinishLesson}
+            disabled={currentStep.type === 'quiz' && !isAnsweredCorrectly}
+          >
+            Finish
+          </button>
+        )}
       </div>
     </div>
   );
