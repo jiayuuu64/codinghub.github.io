@@ -24,7 +24,8 @@
               "type": "quiz",
               "question": "Which line correctly assigns a value to a variable?",
               "options": ["10 = x", "x == 10", "x = 10"],
-              "answer": "x = 10"
+              "answer": "x = 10",
+              "explanation": "The '=' operator assigns values in Python. '10 = x' is invalid, and 'x == 10' checks equality, not assignment."
             }
           ]
         },
@@ -46,7 +47,8 @@
               "type": "quiz",
               "question": "What is the data type of 3.14?",
               "options": ["int", "float", "str", "bool"],
-              "answer": "float"
+              "answer": "float",
+              "explanation": "3.14 is a decimal number, which is represented as a float (floating-point number) in Python."
             }
           ]
         },
@@ -68,7 +70,8 @@
               "type": "quiz",
               "question": "What will be the output of `10 - 2`?",
               "options": ["8", "12", "102", "Error"],
-              "answer": "8"
+              "answer": "8",
+              "explanation": "`10 - 2` subtracts 2 from 10, resulting in 8."
             }
           ]
         }
@@ -96,7 +99,8 @@
               "type": "quiz",
               "question": "What will be printed if x=10?",
               "options": ["x is greater than 5", "x is 5 or less", "Error", "Nothing"],
-              "answer": "x is greater than 5"
+              "answer": "x is greater than 5",
+              "explanation": "Since 10 > 5, the condition is true and the 'if' block runs, printing 'x is greater than 5'."
             }
           ]
         },
@@ -118,7 +122,8 @@
               "type": "quiz",
               "question": "What will be printed by this loop?",
               "options": ["0 1 2", "1 2 3", "0 1 2 3", "Error"],
-              "answer": "0 1 2"
+              "answer": "0 1 2",
+              "explanation": "`range(3)` generates numbers 0, 1, and 2. The loop prints each of them on a new line."
             }
           ]
         }
@@ -146,7 +151,8 @@
               "type": "quiz",
               "question": "How do you define a function in Python?",
               "options": ["function greet()", "def greet()", "func greet()", "define greet()"],
-              "answer": "def greet()"
+              "answer": "def greet()",
+              "explanation": "Python uses the `def` keyword to define functions. `def greet():` is correct syntax."
             }
           ]
         }
@@ -163,19 +169,22 @@
               "type": "quiz",
               "question": "Which symbol is used to assign a value to a variable?",
               "options": ["=", "==", ":", "+="],
-              "answer": "="
+              "answer": "=",
+              "explanation": "`=` is the assignment operator. Others have different meanings."
             },
             {
               "type": "quiz",
               "question": "What is the output of `print(2 + 3 * 4)`?",
               "options": ["20", "14", "24", "None"],
-              "answer": "14"
+              "answer": "14",
+              "explanation": "Multiplication has higher precedence: 3 * 4 = 12, then 2 + 12 = 14."
             },
             {
               "type": "quiz",
               "question": "Which keyword starts a function definition?",
               "options": ["function", "def", "func", "define"],
-              "answer": "def"
+              "answer": "def",
+              "explanation": "In Python, function definitions begin with `def`."
             },
             {
               "type": "quiz",
@@ -186,43 +195,50 @@
                 "Defines a function",
                 "Creates a variable"
               ],
-              "answer": "Executes code conditionally"
+              "answer": "Executes code conditionally",
+              "explanation": "`if` checks a condition and runs a code block if it's true."
             },
             {
               "type": "quiz",
               "question": "Which of these is a valid variable name in Python?",
               "options": ["first-name", "1stName", "_first_name", "first name"],
-              "answer": "_first_name"
+              "answer": "_first_name",
+              "explanation": "Valid variable names can't start with a number or contain spaces/dashes. `_first_name` is valid."
             },
             {
               "type": "quiz",
               "question": "What will be the output of this code?\n\nprint(type(3.14))",
               "options": ["<class 'int'>", "<class 'float'>", "<class 'str'>", "<class 'bool'>"],
-              "answer": "<class 'float'>"
+              "answer": "<class 'float'>",
+              "explanation": "`3.14` is a float, so its type is `<class 'float'>`."
             },
             {
               "type": "quiz",
               "question": "Which operator is used for exponentiation in Python?",
               "options": ["^", "**", "%", "//"],
-              "answer": "**"
+              "answer": "**",
+              "explanation": "`**` is used for exponentiation, like `2 ** 3 = 8`."
             },
             {
               "type": "quiz",
               "question": "What keyword is used to start a conditional statement in Python?",
               "options": ["if", "for", "while", "def"],
-              "answer": "if"
+              "answer": "if",
+              "explanation": "`if` starts a conditional block."
             },
             {
               "type": "quiz",
               "question": "How do you define a function that takes no parameters?",
               "options": ["def func:", "def func()", "function func()", "def func(void)"],
-              "answer": "def func()"
+              "answer": "def func()",
+              "explanation": "`def func()` is correct. Python functions can omit parameters entirely."
             },
             {
               "type": "quiz",
               "question": "What will this loop output?\n\nfor i in range(2):\n    print(i)",
               "options": ["0 1 2", "1 2", "0 1", "1 2 3"],
-              "answer": "0 1"
+              "answer": "0 1",
+              "explanation": "`range(2)` gives 0 and 1. So `print(i)` runs for those two values."
             }
           ]
         }
