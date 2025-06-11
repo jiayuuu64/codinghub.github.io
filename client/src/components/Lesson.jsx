@@ -11,6 +11,8 @@ const Lesson = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [isAnsweredCorrectly, setIsAnsweredCorrectly] = useState(false);
+  const [attemptCount, setAttemptCount] = useState(0);
+  const [showExplanation, setShowExplanation] = useState(false);
 
   const queryParams = new URLSearchParams(location.search);
   const courseId = queryParams.get('courseId');
@@ -21,14 +23,20 @@ const Lesson = () => {
         const res = await axios.get(`https://codinghub-r3bn.onrender.com/api/lessons/${lessonId}`);
         setLesson(res.data);
         setCurrentStepIndex(0);
-        setSelectedOption(null);
-        setIsAnsweredCorrectly(false);
+        resetQuizState();
       } catch (err) {
         console.error('Failed to fetch lesson:', err);
       }
     };
     fetchLesson();
   }, [lessonId]);
+
+  const resetQuizState = () => {
+    setSelectedOption(null);
+    setIsAnsweredCorrectly(false);
+    setAttemptCount(0);
+    setShowExplanation(false);
+  };
 
   if (!lesson) {
     return <div className="lesson-fullscreen"><p>Loading lesson...</p></div>;
@@ -37,24 +45,32 @@ const Lesson = () => {
   const currentStep = lesson.steps[currentStepIndex];
 
   const handleNext = () => {
-    setSelectedOption(null);
-    setIsAnsweredCorrectly(false);
     if (currentStepIndex < lesson.steps.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1);
+      resetQuizState();
     }
   };
 
   const handleBack = () => {
-    setSelectedOption(null);
-    setIsAnsweredCorrectly(false);
     if (currentStepIndex > 0) {
       setCurrentStepIndex(currentStepIndex - 1);
+      resetQuizState();
     }
   };
 
   const handleOptionSelect = (option) => {
+    if (isAnsweredCorrectly || showExplanation) return;
+
     setSelectedOption(option);
-    setIsAnsweredCorrectly(option === currentStep.answer);
+    if (option === currentStep.answer) {
+      setIsAnsweredCorrectly(true);
+    } else {
+      const newAttempts = attemptCount + 1;
+      setAttemptCount(newAttempts);
+      if (newAttempts >= 2) {
+        setShowExplanation(true);
+      }
+    }
   };
 
   const renderStepContent = (step) => {
@@ -127,13 +143,17 @@ const Lesson = () => {
                 <li
                   key={idx}
                   className={`quiz-option ${
-                    selectedOption === option ? (isAnsweredCorrectly ? 'correct' : 'incorrect') : ''
+                    selectedOption === option
+                      ? isAnsweredCorrectly
+                        ? 'correct'
+                        : 'incorrect'
+                      : ''
                   }`}
-                  onClick={() => !isAnsweredCorrectly && handleOptionSelect(option)}
+                  onClick={() => handleOptionSelect(option)}
                   tabIndex={0}
                   role="button"
                   onKeyDown={(e) => {
-                    if ((e.key === 'Enter' || e.key === ' ') && !isAnsweredCorrectly) {
+                    if ((e.key === 'Enter' || e.key === ' ') && !isAnsweredCorrectly && !showExplanation) {
                       handleOptionSelect(option);
                     }
                   }}
@@ -148,6 +168,14 @@ const Lesson = () => {
                 </li>
               ))}
             </ul>
+            {isAnsweredCorrectly && <p className="quiz-feedback-correct">✅ Correct!</p>}
+            {showExplanation && (
+              <div className="quiz-feedback-explanation">
+                <p>❌ You've used all attempts.</p>
+                <p><strong>Correct answer:</strong> {step.answer}</p>
+                {step.explanation && <p>{step.explanation}</p>}
+              </div>
+            )}
           </div>
         );
 
@@ -192,7 +220,10 @@ const Lesson = () => {
         <button
           className="lesson-nav-button"
           onClick={handleNext}
-          disabled={!isAnsweredCorrectly && currentStep.type === 'quiz' || currentStepIndex === lesson.steps.length - 1}
+          disabled={
+            (currentStep.type === 'quiz' && !isAnsweredCorrectly && !showExplanation) ||
+            currentStepIndex === lesson.steps.length - 1
+          }
         >
           Next →
         </button>
