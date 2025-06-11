@@ -22,8 +22,16 @@ const userSchema = new mongoose.Schema({
   languagePreference: String,
   experiencePreference: String,
   commitmentPreference: String,
-  avatar: String
-}, {
+  avatar: String,
+  
+  // ✅ Progress field added here
+  progress: [{
+    courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
+    completedLessons: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Lesson' }],
+    completedQuiz: { type: Boolean, default: false }
+  }]
+}, 
+{
   timestamps: true // optional, adds createdAt & updatedAt
 });
 
