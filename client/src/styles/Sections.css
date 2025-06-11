@@ -82,8 +82,70 @@
   margin: 20px auto;
 }
 
+.progress-container {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.progress-bar-wrapper {
+  background-color: #e0e0e0;
+  border-radius: 20px;
+  height: 20px;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: #4caf50;
+  border-radius: 20px;
+  transition: width 0.4s ease;
+}
+
+.progress-percentage {
+  margin-top: 5px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    margin-bottom: 1rem;
+  }
+
+  .course-title {
+    font-size: 1.5rem;
+    margin-left: 10px;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
+    margin-left: 10px;
+  }
+
+  .section-description {
+    font-size: 0.85rem;
+    margin-left: 10px;
+  }
+
+  .lesson-card {
+    margin: 10px 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+  }
+
+  .lesson-button {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
   }
 }
