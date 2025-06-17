@@ -1,17 +1,19 @@
 import express from 'express';
-import { Configuration, OpenAIApi } from 'openai';
 import dotenv from 'dotenv';
+import pkg from 'openai';
 import User from '../db/models/User.mjs';
 import Course from '../db/models/Course.mjs';
 
 dotenv.config();
 
+const { Configuration, OpenAIApi } = pkg;
+
 const router = express.Router();
 
-const config = new Configuration({
+const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(config);
+const openai = new OpenAIApi(configuration);
 
 router.post('/recommend', async (req, res) => {
   const { score, courseTitle, email } = req.body;
@@ -20,18 +22,21 @@ router.post('/recommend', async (req, res) => {
     return res.status(400).json({ error: 'Missing score, courseTitle, or email' });
   }
 
+  if (!process.env.OPENAI_API_KEY) {
+    return res.status(500).json({ error: 'Server misconfiguration: Missing OpenAI API key' });
+  }
+
   try {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ error: 'User not found' });
 
-    // Optional: Check if course exists
     const course = await Course.findOne({ title: courseTitle });
     if (!course) return res.status(404).json({ error: 'Course not found' });
 
     const prompt = `
 A student just completed a ${courseTitle} quiz and scored ${score}/15.
 Based on this, recommend 3 helpful videos, articles, or exercises to improve.
-Reply clearly with emojis and bullet points.
+Reply clearly using emojis and bullet points.
 `;
 
     const response = await openai.createChatCompletion({
@@ -45,11 +50,11 @@ Reply clearly with emojis and bullet points.
 
     const reply = response.data.choices[0].message.content;
 
-    // Save to user profile (optional)
-    const progressEntry = user.progress.find(p => p.courseId?.toString() === course._id.toString());
-    if (progressEntry) {
-      progressEntry.finalQuizScore = score;
-      progressEntry.recommendations = reply.split('\n').filter(line => line.trim() !== '');
+    // Save score and recommendation to user progress
+    const progress = user.progress.find(p => p.courseId?.toString() === course._id.toString());
+    if (progress) {
+      progress.finalQuizScore = score;
+      progress.recommendations = reply.split('\n').filter(line => line.trim() !== '');
     }
 
     await user.save();
@@ -57,7 +62,7 @@ Reply clearly with emojis and bullet points.
     res.status(200).json({ recommendations: reply });
 
   } catch (err) {
-    console.error('LangChain Error:', err.message || err);
+    console.error('LangChain Error:', err);
     res.status(500).json({ error: 'Failed to generate recommendations' });
   }
 });
