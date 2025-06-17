@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import userRouter from "./routes/userRouter.mjs";
 import courseRouter from './routes/courseRouter.mjs';
 import lessonRouter from './routes/lessonRouter.mjs';
+import quizGenRouter from './routes/quizGenRouter.mjs';
 
 dotenv.config();
 
@@ -40,6 +41,7 @@ app.use(express.json({ limit: '5mb' }));
 app.use("/api/users", userRouter);
 app.use("/api/courses", courseRouter);
 app.use('/api/lessons', lessonRouter);
+app.use('/api/quiz-generator', quizGenRouter);
 
 app.listen(PORT, () => {
     console.log(`🚀 Server is running on port: http://localhost:${PORT}`);
