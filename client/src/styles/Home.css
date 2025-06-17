@@ -22,7 +22,7 @@ body {
 
 /* Add top spacing to recommended section */
 .recommended-section {
-    margin-top: 60px; /* ✅ pushes this section lower */
+    margin-top: 40px; /* ✅ pushes this section lower */
 }
 
 /* ====== CARD GRIDS ====== */
@@ -135,4 +135,35 @@ body {
     .recommended-section {
         margin-top: 40px; /* slightly reduced for mobile */
     }
+
 }
+
+.self-eval-section h2 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 26px
+}
+
+.self-eval-section {
+  margin-top: 40px;
+  margin-bottom: 20px;
+ 
+}
+
+.self-eval-button {
+  background-color: #6345be;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: inline-block;
+  margin: 0; /* ✅ remove unexpected spacing */
+}
+
+    .self-eval-button:hover {
+        background-color: #8b5cf6;
+    }

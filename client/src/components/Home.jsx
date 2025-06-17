@@ -38,7 +38,7 @@ const Home = () => {
     const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
 
     return {
-      courseId: course._id, // store courseId for linking
+      courseId: course._id,
       courseName: course.title,
       percent,
       completed,
@@ -107,6 +107,16 @@ const Home = () => {
               </div>
             ))}
           </div>
+        </section>
+
+        <section className="self-eval-section">
+          <h2>Challenge Yourself</h2>
+          <button
+            className="self-eval-button"
+            onClick={() => navigate('/self-evaluation')}
+          >
+            Take Self Evaluation Quiz
+          </button>
         </section>
 
         <section className="recommended-section">
