@@ -103,7 +103,7 @@ const Lesson = () => {
         {(() => {
           switch (currentStep.type) {
             case 'text':
-              return <p className="lesson-step-text">{currentStep.content}</p>;
+              return <p className="lesson-step-text">{currentStep.text}</p>; // ✅ FIXED LINE
             case 'code':
               return <pre className="lesson-step-code"><code>{currentStep.content}</code></pre>;
             case 'video':
