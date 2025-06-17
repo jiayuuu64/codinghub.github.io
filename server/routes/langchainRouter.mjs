@@ -1,59 +1,44 @@
 import express from 'express';
-import { OpenAI } from 'openai';
-import User from '../db/models/User.mjs';
+import { ChatOpenAI } from 'langchain/chat_models/openai';
+import { PromptTemplate } from 'langchain/prompts';
 import dotenv from 'dotenv';
 dotenv.config();
+import { Headers } from 'node-fetch'; 
+globalThis.Headers = Headers;
 
 const router = express.Router();
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 router.post('/recommend', async (req, res) => {
-  const { email, courseTitle, score } = req.body;
+  const { score, courseTitle, email } = req.body;
 
-  if (!email || !courseTitle || score === undefined) {
-    return res.status(400).json({ error: 'Missing email, courseTitle, or score.' });
+  if (!score || !courseTitle || !email) {
+    return res.status(400).json({ error: 'Missing score, courseTitle, or email.' });
   }
 
   try {
-    const prompt = `
-A student just completed a course titled "${courseTitle}" and scored ${score}/15 on the final quiz.
-Based on their score, recommend 3 specific next steps to improve their skills or learn more. 
-Be encouraging and suggest relevant videos or articles, ideally for a ${score < 10 ? 'beginner' : 'intermediate'} level.
-Respond clearly in plain bullet points.
-    `;
+    // ✅ Define the prompt template
+    const template = PromptTemplate.fromTemplate(`
+      A student completed a {course} quiz and scored {score}/15.
+      Recommend 3 helpful follow-up videos, articles, or tips for this student.
+      Format nicely using emojis and bullet points.
+    `);
 
-    const chatResponse = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+    // ✅ Fill in the prompt
+    const prompt = await template.format({ course: courseTitle, score });
+
+    // ✅ Initialize OpenAI model
+    const model = new ChatOpenAI({
       temperature: 0.7,
-      messages: [
-        { role: 'system', content: 'You are a helpful coding tutor.' },
-        { role: 'user', content: prompt }
-      ]
+      openAIApiKey: process.env.OPENAI_API_KEY
     });
 
-    const recommendations = chatResponse.choices[0].message.content.trim();
+    // ✅ Get recommendations
+    const response = await model.invoke(prompt);
 
-    // Update user's progress in MongoDB
-    const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ error: 'User not found' });
-
-    // Try to match courseId from progress array
-    const progressItem = user.progress.find(p => {
-      const course = p.courseId?.toString().toLowerCase() || '';
-      return course.includes(courseTitle.toLowerCase()); // you can refine this logic
-    });
-
-    if (progressItem) {
-      progressItem.finalQuizScore = score;
-      progressItem.recommendations = recommendations.split('\n').filter(line => line.trim() !== '');
-    }
-
-    await user.save();
-
-    res.status(200).json({ recommendations });
+    return res.status(200).json({ recommendations: response });
   } catch (err) {
-    console.error('LangChain error:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("🔥 LangChain error:", err);
+    return res.status(500).json({ error: 'Failed to generate recommendations' });
   }
 });
 
