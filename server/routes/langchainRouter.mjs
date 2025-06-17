@@ -1,6 +1,6 @@
 import express from 'express';
-import { ChatOpenAI } from 'langchain/chat_models/openai';
-import { PromptTemplate } from 'langchain/prompts';
+import { ChatOpenAI } from '@langchain/openai';
+import { PromptTemplate } from '@langchain/core/prompts';
 import dotenv from 'dotenv';
 dotenv.config();
 import { Headers } from 'node-fetch'; 
