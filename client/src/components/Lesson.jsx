@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import FinalQuiz from './FinalQuiz';
 import '../styles/Lesson.css';
 
 const Lesson = () => {
@@ -11,6 +12,7 @@ const Lesson = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [isAnsweredCorrectly, setIsAnsweredCorrectly] = useState(false);
+  const [userAnswers, setUserAnswers] = useState({}); // ✅ Track for final quiz
 
   const queryParams = new URLSearchParams(location.search);
   const courseId = queryParams.get('courseId');
@@ -54,7 +56,6 @@ const Lesson = () => {
 
   const handleFinishLesson = async () => {
     if (!email) {
-      console.error("Email not found in localStorage.");
       alert("Please log in again.");
       navigate('/login');
       return;
@@ -67,54 +68,55 @@ const Lesson = () => {
       );
       navigate(`/courses/${courseId}`);
     } catch (err) {
-      console.error('Failed to mark lesson as complete:', err);
-      alert('Error: Could not mark lesson as complete. Please try again.');
+      alert('Could not mark lesson as complete. Try again.');
     }
   };
 
-  if (!lesson) {
-    return <div className="lesson-fullscreen"><p>Loading lesson...</p></div>;
-  }
+  if (!lesson) return <div className="lesson-fullscreen"><p>Loading lesson...</p></div>;
 
   const currentStep = lesson.steps[currentStepIndex];
+  const isSummaryQuiz = lesson.title === 'Final Quiz' || lesson.title === 'Summary Quiz';
 
   return (
     <div className="lesson-fullscreen">
       <div className="lesson-top-bar">
-        <button
-          className="lesson-exit-button"
-          onClick={() => navigate(`/courses/${courseId}`)}
-        >
-          ✕ Exit
-        </button>
+        <button className="lesson-exit-button" onClick={() => navigate(`/courses/${courseId}`)}>✕ Exit</button>
         <div className="lesson-progress-bar-wrapper">
           <div className="lesson-progress-bar">
-            {lesson.steps.map((_, index) => (
-              <div
-                key={index}
-                className={`lesson-progress-step ${index <= currentStepIndex ? 'active' : ''}`}
-              ></div>
-            ))}
+            {lesson.steps.map((_, index) => {
+              const isActive = isSummaryQuiz ? !!userAnswers[index] : index <= currentStepIndex;
+              return (
+                <div
+                  key={index}
+                  className={`lesson-progress-step ${isActive ? 'active' : ''}`}
+                ></div>
+              );
+            })}
           </div>
         </div>
       </div>
 
       <div className="lesson-step-container">
         {(() => {
+          if (isSummaryQuiz) {
+            return (
+              <FinalQuiz
+                questions={lesson.steps}
+                onFinish={handleFinishLesson}
+                userAnswers={userAnswers}
+                setUserAnswers={setUserAnswers}
+              />
+            );
+          }
+
           switch (currentStep.type) {
             case 'text':
-              return <p className="lesson-step-text">{currentStep.text}</p>; // ✅ FIXED LINE
+              return <p className="lesson-step-text">{currentStep.text}</p>;
             case 'code':
               return <pre className="lesson-step-code"><code>{currentStep.content}</code></pre>;
             case 'video':
               return currentStep.content.includes('youtube.com') ? (
-                <iframe
-                  className="lesson-step-video"
-                  src={currentStep.content}
-                  title="YouTube video"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
+                <iframe className="lesson-step-video" src={currentStep.content} title="YouTube video" allowFullScreen></iframe>
               ) : (
                 <video controls className="lesson-step-video">
                   <source src={currentStep.content} type="video/mp4" />
@@ -124,13 +126,7 @@ const Lesson = () => {
               return (
                 <div className="lesson-step-text-video">
                   {currentStep.content.includes('youtube.com') ? (
-                    <iframe
-                      className="lesson-step-video"
-                      src={currentStep.content}
-                      title="YouTube video"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    ></iframe>
+                    <iframe className="lesson-step-video" src={currentStep.content} title="YouTube video" allowFullScreen></iframe>
                   ) : (
                     <video controls className="lesson-step-video">
                       <source src={currentStep.content} type="video/mp4" />
@@ -173,32 +169,16 @@ const Lesson = () => {
         })()}
       </div>
 
-      <div className="lesson-bottom-bar">
-        <button
-          className="lesson-nav-button"
-          onClick={handleBack}
-          disabled={currentStepIndex === 0}
-        >
-          ← Back
-        </button>
-        {currentStepIndex < lesson.steps.length - 1 ? (
-          <button
-            className="lesson-nav-button"
-            onClick={handleNext}
-            disabled={currentStep.type === 'quiz' && !isAnsweredCorrectly}
-          >
-            Next →
-          </button>
-        ) : (
-          <button
-            className="lesson-nav-button finish-button"
-            onClick={handleFinishLesson}
-            disabled={currentStep.type === 'quiz' && !isAnsweredCorrectly}
-          >
-            Finish
-          </button>
-        )}
-      </div>
+      {!isSummaryQuiz && (
+        <div className="lesson-bottom-bar">
+          <button className="lesson-nav-button" onClick={handleBack} disabled={currentStepIndex === 0}>← Back</button>
+          {currentStepIndex < lesson.steps.length - 1 ? (
+            <button className="lesson-nav-button" onClick={handleNext} disabled={currentStep.type === 'quiz' && !isAnsweredCorrectly}>Next →</button>
+          ) : (
+            <button className="lesson-nav-button finish-button" onClick={handleFinishLesson} disabled={currentStep.type === 'quiz' && !isAnsweredCorrectly}>Finish</button>
+          )}
+        </div>
+      )}
     </div>
   );
 };
