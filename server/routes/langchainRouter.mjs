@@ -1,20 +1,20 @@
-import express from "express";
-import axios from "axios";
+import express from 'express';
+import fetch from 'node-fetch';
 const router = express.Router();
 
-router.post("/generate-recommendation", async (req, res) => {
-  const { score, courseTitle } = req.body;
-
+router.post('/recommend', async (req, res) => {
   try {
-    const response = await axios.post("http://localhost:5005/recommend", {
-      score,
-      courseTitle
+    const response = await fetch('https://your-flask-langchain-url.onrender.com/recommend', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(req.body),
     });
 
-    res.json({ recommendations: response.data.recommendations });
+    const data = await response.json();
+    res.status(200).json(data);
   } catch (err) {
-    console.error("LangChain error:", err.message);
-    res.status(500).json({ error: "Failed to generate recommendations" });
+    console.error('LangChain Proxy Error:', err.message);
+    res.status(500).json({ error: 'Failed to fetch LangChain recommendation.' });
   }
 });
 
