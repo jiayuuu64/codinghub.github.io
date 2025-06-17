@@ -7,7 +7,6 @@ import Course from '../db/models/Course.mjs';
 dotenv.config();
 
 const { Configuration, OpenAIApi } = pkg;
-
 const router = express.Router();
 
 const configuration = new Configuration({
@@ -23,7 +22,7 @@ router.post('/recommend', async (req, res) => {
   }
 
   if (!process.env.OPENAI_API_KEY) {
-    return res.status(500).json({ error: 'Server misconfiguration: Missing OpenAI API key' });
+    return res.status(500).json({ error: 'Missing OpenAI API key' });
   }
 
   try {
@@ -35,9 +34,17 @@ router.post('/recommend', async (req, res) => {
 
     const prompt = `
 A student just completed a ${courseTitle} quiz and scored ${score}/15.
-Based on this, recommend 3 helpful videos, articles, or exercises to improve.
-Reply clearly using emojis and bullet points.
-`;
+
+Please recommend 3 helpful resources that include **titles AND direct links**:
+- At least one YouTube video
+- At least one online article
+
+✅ Format the response using this exact structure:
+- 📺 Video: "TITLE" - https://youtube.com/watch?v=...
+- 📰 Article: "TITLE" - https://www.example.com/...
+
+Do not explain anything. Only return the list in that format.
+    `;
 
     const response = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
@@ -50,7 +57,6 @@ Reply clearly using emojis and bullet points.
 
     const reply = response.data.choices[0].message.content;
 
-    // Save score and recommendation to user progress
     const progress = user.progress.find(p => p.courseId?.toString() === course._id.toString());
     if (progress) {
       progress.finalQuizScore = score;
@@ -60,7 +66,6 @@ Reply clearly using emojis and bullet points.
     await user.save();
 
     res.status(200).json({ recommendations: reply });
-
   } catch (err) {
     console.error('LangChain Error:', err);
     res.status(500).json({ error: 'Failed to generate recommendations' });
