@@ -1,44 +1,64 @@
 import express from 'express';
-import { ChatOpenAI } from '@langchain/openai';
-import { PromptTemplate } from '@langchain/core/prompts';
+import { Configuration, OpenAIApi } from 'openai';
 import dotenv from 'dotenv';
+import User from '../db/models/User.mjs';
+import Course from '../db/models/Course.mjs';
+
 dotenv.config();
-import { Headers } from 'node-fetch'; 
-globalThis.Headers = Headers;
 
 const router = express.Router();
+
+const config = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(config);
 
 router.post('/recommend', async (req, res) => {
   const { score, courseTitle, email } = req.body;
 
   if (!score || !courseTitle || !email) {
-    return res.status(400).json({ error: 'Missing score, courseTitle, or email.' });
+    return res.status(400).json({ error: 'Missing score, courseTitle, or email' });
   }
 
   try {
-    // ✅ Define the prompt template
-    const template = PromptTemplate.fromTemplate(`
-      A student completed a {course} quiz and scored {score}/15.
-      Recommend 3 helpful follow-up videos, articles, or tips for this student.
-      Format nicely using emojis and bullet points.
-    `);
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ error: 'User not found' });
 
-    // ✅ Fill in the prompt
-    const prompt = await template.format({ course: courseTitle, score });
+    // Optional: Check if course exists
+    const course = await Course.findOne({ title: courseTitle });
+    if (!course) return res.status(404).json({ error: 'Course not found' });
 
-    // ✅ Initialize OpenAI model
-    const model = new ChatOpenAI({
+    const prompt = `
+A student just completed a ${courseTitle} quiz and scored ${score}/15.
+Based on this, recommend 3 helpful videos, articles, or exercises to improve.
+Reply clearly with emojis and bullet points.
+`;
+
+    const response = await openai.createChatCompletion({
+      model: 'gpt-3.5-turbo',
       temperature: 0.7,
-      openAIApiKey: process.env.OPENAI_API_KEY
+      messages: [
+        { role: 'system', content: 'You are a smart AI tutor helping students improve.' },
+        { role: 'user', content: prompt }
+      ]
     });
 
-    // ✅ Get recommendations
-    const response = await model.invoke(prompt);
+    const reply = response.data.choices[0].message.content;
 
-    return res.status(200).json({ recommendations: response });
+    // Save to user profile (optional)
+    const progressEntry = user.progress.find(p => p.courseId?.toString() === course._id.toString());
+    if (progressEntry) {
+      progressEntry.finalQuizScore = score;
+      progressEntry.recommendations = reply.split('\n').filter(line => line.trim() !== '');
+    }
+
+    await user.save();
+
+    res.status(200).json({ recommendations: reply });
+
   } catch (err) {
-    console.error("🔥 LangChain error:", err);
-    return res.status(500).json({ error: 'Failed to generate recommendations' });
+    console.error('LangChain Error:', err.message || err);
+    res.status(500).json({ error: 'Failed to generate recommendations' });
   }
 });
 
