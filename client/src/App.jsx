@@ -14,6 +14,8 @@ import Sections from './components/Sections';
 import Lesson from './components/Lesson';  
 import EditProfile from './components/EditProfile';  
 import ChangePassword from './components/ChangePassword';
+import SelfEval from './pages/SelfEval'; // ✅ NEW
+
 import { isAuthenticated } from './utils/auth';
 
 const ProtectedRoute = ({ children }) => {
@@ -40,6 +42,7 @@ const App = () => {
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
             <Route path="/change-password" element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />
+            <Route path="/self-evaluation" element={<ProtectedRoute><SelfEval /></ProtectedRoute>} /> {/* ✅ NEW */}
         </Routes>
     );
 };
