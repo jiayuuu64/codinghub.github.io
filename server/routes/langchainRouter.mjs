@@ -18,7 +18,7 @@ const openai = new OpenAIApi(configuration);
 router.post('/recommend', async (req, res) => {
   const { score, courseTitle, email } = req.body;
 
-  if (!score || !courseTitle || !email) {
+  if (score === undefined || !courseTitle || !email) {
     return res.status(400).json({ error: 'Missing score, courseTitle, or email' });
   }
 
