@@ -2,6 +2,8 @@ import express from 'express';
 import { OpenAI } from 'openai';
 import User from '../db/models/User.mjs';
 import dotenv from 'dotenv';
+import fetch from 'node-fetch';
+globalThis.fetch = fetch;
 dotenv.config();
 
 const router = express.Router();
