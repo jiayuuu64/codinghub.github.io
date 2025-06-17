@@ -34,8 +34,10 @@
               "type": "quiz",
               "question": "Which line assigns a string to a variable?",
               "options": [
+                "name = 'Bob'",
                 "name == 'Bob'",
-                "name = 'Bob'"
+                "False",
+                "1"
               ],
               "answer": "name = 'Bob'",
               "explanation": "Use = to assign."
@@ -44,8 +46,9 @@
               "type": "quiz",
               "question": "What will this print?\nx = 5\nx = x + 2\nprint(x)",
               "options": [
-                "5",
-                "7"
+                "1",
+                "7",
+                "5"
               ],
               "answer": "7",
               "explanation": "x becomes 7"
@@ -54,8 +57,9 @@
               "type": "quiz",
               "question": "Which is a valid Python variable name?",
               "options": [
-                "1name",
                 "_name",
+                "1name",
+                "==",
                 "name!"
               ],
               "answer": "_name",
@@ -91,8 +95,9 @@
               "type": "quiz",
               "question": "What is the type of 5.0?",
               "options": [
-                "int",
-                "float"
+                "0",
+                "float",
+                "int"
               ],
               "answer": "float",
               "explanation": "Decimal = float"
@@ -102,6 +107,8 @@
               "question": "What is the result of bool(0)?",
               "options": [
                 "True",
+                "False",
+                "1",
                 "False"
               ],
               "answer": "False",
@@ -111,8 +118,10 @@
               "type": "quiz",
               "question": "Which of the following is a string?",
               "options": [
+                "None",
                 "'3'",
-                "3"
+                "3",
+                "Error"
               ],
               "answer": "'3'",
               "explanation": "Surrounded by quotes = string"
@@ -147,8 +156,10 @@
               "type": "quiz",
               "question": "What does 5 % 2 return?",
               "options": [
+                "Error",
                 "1",
-                "2"
+                "2",
+                "=="
               ],
               "answer": "1",
               "explanation": "5 divided by 2 = remainder 1"
@@ -157,8 +168,9 @@
               "type": "quiz",
               "question": "What is the output of 2 ** 3?",
               "options": [
-                "6",
-                "8"
+                "1",
+                "8",
+                "6"
               ],
               "answer": "8",
               "explanation": "2 to the power of 3"
@@ -168,6 +180,8 @@
               "question": "What is the output of 9 // 2?",
               "options": [
                 "4",
+                "+=",
+                "True",
                 "4.5"
               ],
               "answer": "4",
@@ -204,6 +218,8 @@
               "question": "What keyword is used for checking multiple conditions?",
               "options": [
                 "elif",
+                "1",
+                "True",
                 "else if"
               ],
               "answer": "elif",
@@ -214,7 +230,9 @@
               "question": "What happens if x = -1?",
               "options": [
                 "Positive",
-                "Not positive"
+                "+=",
+                "Not positive",
+                "False"
               ],
               "answer": "Not positive",
               "explanation": "x is not > 0"
@@ -223,6 +241,7 @@
               "type": "quiz",
               "question": "Is else required?",
               "options": [
+                "False",
                 "Yes",
                 "No"
               ],
@@ -260,7 +279,9 @@
               "question": "What does range(3) output?",
               "options": [
                 "0 1 2",
-                "1 2 3"
+                "1 2 3",
+                "==",
+                "0"
               ],
               "answer": "0 1 2",
               "explanation": "Starts at 0"
@@ -269,8 +290,10 @@
               "type": "quiz",
               "question": "Which loop depends on condition?",
               "options": [
+                "True",
+                "while",
                 "for",
-                "while"
+                "0"
               ],
               "answer": "while",
               "explanation": "Runs while condition is True"
@@ -279,8 +302,10 @@
               "type": "quiz",
               "question": "What is the output of x=1; while x<3: print(x); x+=1?",
               "options": [
+                "0 1",
                 "1 2",
-                "0 1"
+                "0",
+                "False"
               ],
               "answer": "1 2",
               "explanation": "Loop runs while x<3"
@@ -321,8 +346,9 @@
               "type": "quiz",
               "question": "What keyword defines a function?",
               "options": [
-                "function",
-                "def"
+                "def",
+                "0",
+                "function"
               ],
               "answer": "def",
               "explanation": "`def` starts a function"
@@ -331,8 +357,10 @@
               "type": "quiz",
               "question": "What does return do?",
               "options": [
+                "sends value back",
                 "prints value",
-                "sends value back"
+                "0",
+                "True"
               ],
               "answer": "sends value back",
               "explanation": "Exits and returns"
@@ -341,7 +369,9 @@
               "type": "quiz",
               "question": "What is output of:\ndef f(): return 3\nprint(f())",
               "options": [
+                "Error",
                 "3",
+                "str",
                 "None"
               ],
               "answer": "3",
@@ -360,153 +390,183 @@
           "steps": [
             {
               "type": "quiz",
-              "question": "Symbol to assign value?",
+              "question": "Which of these correctly assigns a value to a variable in Python?",
               "options": [
-                "=",
-                "=="
+                "x == 10",
+                "x := 10",
+                "10 = x",
+                "x = 10"
               ],
-              "answer": "=",
-              "explanation": "Assignment"
+              "answer": "x = 10",
+              "explanation": "`=` assigns a value to a variable."
             },
             {
               "type": "quiz",
-              "question": "Output of print(2 + 3 * 4)?",
+              "question": "Which data type is used to represent decimal numbers in Python?",
               "options": [
-                "14",
-                "20"
+                "int",
+                "float",
+                "bool",
+                "str"
               ],
-              "answer": "14",
-              "explanation": "Order of operations"
+              "answer": "float",
+              "explanation": "Decimals are stored as `float`."
             },
             {
               "type": "quiz",
-              "question": "Function definition keyword?",
+              "question": "What will be the result of: print(3 + 2 * 2)?",
               "options": [
+                "10",
+                "7",
+                "9",
+                "12"
+              ],
+              "answer": "7",
+              "explanation": "Multiplication happens before addition: 2*2=4, then 3+4=7."
+            },
+            {
+              "type": "quiz",
+              "question": "What keyword is used to define a function in Python?",
+              "options": [
+                "func",
+                "define",
                 "def",
                 "function"
               ],
               "answer": "def",
-              "explanation": "Use def"
+              "explanation": "`def` is used to define a function."
             },
             {
               "type": "quiz",
-              "question": "`if` is used to?",
+              "question": "Which of the following is a Boolean value in Python?",
               "options": [
-                "loop",
-                "check condition"
+                "'True'",
+                "1",
+                "True",
+                "'False'"
               ],
-              "answer": "check condition",
-              "explanation": "Control flow"
+              "answer": "True",
+              "explanation": "`True` (without quotes) is a Boolean."
             },
             {
               "type": "quiz",
-              "question": "Valid variable name?",
+              "question": "Which operator is used for exponentiation?",
               "options": [
-                "1stName",
-                "_name"
-              ],
-              "answer": "_name",
-              "explanation": "Can't start with number"
-            },
-            {
-              "type": "quiz",
-              "question": "type(3.14)?",
-              "options": [
-                "float",
-                "int"
-              ],
-              "answer": "float",
-              "explanation": "Decimal = float"
-            },
-            {
-              "type": "quiz",
-              "question": "Exponentiation operator?",
-              "options": [
+                "^",
                 "**",
-                "^"
+                "^^",
+                "//"
               ],
               "answer": "**",
-              "explanation": "** is used"
+              "explanation": "`**` is used for powers like 2 ** 3 = 8."
             },
             {
               "type": "quiz",
-              "question": "Keyword for conditions?",
+              "question": "What is the output of: print(type('Hello'))?",
               "options": [
-                "if",
+                "<class 'int'>",
+                "<class 'str'>",
+                "<class 'bool'>",
+                "<class 'float'>"
+              ],
+              "answer": "<class 'str'>",
+              "explanation": "The value is a string."
+            },
+            {
+              "type": "quiz",
+              "question": "Which of the following are valid ways to loop in Python?",
+              "options": [
+                "do-while",
+                "for",
+                "foreach",
                 "while"
               ],
-              "answer": "if",
-              "explanation": "Conditional logic"
+              "answer": "for",
+              "explanation": "`for` and `while` are valid. `foreach` is not used in Python."
             },
             {
               "type": "quiz",
-              "question": "Define parameterless function?",
+              "question": "What is the result of: bool(0)?",
               "options": [
-                "def f()",
-                "def f(void)"
+                "True",
+                "False",
+                "None",
+                "0"
               ],
-              "answer": "def f()",
-              "explanation": "No param syntax"
+              "answer": "False",
+              "explanation": "0 evaluates to `False` in Boolean context."
             },
             {
               "type": "quiz",
-              "question": "Loop output for range(2)?",
+              "question": "What will this output?\n\nx = 5\nx += 2\nprint(x)",
               "options": [
+                "7",
+                "5",
+                "2",
+                "Error"
+              ],
+              "answer": "7",
+              "explanation": "x is increased by 2."
+            },
+            {
+              "type": "quiz",
+              "question": "What is the purpose of a return statement in a function?",
+              "options": [
+                "To print a value",
+                "To exit the loop",
+                "To stop the program",
+                "To send back a value"
+              ],
+              "answer": "To send back a value",
+              "explanation": "Return gives output from the function."
+            },
+            {
+              "type": "quiz",
+              "question": "What will this print?\n\nfor i in range(2): print(i)",
+              "options": [
+                "1 2",
                 "0 1",
-                "1 2"
+                "0 1 2",
+                "2 3"
               ],
               "answer": "0 1",
-              "explanation": "Starts at 0"
+              "explanation": "`range(2)` includes 0 and 1."
             },
             {
               "type": "quiz",
-              "question": "What does print() do?",
+              "question": "Which keyword is used for alternative conditions?",
               "options": [
-                "output",
-                "input"
+                "elseif",
+                "elif",
+                "else if",
+                "alt"
               ],
-              "answer": "output",
-              "explanation": "Displays result"
+              "answer": "elif",
+              "explanation": "Python uses `elif` instead of `else if`."
             },
             {
               "type": "quiz",
-              "question": "Is 'True' a boolean?",
+              "question": "Which function tells you the data type of a variable?",
               "options": [
-                "Yes",
-                "No"
+                "type()",
+                "data()",
+                "typeof()",
+                "class()"
               ],
-              "answer": "No",
-              "explanation": "'True' is a string"
+              "answer": "type()",
+              "explanation": "`type()` is the correct Python function."
             },
             {
               "type": "quiz",
-              "question": "* is what operator?",
+              "question": "What does the // operator do?",
               "options": [
-                "arithmetic",
-                "comparison"
+                "Divide and round up",
+                "Divide and return remainder",
+                "Floor division",
+                "Exponentiation"
               ],
-              "answer": "arithmetic",
-              "explanation": "Multiplication"
-            },
-            {
-              "type": "quiz",
-              "question": "int('5') returns?",
-              "options": [
-                "5",
-                "'5'"
-              ],
-              "answer": "5",
-              "explanation": "Casts to int"
-            },
-            {
-              "type": "quiz",
-              "question": "Is None a boolean?",
-              "options": [
-                "Yes",
-                "No"
-              ],
-              "answer": "No",
-              "explanation": "None is null type"
+              "answer": "Floor division",
+              "explanation": "`//` returns the quotient rounded down."
             }
           ]
         }
