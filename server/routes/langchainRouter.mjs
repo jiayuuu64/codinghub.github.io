@@ -1,10 +1,12 @@
 import express from 'express';
-import { Configuration, OpenAIApi } from 'openai';
 import dotenv from 'dotenv';
 import User from '../db/models/User.mjs';
 import Course from '../db/models/Course.mjs';
+import pkg from 'openai'; // 👈 import CommonJS as default
 
 dotenv.config();
+
+const { Configuration, OpenAIApi } = pkg;
 
 const router = express.Router();
 
@@ -24,7 +26,6 @@ router.post('/recommend', async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ error: 'User not found' });
 
-    // Optional: Check if course exists
     const course = await Course.findOne({ title: courseTitle });
     if (!course) return res.status(404).json({ error: 'Course not found' });
 
@@ -45,11 +46,11 @@ Reply clearly with emojis and bullet points.
 
     const reply = response.data.choices[0].message.content;
 
-    // Save to user profile (optional)
+    // Save to user's progress
     const progressEntry = user.progress.find(p => p.courseId?.toString() === course._id.toString());
     if (progressEntry) {
       progressEntry.finalQuizScore = score;
-      progressEntry.recommendations = reply.split('\n').filter(line => line.trim() !== '');
+      progressEntry.recommendations = reply.split('\n').filter(line => line.trim());
     }
 
     await user.save();
