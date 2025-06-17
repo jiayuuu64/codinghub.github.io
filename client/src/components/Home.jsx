@@ -17,6 +17,7 @@ const Home = () => {
         const coursesRes = await axios.get('https://codinghub-r3bn.onrender.com/api/courses');
         setCourses(coursesRes.data);
 
+
         // Fetch user progress
         if (email) {
           const progressRes = await axios.get(`${import.meta.env.VITE_API_URL}/${email}/progress`);

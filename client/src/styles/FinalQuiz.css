@@ -142,36 +142,128 @@
   color: #a78bfa; /* Purple after submission */
 }
 
+.recommendation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  justify-items: center;
+  margin-top: 1.5rem;
+}
+
+.recommendation-card {
+  background: #1e1e2f;
+  padding: 1rem;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 240px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.recommendation-thumb {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+}
+
+.recommendation-type {
+  font-size: 0.75rem;
+  color: #aaa;
+}
+
+.recommendation-title {
+  font-size: 0.95rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+.recommendation-site {
+  font-size: 0.75rem;
+  color: #bbb;
+  margin-bottom: 0.4rem;
+}
+
+.disabled-link {
+  color: #888;
+  font-size: 0.85rem;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+
 
 @media (max-width: 768px) {
   .final-quiz-container {
     padding: 1rem;
   }
 
+  .final-quiz-question-block {
+    width: 100%;
+  }
+
   .final-quiz-question-block h3,
   .final-quiz-results h3 {
     font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .final-quiz-options {
+    padding: 0;
   }
 
   .final-quiz-option {
     padding: 0.75rem 1rem;
     font-size: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tick, .cross {
+    align-self: flex-end;
+    margin-top: 0.5rem;
   }
 
   .submit-btn,
   .finish-btn {
     font-size: 0.9rem;
     padding: 8px 16px;
+    width: 100%;
   }
 
   .final-quiz-nav {
     flex-direction: column;
     gap: 10px;
     align-items: center;
+    width: 100%;
   }
 
   .final-quiz-actions {
     flex-direction: column;
     gap: 12px;
+    width: 100%;
+  }
+
+  .final-quiz-result-item {
+    font-size: 0.9rem;
+  }
+
+  .recommendation-grid {
+      grid-template-columns: 1fr;
+  }
+
+  .recommendation-card {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .recommendation-title {
+    font-size: 1rem;
+  }
+
+  .recommendation-thumb {
+    width: 100%;
+    height: auto;
   }
 }

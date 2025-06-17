@@ -12,7 +12,8 @@ const Lesson = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [isAnsweredCorrectly, setIsAnsweredCorrectly] = useState(false);
-  const [userAnswers, setUserAnswers] = useState({}); // ✅ Track for final quiz
+  const [userAnswers, setUserAnswers] = useState({});
+  const [courseTitle, setCourseTitle] = useState('');
 
   const queryParams = new URLSearchParams(location.search);
   const courseId = queryParams.get('courseId');
@@ -30,8 +31,19 @@ const Lesson = () => {
         console.error('Failed to fetch lesson:', err);
       }
     };
+
+    const fetchCourse = async () => {
+      try {
+        const res = await axios.get(`https://codinghub-r3bn.onrender.com/api/courses/${courseId}`);
+        setCourseTitle(res.data.title);
+      } catch (err) {
+        console.error('Failed to fetch course title:', err);
+      }
+    };
+
     fetchLesson();
-  }, [lessonId]);
+    fetchCourse();
+  }, [lessonId, courseId]);
 
   const handleNext = () => {
     setSelectedOption(null);
@@ -105,6 +117,7 @@ const Lesson = () => {
                 onFinish={handleFinishLesson}
                 userAnswers={userAnswers}
                 setUserAnswers={setUserAnswers}
+                courseTitle={courseTitle} 
               />
             );
           }

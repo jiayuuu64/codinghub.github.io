@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import '../styles/finalquiz.css';
 
-const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers }) => {
+const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTitle }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showResults, setShowResults] = useState(false);
   const [score, setScore] = useState(0);
   const [showAll, setShowAll] = useState(false);
-  const [recommendations, setRecommendations] = useState('');
+  const [recommendations, setRecommendations] = useState([]);
 
   const handleOptionClick = (option) => {
     setUserAnswers((prev) => ({ ...prev, [currentIndex]: option }));
@@ -36,22 +36,48 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers }) => {
     setScore(correctCount);
     setShowResults(true);
 
+    const email = localStorage.getItem('email');
+
+    if (correctCount / questions.length > 0.8) return; // skip recommendation if >80%
+
     try {
       const response = await axios.post('https://codinghub-r3bn.onrender.com/api/ai/recommend', {
         score: correctCount,
-        courseTitle: 'Python', // Replace this with dynamic course title if needed
-        email: localStorage.getItem('email'),
+        courseTitle,
+        email,
       });
-      setRecommendations(response.data.recommendations);
+
+      const lines = response.data.recommendations.split('\n').filter(line => line.trim() !== '');
+      const parsed = lines.map((line) => {
+        const titleMatch = line.match(/"(.+?)"/);
+        const linkMatch = line.match(/https?:\/\/[^\s]+/);
+        const title = titleMatch ? titleMatch[1] : 'Untitled';
+        const link = linkMatch ? linkMatch[0] : null;
+        const isVideo = line.includes('📺') || (link && link.includes('youtube.com/watch?v='));
+        const isArticle = line.includes('📰') || (!isVideo && line.includes('Article'));
+        const videoId = isVideo && link?.includes('v=') ? link.split('v=')[1].split('&')[0] : null;
+
+        return {
+          type: isVideo ? 'video' : 'article',
+          title,
+          link,
+          hostname: link ? new URL(link).hostname.replace('www.', '') : '',
+          thumbnail: isVideo && videoId
+            ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+            : isArticle && link
+              ? `https://www.google.com/s2/favicons?sz=128&domain_url=${encodeURIComponent(link)}`
+              : 'https://via.placeholder.com/160x90?text=Resource'
+        };
+      });
+
+      setRecommendations(parsed);
     } catch (err) {
       console.error('Failed to fetch recommendations:', err);
-      setRecommendations('⚠️ Failed to fetch recommendations. Please try again later.');
     }
   };
 
   const downloadResults = () => {
     const lines = [`Final Quiz Score: ${score}/${questions.length}\n`];
-
     questions.forEach((q, i) => {
       const userAns = userAnswers[i] || "Not answered";
       lines.push(`Q${i + 1}: ${q.question}`);
@@ -68,9 +94,12 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers }) => {
   };
 
   const currentQn = questions[currentIndex];
+  const passedWell = score / questions.length > 0.8;
 
   return (
     <div className="final-quiz-container">
+      {passedWell && showResults && <Confetti />}
+      
       {!showResults ? (
         <div className="final-quiz-question-block">
           <h2 className="final-quiz-title">Final Quiz</h2>
@@ -101,10 +130,38 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers }) => {
         <div className="final-quiz-results">
           <h3>Your Score: {score}/{questions.length}</h3>
 
-          {recommendations && (
+          {passedWell ? (
+            <div className="ai-recommendations">
+              <h4>Great Job!</h4>
+              <p style={{ textAlign: 'center', color: '#ccc' }}>
+                You scored above 80%! Keep up the good work and challenge yourself further!
+              </p>
+              <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+                <button className="submit-btn" onClick={() => window.location.reload()}>
+                  Retry a Harder Quiz
+                </button>
+              </div>
+            </div>
+          ) : recommendations.length > 0 && (
             <div className="ai-recommendations">
               <h4>✨ Personalized Recommendations:</h4>
-              <pre>{recommendations}</pre>
+              <div className="recommendation-grid">
+                {recommendations.map((rec, i) => (
+                  <div className="recommendation-card" key={i}>
+                    <img src={rec.thumbnail} alt={rec.title} className="recommendation-thumb" />
+                    <div className="recommendation-info">
+                      <p className="recommendation-type">{rec.type.toUpperCase()}</p>
+                      <p className="recommendation-title">{rec.title}</p>
+                      {rec.hostname && <p className="recommendation-site">{rec.hostname}</p>}
+                      {rec.link ? (
+                        <a href={rec.link} target="_blank" rel="noopener noreferrer">View</a>
+                      ) : (
+                        <p className="disabled-link">Link not available</p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
