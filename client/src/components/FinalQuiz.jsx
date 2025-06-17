@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import '../styles/finalquiz.css';
 
 const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers }) => {
@@ -6,6 +7,7 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers }) => {
   const [showResults, setShowResults] = useState(false);
   const [score, setScore] = useState(0);
   const [showAll, setShowAll] = useState(false);
+  const [recommendations, setRecommendations] = useState('');
 
   const handleOptionClick = (option) => {
     setUserAnswers((prev) => ({ ...prev, [currentIndex]: option }));
@@ -23,15 +25,27 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers }) => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const unanswered = questions.length - Object.keys(userAnswers).length;
     const confirmSubmit = window.confirm(
       `You left ${unanswered} question(s) blank. Do you want to submit?`
     );
-    if (confirmSubmit) {
-      const correctCount = questions.filter((q, i) => userAnswers[i] === q.answer).length;
-      setScore(correctCount);
-      setShowResults(true);
+    if (!confirmSubmit) return;
+
+    const correctCount = questions.filter((q, i) => userAnswers[i] === q.answer).length;
+    setScore(correctCount);
+    setShowResults(true);
+
+    try {
+      const response = await axios.post('https://codinghub-r3bn.onrender.com/api/ai/recommend', {
+        score: correctCount,
+        courseTitle: 'Python', // Replace this with dynamic course title if needed
+        email: localStorage.getItem('email'),
+      });
+      setRecommendations(response.data.recommendations);
+    } catch (err) {
+      console.error('Failed to fetch recommendations:', err);
+      setRecommendations('⚠️ Failed to fetch recommendations. Please try again later.');
     }
   };
 
@@ -86,6 +100,13 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers }) => {
       ) : (
         <div className="final-quiz-results">
           <h3>Your Score: {score}/{questions.length}</h3>
+
+          {recommendations && (
+            <div className="ai-recommendations">
+              <h4>✨ Personalized Recommendations:</h4>
+              <pre>{recommendations}</pre>
+            </div>
+          )}
 
           <div className="final-quiz-actions" style={{ marginBottom: '1rem' }}>
             <button onClick={() => setShowAll(false)} className={!showAll ? 'active-toggle' : ''}>
