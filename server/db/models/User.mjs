@@ -28,9 +28,7 @@ const userSchema = new mongoose.Schema({
   progress: [{
     courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
     completedLessons: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Lesson' }],
-    completedQuiz: { type: Boolean, default: false },
-    finalQuizScore: { type: Number }, // save quiz score
-    recommendations: [String]
+    completedQuiz: { type: Boolean, default: false }
   }]
 }, 
 {
