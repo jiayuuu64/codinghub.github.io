@@ -1,11 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/Lesson.css';
 
-const SelfEvalQuiz = ({ quizData, onBack }) => {
+const SelfEvalQuiz = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const quizData = location.state?.quiz;
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null);
   const [showExplanation, setShowExplanation] = useState(false);
+
+  useEffect(() => {
+    if (!quizData) {
+      navigate('/self-evaluation');
+    }
+  }, [quizData, navigate]);
+
+  if (!quizData) return null;
 
   const currentQuestion = quizData[currentIndex];
 
@@ -33,10 +46,12 @@ const SelfEvalQuiz = ({ quizData, onBack }) => {
     }
   };
 
+  const handleExit = () => navigate('/self-evaluation');
+
   return (
     <div className="lesson-fullscreen">
       <div className="lesson-top-bar">
-        <button className="lesson-exit-button" onClick={onBack}>
+        <button className="lesson-exit-button" onClick={handleExit}>
           ✕ Exit
         </button>
         <div className="lesson-progress-bar-wrapper">
@@ -99,10 +114,7 @@ const SelfEvalQuiz = ({ quizData, onBack }) => {
             Next →
           </button>
         ) : (
-          <button
-            className="lesson-nav-button finish-button"
-            onClick={onBack}
-          >
+          <button className="lesson-nav-button finish-button" onClick={handleExit}>
             Finish
           </button>
         )}

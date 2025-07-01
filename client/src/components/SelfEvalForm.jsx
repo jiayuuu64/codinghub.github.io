@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Lesson.css'; // Reuse your theme
+import '../styles/Lesson.css';
 
-// ✅ Predefined topics from courseContent.json
 const predefinedTopics = [
   "Creating Variables",
   "Data Types",
@@ -28,7 +27,7 @@ const SelfEvalForm = () => {
     setError('');
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/quiz-generator/custom`, {
+      const res = await fetch('https://codinghub-r3bn.onrender.com/api/quiz-generator/custom', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, topic, numQuestions })
@@ -37,7 +36,25 @@ const SelfEvalForm = () => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Quiz generation failed");
 
-      navigate('/self-eval/quiz', { state: { quiz: data.quiz } });
+      // Parse text into structured questions
+      const lines = data.quiz.split('\n').filter(line => line.trim() !== '');
+      const questions = [];
+
+      for (let i = 0; i < lines.length; i += 6) {
+        const q = lines[i];
+        const options = [lines[i + 1], lines[i + 2], lines[i + 3], lines[i + 4]].map(opt => opt.slice(3));
+        const answerLine = lines[i + 5];
+        const answerLetter = answerLine.split(':')[1].trim();
+        const answerMap = { A: 0, B: 1, C: 2, D: 3 };
+        questions.push({
+          question: q.slice(3),
+          options,
+          answer: options[answerMap[answerLetter]],
+          explanation: "Explanation will be available in a future version." // Optional
+        });
+      }
+
+      navigate('/self-eval/quiz', { state: { quiz: questions } });
     } catch (err) {
       setError(err.message);
     } finally {
