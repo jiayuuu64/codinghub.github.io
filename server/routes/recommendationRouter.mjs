@@ -43,28 +43,28 @@ router.get('/recommendations', async (req, res) => {
 
     // fallback to user preferences
     const fallback = [
-      {
-        type: 'article',
-        title: `Intro to ${user.languagePreference || 'Programming'}`,
-        link: 'https://www.geeksforgeeks.org/introduction-to-programming/',
-        hostname: 'geeksforgeeks.org',
-        thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=geeksforgeeks.org'
-      },
-      {
-        type: 'video',
-        title: `Top tips for ${user.experiencePreference || 'beginner coders'}`,
-        link: 'https://www.youtube.com/watch?v=rfscVS0vtbw',
-        hostname: 'youtube.com',
-        thumbnail: 'https://img.youtube.com/vi/rfscVS0vtbw/hqdefault.jpg'
-      },
-      {
-        type: 'article',
-        title: 'Boost Your Learning Motivation',
-        link: 'https://www.lifehack.org/articles/productivity/10-tips-study-smart-and-save-time.html',
-        hostname: 'lifehack.org',
-        thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=lifehack.org'
-      }
-    ];
+  {
+    type: 'article',
+    title: 'Intro to PHP',
+    link: 'https://www.geeksforgeeks.org/php-introduction/',
+    hostname: 'geeksforgeeks.org',
+    thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=geeksforgeeks.org'
+  },
+  {
+    type: 'video',
+    title: 'Top tips for Confident Coder',
+    link: 'https://www.youtube.com/watch?v=rfscVS0vtbw',
+    hostname: 'youtube.com',
+    thumbnail: 'https://img.youtube.com/vi/rfscVS0vtbw/hqdefault.jpg'
+  },
+  {
+    type: 'article',
+    title: 'Boost Your Learning Motivation',
+    link: 'https://www.lifehack.org/813336/study-smart',
+    hostname: 'lifehack.org',
+    thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=lifehack.org'
+  }
+];
 
     return res.status(200).json(fallback);
   } catch (err) {
