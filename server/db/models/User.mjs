@@ -23,17 +23,20 @@ const userSchema = new mongoose.Schema({
   experiencePreference: String,
   commitmentPreference: String,
   avatar: String,
-  
+
   // ✅ Progress field added here
-  progress: [{
+    progress: [{
     courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
     completedLessons: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Lesson' }],
-    completedQuiz: { type: Boolean, default: false }
+    completedQuiz: { type: Boolean, default: false },
+    finalQuizScore: { type: Number },
+    recommendations: [String],
+    updatedAt: { type: Date, default: Date.now }
   }]
-}, 
-{
-  timestamps: true // optional, adds createdAt & updatedAt
-});
+},
+  {
+    timestamps: true // optional, adds createdAt & updatedAt
+  });
 
 const User = mongoose.model('User', userSchema);
 export default User;
