@@ -45,7 +45,7 @@ app.use("/api/courses", courseRouter);
 app.use('/api/lessons', lessonRouter);
 app.use('/api/quiz-generator', quizGenRouter);
 app.use('/api/ai', langchainRouter);
-app.use('/api', recommendationRouter);
+app.use('/api/users', recommendationRouter);
 
 app.listen(PORT, () => {
     console.log(`🚀 Server is running on port: http://localhost:${PORT}`);
