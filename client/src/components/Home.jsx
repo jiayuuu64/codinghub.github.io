@@ -7,31 +7,38 @@ import '../styles/Home.css';
 const Home = () => {
   const [courses, setCourses] = useState([]);
   const [progressData, setProgressData] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
   const email = localStorage.getItem('email');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCoursesAndProgress = async () => {
+    const fetchAll = async () => {
       try {
-        // Fetch courses
-        const coursesRes = await axios.get('https://codinghub-r3bn.onrender.com/api/courses');
-        setCourses(coursesRes.data);
+        const baseUrl = import.meta.env.VITE_API_URL;
 
+        // Fetch courses
+        const coursesRes = await axios.get(`${baseUrl.replace('/users', '')}/courses`);
+        setCourses(coursesRes.data);
 
         // Fetch user progress
         if (email) {
-          const progressRes = await axios.get(`${import.meta.env.VITE_API_URL}/${email}/progress`);
+          const progressRes = await axios.get(`${baseUrl}/${email}/progress`);
           setProgressData(progressRes.data || []);
         }
+
+        // Fetch recommendations
+        if (email) {
+          const recRes = await axios.get(`${baseUrl.replace('/users', '')}/recommendations?email=${email}`);
+          setRecommendations(recRes.data || []);
+        }
       } catch (err) {
-        console.error('Failed to fetch courses or progress:', err);
+        console.error('Error fetching data:', err);
       }
     };
 
-    fetchCoursesAndProgress();
+    fetchAll();
   }, [email]);
 
-  // Map progress data to course information
   const mergedData = courses.map(course => {
     const courseProgress = progressData.find(p => p.courseId === course._id);
     const completed = courseProgress?.completedLessons?.length || 0;
@@ -47,34 +54,19 @@ const Home = () => {
     };
   });
 
-  // Sort by completion percentage and pick top 4
-  const topCourses = mergedData
-    .sort((a, b) => b.percent - a.percent)
-    .slice(0, 4);
-
-  // Fill empty slots if needed
+  const topCourses = mergedData.sort((a, b) => b.percent - a.percent).slice(0, 4);
   while (topCourses.length < 4) {
-    topCourses.push({
-      courseId: '',
-      courseName: '',
-      logo: '',
-      percent: 0,
-      completed: 0,
-      total: 0
-    });
+    topCourses.push({ courseId: '', courseName: '', percent: 0, completed: 0, total: 0 });
   }
 
   const handleCourseClick = (courseId) => {
-    if (courseId) {
-      navigate(`/courses/${courseId}`);
-    }
+    if (courseId) navigate(`/courses/${courseId}`);
   };
 
   return (
     <>
       <Navbar />
       <div className="home-container">
-
         <section className="progress-section">
           <h2>Your Progress</h2>
           <div className="progress-cards">
@@ -85,21 +77,9 @@ const Home = () => {
                 onClick={() => handleCourseClick(course.courseId)}
                 style={{ cursor: course.courseId ? 'pointer' : 'not-allowed' }}
               >
-                <p className="course-title">
-                  {course.logo && (
-                    <img
-                      src={course.logo}
-                      alt={`${course.courseName} logo`}
-                      className="course-logo"
-                    />
-                  )}
-                  {course.courseName || '—'}
-                </p>
+                <p className="course-title">{course.courseName || '—'}</p>
                 <div className="progress-bar">
-                  <div
-                    className="progress"
-                    style={{ width: `${course.percent}%` }}
-                  ></div>
+                  <div className="progress" style={{ width: `${course.percent}%` }}></div>
                 </div>
                 <div className="progress-info">
                   <span>{course.percent}% complete</span>
@@ -122,14 +102,34 @@ const Home = () => {
 
         <section className="recommended-section">
           <h2>Recommended For You</h2>
-          <div className="recommended-cards">
-            <div className="recommended-card"></div>
-            <div className="recommended-card"></div>
-            <div className="recommended-card"></div>
-            <div className="recommended-card"></div>
+          <div className="recommendation-grid">
+            {recommendations.map((rec, idx) => (
+              <div className="recommendation-card" key={idx}>
+                <img
+                  src={rec.thumbnail}
+                  alt={rec.title}
+                  className="recommendation-thumb"
+                />
+                <div className="recommendation-info">
+                  <p className="recommendation-type">{rec.type?.toUpperCase()}</p>
+                  <p className="recommendation-title">{rec.title}</p>
+                  {rec.hostname && <p className="recommendation-site">{rec.hostname}</p>}
+                  {rec.link ? (
+                    <a href={rec.link} target="_blank" rel="noopener noreferrer">View</a>
+                  ) : (
+                    <p className="disabled-link">Link not available</p>
+                  )}
+                </div>
+              </div>
+            ))}
+
+            {recommendations.length === 0 && (
+              <p style={{ color: '#ccc', textAlign: 'center', marginTop: '1rem' }}>
+                No recommendations yet — complete a quiz to see personalized suggestions!
+              </p>
+            )}
           </div>
         </section>
-
       </div>
     </>
   );
