@@ -11,6 +11,7 @@ router.get('/recommendations', async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ error: 'User not found' });
 
+    // Step 1: Check if user has quiz-based recommendations
     const latestProgress = user.progress
       ?.filter(p => p.recommendations?.length)
       ?.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))[0];
@@ -41,186 +42,220 @@ router.get('/recommendations', async (req, res) => {
       return res.status(200).json(parsed);
     }
 
-    // fallback to preferences
-    const pref = user.languagePreference || 'Python';
-
-    const articles = {
-      Python: [
+    // Step 2: Fallback to language preference
+    const lang = (user.languagePreference || '').toLowerCase();
+    const fallbackMap = {
+      python: [
         {
-          title: 'Intro to Python Programming',
-          link: 'https://www.geeksforgeeks.org/python-programming-language/',
-          hostname: 'geeksforgeeks.org'
-        },
-        {
-          title: 'Python Basics',
-          link: 'https://www.programiz.com/python-programming',
-          hostname: 'programiz.com'
-        },
-        {
-          title: 'Learn Python – Full Course',
+          type: 'video',
+          title: 'Python Tutorial for Beginners',
           link: 'https://www.youtube.com/watch?v=rfscVS0vtbw',
           hostname: 'youtube.com',
-          isVideo: true
+          thumbnail: 'https://img.youtube.com/vi/rfscVS0vtbw/hqdefault.jpg'
+        },
+        {
+          type: 'article',
+          title: 'Python Crash Course',
+          link: 'https://www.freecodecamp.org/news/python-crash-course/',
+          hostname: 'freecodecamp.org',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=freecodecamp.org'
+        },
+        {
+          type: 'article',
+          title: 'Common Python Mistakes and How to Fix Them',
+          link: 'https://betterprogramming.pub/10-common-python-mistakes-and-how-to-avoid-them-299f1c96221c',
+          hostname: 'betterprogramming.pub',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=betterprogramming.pub'
         }
       ],
-      JavaScript: [
+      javascript: [
         {
+          type: 'video',
+          title: 'JavaScript Full Course (2024)',
+          link: 'https://www.youtube.com/watch?v=SBmSRK3feww',
+          hostname: 'youtube.com',
+          thumbnail: 'https://img.youtube.com/vi/SBmSRK3feww/hqdefault.jpg'
+        },
+        {
+          type: 'article',
           title: 'JavaScript Guide',
           link: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide',
-          hostname: 'mdn.dev'
+          hostname: 'developer.mozilla.org',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=developer.mozilla.org'
         },
         {
-          title: 'JS Tutorial',
-          link: 'https://www.w3schools.com/js/',
-          hostname: 'w3schools.com'
-        },
-        {
-          title: 'JavaScript Full Course',
-          link: 'https://www.youtube.com/watch?v=jS4aFq5-91M',
-          hostname: 'youtube.com',
-          isVideo: true
+          type: 'article',
+          title: 'Understanding JavaScript Closures',
+          link: 'https://www.freecodecamp.org/news/lets-learn-javascript-closures/',
+          hostname: 'freecodecamp.org',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=freecodecamp.org'
         }
       ],
-      HTML: [
+      html: [
         {
-          title: 'HTML Beginner Tutorial',
-          link: 'https://www.w3schools.com/html/',
-          hostname: 'w3schools.com'
-        },
-        {
-          title: 'HTML Crash Course',
+          type: 'video',
+          title: 'HTML Crash Course For Beginners',
           link: 'https://www.youtube.com/watch?v=UB1O30fR-EE',
           hostname: 'youtube.com',
-          isVideo: true
+          thumbnail: 'https://img.youtube.com/vi/UB1O30fR-EE/hqdefault.jpg'
         },
         {
-          title: 'HTML Basics',
-          link: 'https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML',
-          hostname: 'mdn.dev'
+          type: 'article',
+          title: 'HTML Beginner’s Guide',
+          link: 'https://www.w3schools.com/html/',
+          hostname: 'w3schools.com',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=w3schools.com'
+        },
+        {
+          type: 'article',
+          title: 'Semantic HTML: What You Should Know',
+          link: 'https://developer.mozilla.org/en-US/docs/Glossary/Semantics',
+          hostname: 'developer.mozilla.org',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=developer.mozilla.org'
         }
       ],
-      CSS: [
+      css: [
         {
-          title: 'CSS Tutorial',
-          link: 'https://www.w3schools.com/css/',
-          hostname: 'w3schools.com'
-        },
-        {
-          title: 'Learn CSS',
-          link: 'https://developer.mozilla.org/en-US/docs/Web/CSS',
-          hostname: 'mdn.dev'
-        },
-        {
-          title: 'CSS Crash Course',
+          type: 'video',
+          title: 'CSS Crash Course For Beginners',
           link: 'https://www.youtube.com/watch?v=yfoY53QXEnI',
           hostname: 'youtube.com',
-          isVideo: true
-        }
-      ],
-      SQL: [
-        {
-          title: 'SQL Tutorial',
-          link: 'https://www.w3schools.com/sql/',
-          hostname: 'w3schools.com'
+          thumbnail: 'https://img.youtube.com/vi/yfoY53QXEnI/hqdefault.jpg'
         },
         {
-          title: 'SQL for Beginners',
+          type: 'article',
+          title: 'Learn CSS in 20 Minutes',
+          link: 'https://www.freecodecamp.org/news/learn-css-in-20-minutes/',
+          hostname: 'freecodecamp.org',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=freecodecamp.org'
+        },
+        {
+          type: 'article',
+          title: 'CSS Basics',
+          link: 'https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics',
+          hostname: 'developer.mozilla.org',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=developer.mozilla.org'
+        }
+      ],
+      sql: [
+        {
+          type: 'video',
+          title: 'SQL Tutorial - Full Database Course',
           link: 'https://www.youtube.com/watch?v=HXV3zeQKqGY',
           hostname: 'youtube.com',
-          isVideo: true
+          thumbnail: 'https://img.youtube.com/vi/HXV3zeQKqGY/hqdefault.jpg'
         },
         {
-          title: 'Intro to SQL',
-          link: 'https://mode.com/sql-tutorial/',
-          hostname: 'mode.com'
+          type: 'article',
+          title: 'Learn SQL Basics',
+          link: 'https://www.w3schools.com/sql/',
+          hostname: 'w3schools.com',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=w3schools.com'
+        },
+        {
+          type: 'article',
+          title: 'SQL for Beginners',
+          link: 'https://www.freecodecamp.org/news/learn-sql-in-10-minutes/',
+          hostname: 'freecodecamp.org',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=freecodecamp.org'
         }
       ],
-      Java: [
+      java: [
         {
-          title: 'Java Programming',
-          link: 'https://www.geeksforgeeks.org/java/',
-          hostname: 'geeksforgeeks.org'
-        },
-        {
-          title: 'Learn Java – Full Course',
+          type: 'video',
+          title: 'Java Full Course for Beginners',
           link: 'https://www.youtube.com/watch?v=GoXwIVyNvX0',
           hostname: 'youtube.com',
-          isVideo: true
+          thumbnail: 'https://img.youtube.com/vi/GoXwIVyNvX0/hqdefault.jpg'
         },
         {
-          title: 'Java Basics',
-          link: 'https://www.programiz.com/java-programming',
-          hostname: 'programiz.com'
+          type: 'article',
+          title: 'Java Programming Basics',
+          link: 'https://www.geeksforgeeks.org/java/',
+          hostname: 'geeksforgeeks.org',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=geeksforgeeks.org'
+        },
+        {
+          type: 'article',
+          title: 'Java 101: Introduction to Java',
+          link: 'https://developer.ibm.com/articles/j-introduction-to-java/',
+          hostname: 'developer.ibm.com',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=developer.ibm.com'
         }
       ],
-      'C++': [
+      cplusplus: [
         {
-          title: 'C++ for Beginners',
-          link: 'https://www.geeksforgeeks.org/c-plus-plus/',
-          hostname: 'geeksforgeeks.org'
-        },
-        {
-          title: 'Learn C++',
-          link: 'https://www.learncpp.com/',
-          hostname: 'learncpp.com'
-        },
-        {
-          title: 'C++ Crash Course',
+          type: 'video',
+          title: 'C++ Tutorial for Beginners',
           link: 'https://www.youtube.com/watch?v=vLnPwxZdW4Y',
           hostname: 'youtube.com',
-          isVideo: true
-        }
-      ],
-      PHP: [
-        {
-          title: 'PHP Tutorial',
-          link: 'https://www.w3schools.com/php/',
-          hostname: 'w3schools.com'
+          thumbnail: 'https://img.youtube.com/vi/vLnPwxZdW4Y/hqdefault.jpg'
         },
         {
-          title: 'PHP for Beginners',
+          type: 'article',
+          title: 'C++ Tutorial',
+          link: 'https://www.learncpp.com/',
+          hostname: 'learncpp.com',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=learncpp.com'
+        },
+        {
+          type: 'article',
+          title: 'C++ Basics: Learn from Scratch',
+          link: 'https://www.programiz.com/cpp-programming',
+          hostname: 'programiz.com',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=programiz.com'
+        }
+      ],
+      php: [
+        {
+          type: 'video',
+          title: 'PHP Full Course for Beginners',
           link: 'https://www.youtube.com/watch?v=OK_JCtrrv-c',
           hostname: 'youtube.com',
-          isVideo: true
+          thumbnail: 'https://img.youtube.com/vi/OK_JCtrrv-c/hqdefault.jpg'
         },
         {
-          title: 'Learn PHP',
-          link: 'https://www.tutorialrepublic.com/php-tutorial/',
-          hostname: 'tutorialrepublic.com'
+          type: 'article',
+          title: 'PHP Tutorial',
+          link: 'https://www.w3schools.com/php/',
+          hostname: 'w3schools.com',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=w3schools.com'
+        },
+        {
+          type: 'article',
+          title: 'Learn PHP Basics',
+          link: 'https://www.geeksforgeeks.org/php-tutorial/',
+          hostname: 'geeksforgeeks.org',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=geeksforgeeks.org'
         }
       ],
-      Dart: [
+      dart: [
         {
-          title: 'Dart Language Tour',
-          link: 'https://dart.dev/guides/language/language-tour',
-          hostname: 'dart.dev'
-        },
-        {
-          title: 'Dart Tutorial',
+          type: 'video',
+          title: 'Dart Programming Full Course',
           link: 'https://www.youtube.com/watch?v=Ej_Pcr4uC2Q',
           hostname: 'youtube.com',
-          isVideo: true
+          thumbnail: 'https://img.youtube.com/vi/Ej_Pcr4uC2Q/hqdefault.jpg'
         },
         {
+          type: 'article',
           title: 'Learn Dart Basics',
-          link: 'https://www.javatpoint.com/dart-programming',
-          hostname: 'javatpoint.com'
+          link: 'https://dart.dev/guides',
+          hostname: 'dart.dev',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=dart.dev'
+        },
+        {
+          type: 'article',
+          title: 'Dart Introduction',
+          link: 'https://www.geeksforgeeks.org/dart-programming-language-introduction/',
+          hostname: 'geeksforgeeks.org',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=geeksforgeeks.org'
         }
       ]
     };
 
-    const selected = articles[pref] || articles['Python'];
-    const formatted = selected.map(item => ({
-      type: item.isVideo ? 'video' : 'article',
-      title: item.title,
-      link: item.link,
-      hostname: item.hostname,
-      thumbnail: item.isVideo
-        ? `https://img.youtube.com/vi/${item.link.split('v=')[1]}/hqdefault.jpg`
-        : `https://www.google.com/s2/favicons?sz=128&domain_url=${item.link}`
-    }));
-
-    return res.status(200).json(formatted);
+    const fallback = fallbackMap[lang] || fallbackMap['python']; // default to Python
+    return res.status(200).json(fallback);
   } catch (err) {
     console.error('Error fetching recommendations:', err);
     res.status(500).json({ error: 'Internal server error' });
