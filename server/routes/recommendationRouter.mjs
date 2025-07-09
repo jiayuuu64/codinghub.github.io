@@ -71,11 +71,12 @@ router.get('/recommendations', async (req, res) => {
       javascript: [
         {
           type: 'video',
-          title: 'JavaScript Full Course (2024)',
-          link: 'https://www.youtube.com/watch?v=SBmSRK3feww',
+          title: 'JavaScript Tutorial for Beginners',
+          link: 'https://www.youtube.com/watch?v=W6NZfCO5SIk',
           hostname: 'youtube.com',
-          thumbnail: 'https://img.youtube.com/vi/SBmSRK3feww/hqdefault.jpg'
+          thumbnail: 'https://img.youtube.com/vi/W6NZfCO5SIk/hqdefault.jpg'
         },
+
         {
           type: 'article',
           title: 'JavaScript Guide',
@@ -85,10 +86,10 @@ router.get('/recommendations', async (req, res) => {
         },
         {
           type: 'article',
-          title: 'Understanding JavaScript Closures',
-          link: 'https://www.freecodecamp.org/news/lets-learn-javascript-closures/',
-          hostname: 'freecodecamp.org',
-          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=freecodecamp.org'
+          title: 'JavaScript First Steps – MDN Web Docs',
+          link: 'https://developer.mozilla.org/en-US/docs/Learn/JavaScript/First_steps',
+          hostname: 'developer.mozilla.org',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=developer.mozilla.org'
         }
       ],
       html: [
@@ -124,10 +125,10 @@ router.get('/recommendations', async (req, res) => {
         },
         {
           type: 'article',
-          title: 'Learn CSS in 20 Minutes',
-          link: 'https://www.freecodecamp.org/news/learn-css-in-20-minutes/',
-          hostname: 'freecodecamp.org',
-          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=freecodecamp.org'
+          title: 'CSS Tutorial for Beginners',
+          link: 'https://www.w3schools.com/css/',
+          hostname: 'w3schools.com',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=w3schools.com'
         },
         {
           type: 'article',
@@ -177,11 +178,12 @@ router.get('/recommendations', async (req, res) => {
         },
         {
           type: 'article',
-          title: 'Java 101: Introduction to Java',
-          link: 'https://developer.ibm.com/articles/j-introduction-to-java/',
-          hostname: 'developer.ibm.com',
-          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=developer.ibm.com'
+          title: 'Java Tutorial - W3Schools',
+          link: 'https://www.w3schools.com/java/',
+          hostname: 'w3schools.com',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=w3schools.com'
         }
+
       ],
       cplusplus: [
         {
@@ -246,15 +248,15 @@ router.get('/recommendations', async (req, res) => {
         },
         {
           type: 'article',
-          title: 'Dart Introduction',
-          link: 'https://www.geeksforgeeks.org/dart-programming-language-introduction/',
-          hostname: 'geeksforgeeks.org',
-          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=geeksforgeeks.org'
+          title: 'Introduction to Dart',
+          link: 'https://dart.dev/tutorials',
+          hostname: 'dart.dev',
+          thumbnail: 'https://www.google.com/s2/favicons?sz=128&domain=dart.dev'
         }
       ]
     };
 
-    const fallback = fallbackMap[lang] || fallbackMap['python']; 
+    const fallback = fallbackMap[lang] || fallbackMap['python'];
     return res.status(200).json(fallback);
   } catch (err) {
     console.error('Error fetching recommendations:', err);
