@@ -254,7 +254,7 @@ router.get('/recommendations', async (req, res) => {
       ]
     };
 
-    const fallback = fallbackMap[lang] || fallbackMap['python']; // default to Python
+    const fallback = fallbackMap[lang] || fallbackMap['python']; 
     return res.status(200).json(fallback);
   } catch (err) {
     console.error('Error fetching recommendations:', err);
