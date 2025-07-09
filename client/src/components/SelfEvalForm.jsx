@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../styles/Lesson.css';
+import '../styles/SelfEval.css';
 
 const predefinedTopics = [
   "Creating Variables",
@@ -11,85 +10,75 @@ const predefinedTopics = [
   "Defining Functions"
 ];
 
-const SelfEvalForm = () => {
+const SelfEvalForm = ({ onGenerate, loading }) => {
   const [topic, setTopic] = useState('');
   const [numQuestions, setNumQuestions] = useState(5);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+  const [message, setMessage] = useState('');
   const email = localStorage.getItem('email');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!topic || !numQuestions) return setError("All fields are required");
-
-    setLoading(true);
-    setError('');
-
+    if (!topic || !numQuestions) {
+      setMessage("Please select a topic and number of questions.");
+      return;
+    }
+    setMessage('');
     try {
-      const res = await fetch('https://codinghub-r3bn.onrender.com/api/quiz-generator/custom', {
+      const response = await fetch(`https://codinghub-r3bn.onrender.com/api/quiz-generator/custom`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, topic, numQuestions })
+        body: JSON.stringify({ email, topic, numQuestions }),
       });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Quiz generation failed");
-
-      // Parse text into structured questions
-      const lines = data.quiz.split('\n').filter(line => line.trim() !== '');
-      const questions = [];
-
-      for (let i = 0; i < lines.length; i += 6) {
-        const q = lines[i];
-        const options = [lines[i + 1], lines[i + 2], lines[i + 3], lines[i + 4]].map(opt => opt.slice(3));
-        const answerLine = lines[i + 5];
-        const answerLetter = answerLine.split(':')[1].trim();
-        const answerMap = { A: 0, B: 1, C: 2, D: 3 };
-        questions.push({
-          question: q.slice(3),
-          options,
-          answer: options[answerMap[answerLetter]],
-          explanation: "Explanation will be available in a future version." // Optional
+      const data = await response.json();
+      if (response.ok) {
+        // Parse quiz string into objects
+        const raw = data.quiz.split(/\d+\./).filter(Boolean);
+        const parsedQuiz = raw.map(q => {
+          const [questionPart, ...optionsAndAnswer] = q.trim().split(/A\.|B\.|C\.|D\.|Answer:/).filter(Boolean);
+          const options = optionsAndAnswer.slice(0, 4).map(opt => opt.trim());
+          const answerLine = optionsAndAnswer[4]?.trim().replace(/Answer:\s*/, '');
+          return { question: questionPart.trim(), options, answer: answerLine, explanation: "Auto-generated explanation." };
         });
+        onGenerate(parsedQuiz);
+      } else {
+        setMessage(data.error || "Failed to generate quiz.");
       }
-
-      navigate('/self-eval/quiz', { state: { quiz: questions } });
     } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+      setMessage("Error generating quiz.");
     }
   };
 
   return (
-    <div className="lesson-fullscreen">
-      <div className="lesson-step-container" style={{ flexDirection: 'column' }}>
-        <h2>🧠 Self-Evaluation Quiz</h2>
-
-        <form onSubmit={handleSubmit} className="self-eval-form">
-          <label>Select Topic:</label>
-          <select value={topic} onChange={(e) => setTopic(e.target.value)}>
-            <option value="">-- Choose a topic --</option>
-            {predefinedTopics.map((t, idx) => (
-              <option key={idx} value={t}>{t}</option>
+    <div className="selfeval-container">
+      <div className="selfeval-card">
+        <h2>Generate Your Self-Evaluation Quiz</h2>
+        <form onSubmit={handleSubmit}>
+          <select
+            className="selfeval-select"
+            value={topic}
+            onChange={(e) => setTopic(e.target.value)}
+          >
+            <option value="">Select Topic</option>
+            {predefinedTopics.map((t) => (
+              <option key={t} value={t}>{t}</option>
             ))}
           </select>
 
-          <label>Number of Questions:</label>
           <input
+            className="selfeval-input"
             type="number"
             min="1"
             max="10"
             value={numQuestions}
-            onChange={(e) => setNumQuestions(Number(e.target.value))}
+            onChange={(e) => setNumQuestions(e.target.value)}
+            placeholder="Number of questions (1-10)"
           />
 
-          <button className="lesson-nav-button" type="submit" disabled={loading}>
-            {loading ? "Generating..." : "Start Quiz"}
+          <button type="submit" className="selfeval-button" disabled={loading}>
+            {loading ? 'Generating...' : 'Generate Quiz'}
           </button>
 
-          {error && <p style={{ color: '#f87171' }}>{error}</p>}
+          {message && <p className="selfeval-message">{message}</p>}
         </form>
       </div>
     </div>
