@@ -104,22 +104,27 @@ const Home = () => {
           <h2>Recommended For You</h2>
           <div className="recommendation-grid">
             {recommendations.map((rec, idx) => (
-              <div className="recommendation-card" key={idx}>
+              <div
+                className="recommendation-card"
+                key={idx}
+                onClick={() => rec.link && window.open(rec.link, '_blank')}
+                style={{ cursor: rec.link ? 'pointer' : 'not-allowed' }}
+              >
                 <img
                   src={rec.thumbnail}
                   alt={rec.title}
                   className="recommendation-thumb"
                 />
-                <div className="recommendation-info">
+                <div>
                   <p className="recommendation-type">{rec.type?.toUpperCase()}</p>
                   <p className="recommendation-title">{rec.title}</p>
                   {rec.hostname && <p className="recommendation-site">{rec.hostname}</p>}
-                  {rec.link ? (
-                    <a href={rec.link} target="_blank" rel="noopener noreferrer">View</a>
-                  ) : (
-                    <p className="disabled-link">Link not available</p>
-                  )}
                 </div>
+                {rec.link ? (
+                  <a href={rec.link} target="_blank" rel="noopener noreferrer">View</a>
+                ) : (
+                  <p className="disabled-link">Link not available</p>
+                )}
               </div>
             ))}
 

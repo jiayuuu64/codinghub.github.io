@@ -38,7 +38,7 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
 
     const email = localStorage.getItem('email');
 
-    if (correctCount / questions.length > 0.8) return; // skip recommendation if >80%
+    if (correctCount / questions.length > 0.8) return;
 
     try {
       const response = await axios.post('https://codinghub-r3bn.onrender.com/api/ai/recommend', {
@@ -97,19 +97,17 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
   const passedWell = score / questions.length > 0.8;
 
   return (
-    <div className="final-quiz-container">
-      {passedWell && showResults && <Confetti />}
-      
+    <div className="f-quiz-container">
       {!showResults ? (
-        <div className="final-quiz-question-block">
-          <h2 className="final-quiz-title">Final Quiz</h2>
-          <h3 className="quiz-question">{currentQn.question}</h3>
+        <div className="f-quiz-block">
+          <h2 className="f-quiz-title">Final Quiz</h2>
+          <h3 className="f-quiz-question">{currentQn.question}</h3>
 
-          <ul className="final-quiz-options">
+          <ul className="f-quiz-options">
             {currentQn.options.map((opt, i) => (
               <li
                 key={i}
-                className={`final-quiz-option ${userAnswers[currentIndex] === opt ? 'selected' : ''}`}
+                className={`f-quiz-option ${userAnswers[currentIndex] === opt ? 'selected' : ''}`}
                 onClick={() => handleOptionClick(opt)}
               >
                 {opt}
@@ -117,7 +115,7 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
             ))}
           </ul>
 
-          <div className="final-quiz-nav">
+          <div className="f-quiz-nav">
             <button onClick={handleBack} disabled={currentIndex === 0}>← Back</button>
             {currentIndex < questions.length - 1 ? (
               <button onClick={handleNext}>Next →</button>
@@ -127,11 +125,11 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
           </div>
         </div>
       ) : (
-        <div className="final-quiz-results">
+        <div className="f-quiz-results">
           <h3>Your Score: {score}/{questions.length}</h3>
 
           {passedWell ? (
-            <div className="ai-recommendations">
+            <div className="recom-section">
               <h4>Great Job!</h4>
               <p style={{ textAlign: 'center', color: '#ccc' }}>
                 You scored above 80%! Keep up the good work and challenge yourself further!
@@ -143,16 +141,16 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
               </div>
             </div>
           ) : recommendations.length > 0 && (
-            <div className="ai-recommendations">
+            <div className="recom-section">
               <h4>✨ Personalized Recommendations:</h4>
-              <div className="recommendation-grid">
+              <div className="recom-grid">
                 {recommendations.map((rec, i) => (
-                  <div className="recommendation-card" key={i}>
-                    <img src={rec.thumbnail} alt={rec.title} className="recommendation-thumb" />
-                    <div className="recommendation-info">
-                      <p className="recommendation-type">{rec.type.toUpperCase()}</p>
-                      <p className="recommendation-title">{rec.title}</p>
-                      {rec.hostname && <p className="recommendation-site">{rec.hostname}</p>}
+                  <div className="recom-card" key={i}>
+                    <img src={rec.thumbnail} alt={rec.title} className="recom-thumb" />
+                    <div className="recom-info">
+                      <p className="recom-type">{rec.type.toUpperCase()}</p>
+                      <p className="recom-title">{rec.title}</p>
+                      {rec.hostname && <p className="recom-site">{rec.hostname}</p>}
                       {rec.link ? (
                         <a href={rec.link} target="_blank" rel="noopener noreferrer">View</a>
                       ) : (
@@ -165,7 +163,7 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
             </div>
           )}
 
-          <div className="final-quiz-actions" style={{ marginBottom: '1rem' }}>
+          <div className="f-quiz-actions" style={{ marginBottom: '1rem' }}>
             <button onClick={() => setShowAll(false)} className={!showAll ? 'active-toggle' : ''}>
               Show Only Wrong
             </button>
@@ -181,7 +179,7 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
             if (!showAll && isCorrect) return null;
 
             return (
-              <div key={i} className="final-quiz-result-item">
+              <div key={i} className="f-quiz-result-item">
                 <p><strong>Q{i + 1}:</strong> {q.question}</p>
                 {q.options.map((opt, j) => {
                   const isAnswer = opt === q.answer;
@@ -189,7 +187,7 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
                   return (
                     <div
                       key={j}
-                      className={`final-quiz-option ${
+                      className={`f-quiz-option ${
                         isAnswer ? 'correct' : ''
                       } ${isSelected && !isAnswer ? 'incorrect' : ''} ${
                         isSelected ? 'selected' : ''
@@ -201,14 +199,14 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
                     </div>
                   );
                 })}
-                <div className="final-quiz-explanation">
+                <div className="f-quiz-explanation">
                   <strong>Explanation:</strong> {q.explanation}
                 </div>
               </div>
             );
           })}
 
-          <div className="final-quiz-actions">
+          <div className="f-quiz-actions">
             <button onClick={() => window.location.reload()}>Try Again</button>
             <button onClick={onFinish}>Finish</button>
           </div>

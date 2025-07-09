@@ -103,14 +103,14 @@ body {
     color: white;
 }
 
-.recommended-cards {
+.recommendation-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 24px;
   margin-top: 1rem;
 }
 
-.recommended-card {
+.recommendation-card {
   background-color: #2a3872;
   border-radius: 16px;
   padding: 24px 20px;
@@ -123,14 +123,14 @@ body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease;
   overflow: hidden;
+  cursor: pointer;
 }
 
-.recommended-card:hover {
+.recommendation-card:hover {
   transform: translateY(-4px);
 }
 
-
-.recommended-thumb {
+.recommendation-thumb {
   position: absolute;
   top: 16px;
   right: 16px;
@@ -140,8 +140,7 @@ body {
   border-radius: 6px;
 }
 
-
-.recommended-type {
+.recommendation-type {
   font-size: 12px;
   font-weight: bold;
   color: #7fbaff;
@@ -149,29 +148,35 @@ body {
   margin-bottom: 4px;
 }
 
-.recommended-title {
-  font-size: 16px;
+.recommendation-title {
+  font-size: 18px;
   font-weight: bold;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-.recommended-site {
+.recommendation-site {
   font-size: 13px;
   color: #ddd;
-  margin-bottom: 6px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-.recommended-card a {
+.recommendation-card a {
   color: #79b8ff;
   text-decoration: underline;
   font-size: 13px;
+  margin-top: 6px;
 }
+
+.disabled-link {
+  font-size: 13px;
+  color: #999;
+}
+
 
 
 
