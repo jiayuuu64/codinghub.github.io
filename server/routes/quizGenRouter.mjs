@@ -19,13 +19,22 @@ router.post('/custom', async (req, res) => {
       return res.status(400).json({ error: 'Missing fields in request body' });
     }
 
-    const prompt = `Generate ${numQuestions} beginner-level multiple choice quiz questions with 4 options each, and indicate the correct answer. Topic: ${topic}. Format:
-1. Question
+    // ✅ New prompt
+const prompt = `Generate ${numQuestions} beginner-level multiple choice quiz questions with 4 options each. 
+For each question, provide the exact correct answer as text (not as letters). 
+Topic: ${topic}.
+Format:
+1. Question text
 A. Option A
 B. Option B
 C. Option C
 D. Option D
-Answer: B
+Answer: exact text of the correct option (example: "Answer: Boolean")
+
+Important:
+- Do not write "Answer: A" or "Answer: B".
+- Always write "Answer: actual text" exactly as the correct option.
+- Do not mention option letters in the answer.
 (Repeat for all questions)`;
 
     const completion = await openai.createChatCompletion({
