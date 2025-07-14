@@ -73,9 +73,16 @@ const SelfEvalQuiz = () => {
         <div className="lesson-progress-bar-wrapper">
           <div className="lesson-progress-bar">
             {quizData.map((_, index) => {
-              const isActive = !!userAnswers[index];
+              let stepClass = '';
+              if (userAnswers[index]) {
+                stepClass = 'answered';
+              } else if (showResults) {
+                stepClass = 'skipped';
+              } else {
+                stepClass = 'not-visited';
+              }
               return (
-                <div key={index} className={`lesson-progress-step ${isActive ? 'active' : ''}`}></div>
+                <div key={index} className={`lesson-progress-step ${stepClass}`}></div>
               );
             })}
           </div>
@@ -134,7 +141,7 @@ const SelfEvalQuiz = () => {
                   {q.options.map((opt, j) => {
                     const isAnswer = opt === q.answer;
                     const isSelected = userAnswer === opt;
-                    const shouldColor = userAnswer !== undefined;
+                    const shouldColor = true; // Always show correct/incorrect
 
                     return (
                       <div

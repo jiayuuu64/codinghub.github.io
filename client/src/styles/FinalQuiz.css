@@ -3,10 +3,10 @@
   color: #ffed91;
   min-height: 100vh;
   display: flex;
-  flex-direction: column;  /* Stack vertically */
+  flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* Push content to top */
-  padding-top: 2rem; /* ✅ Push up */
+  justify-content: flex-start;
+  padding-top: 2rem;
 }
 
 .f-quiz-block {
@@ -110,6 +110,29 @@
   margin-top: 16px;
 }
 
+/* Progress bar styles */
+.lesson-progress-step {
+  flex: 1;
+  height: 6px;
+  margin: 0 2px;
+  background-color: #333; /* default: not visited */
+  border-radius: 4px;
+  transition: background-color 0.3s, opacity 0.3s;
+}
+
+.lesson-progress-step.answered {
+  background-color: #b48cff; /* purple when answered */
+}
+
+.lesson-progress-step.skipped {
+  background-color: #555; /* faded or gray for skipped */
+  opacity: 0.5;
+}
+
+.lesson-progress-step.not-visited {
+  background-color: #333;
+}
+
 /* ========== RENAMED Recommendation Section ========== */
 .recom-section {
   margin-top: 2rem;
@@ -124,7 +147,6 @@
   margin-top: 1rem;
   margin-bottom: 2rem;
 }
-
 
 .recom-card {
   background-color: #2a3872;
@@ -204,7 +226,8 @@
   .f-quiz-block {
     padding: 1.5rem;
   }
-    .f-quiz-question {
+
+  .f-quiz-question {
     font-size: 1.1rem;
   }
 
