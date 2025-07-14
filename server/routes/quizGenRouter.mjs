@@ -10,7 +10,6 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-// POST /api/quiz-generator/custom
 router.post('/custom', async (req, res) => {
   try {
     const { email, topic, numQuestions } = req.body;
@@ -19,9 +18,11 @@ router.post('/custom', async (req, res) => {
       return res.status(400).json({ error: 'Missing fields in request body' });
     }
 
-    // ✅ New prompt
-const prompt = `Generate ${numQuestions} beginner-level multiple choice quiz questions with 4 options each. 
-For each question, provide the exact correct answer as text (not as letters). 
+    const prompt = `Generate ${numQuestions} beginner-level multiple choice quiz questions with 4 options each. 
+For each question, provide:
+- The exact correct answer as text (not letters).
+- A short explanation (1-2 sentences) explaining why that option is correct.
+
 Topic: ${topic}.
 Format:
 1. Question text
@@ -30,10 +31,12 @@ B. Option B
 C. Option C
 D. Option D
 Answer: exact text of the correct option (example: "Answer: Boolean")
+Explanation: brief explanation why this is correct.
 
 Important:
 - Do not write "Answer: A" or "Answer: B".
-- Always write "Answer: actual text" exactly as the correct option.
+- Only write the actual text in "Answer:".
+- Always include "Explanation:" after the answer.
 - Do not mention option letters in the answer.
 (Repeat for all questions)`;
 
