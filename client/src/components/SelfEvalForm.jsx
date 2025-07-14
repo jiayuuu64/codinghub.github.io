@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/SelfEval.css';
+import { parseQuizText } from '../utils/parseQuizText'; // ✅ Import your parser
 
 const predefinedTopics = [
   "Creating Variables",
@@ -31,14 +32,8 @@ const SelfEvalForm = ({ onGenerate, loading }) => {
       });
       const data = await response.json();
       if (response.ok) {
-        // Parse quiz string into objects
-        const raw = data.quiz.split(/\d+\./).filter(Boolean);
-        const parsedQuiz = raw.map(q => {
-          const [questionPart, ...optionsAndAnswer] = q.trim().split(/A\.|B\.|C\.|D\.|Answer:/).filter(Boolean);
-          const options = optionsAndAnswer.slice(0, 4).map(opt => opt.trim());
-          const answerLine = optionsAndAnswer[4]?.trim().replace(/Answer:\s*/, '');
-          return { question: questionPart.trim(), options, answer: answerLine, explanation: "Auto-generated explanation." };
-        });
+        // ✅ Use your parser to handle explanation and options properly
+        const parsedQuiz = parseQuizText(data.quiz);
         onGenerate(parsedQuiz);
       } else {
         setMessage(data.error || "Failed to generate quiz.");

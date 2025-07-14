@@ -36,7 +36,7 @@ export const parseQuizText = (quizText) => {
       question,
       options,
       answer: finalAnswer,
-      explanation
+      explanation // ✅ Use the parsed explanation here!
     };
   });
 
