@@ -1,7 +1,5 @@
-// src/utils/parseQuizText.js
-
 export const parseQuizText = (quizText) => {
-  const questionBlocks = quizText.trim().split(/\n(?=\d+\.\s)/); // Split on lines like "1. ", "2. ", etc.
+  const questionBlocks = quizText.trim().split(/\n(?=\d+\.\s)/);
 
   const parsedQuestions = questionBlocks.map((block) => {
     const lines = block.trim().split('\n');
@@ -14,10 +12,29 @@ export const parseQuizText = (quizText) => {
       return line ? line.slice(3).trim() : '';
     });
 
-    const answerLine = lines.find(line => /^Answer:/i.test(line));
-    const answer = answerLine ? answerLine.split(':')[1].trim() : '';
+    let answerLine = lines.find(line => /^Answer:/i.test(line));
+    let rawAnswer = answerLine ? answerLine.replace(/^Answer:\s*/, '').trim() : '';
 
-    return { question, options, answer, explanation: '' };
+    // ✅ Check if rawAnswer exactly matches option text
+    let finalAnswer = options.find(opt => opt.toLowerCase() === rawAnswer.toLowerCase());
+
+    // ✅ If rawAnswer is a letter, map to option
+    if (!finalAnswer && ['A', 'B', 'C', 'D'].includes(rawAnswer.toUpperCase())) {
+      const index = ['A', 'B', 'C', 'D'].indexOf(rawAnswer.toUpperCase());
+      finalAnswer = options[index];
+    }
+
+    // ✅ Fallback if still no match
+    if (!finalAnswer) {
+      finalAnswer = rawAnswer;
+    }
+
+    return {
+      question,
+      options,
+      answer: finalAnswer,
+      explanation: ''
+    };
   });
 
   return parsedQuestions;
