@@ -11,14 +11,13 @@ router.get('/recommendations', async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ error: 'User not found' });
 
-    // ✅ Combine all recommendations from failed final quizzes
-    const allQuizRecs = user.progress
-      ?.filter(p => p.recommendations?.length && p.finalQuizScore !== undefined && p.finalQuizScore < 6)
-      ?.flatMap(p => p.recommendations) || [];
+    // Step 1: Check if user has quiz-based recommendations
+    const latestProgress = user.progress
+      ?.filter(p => p.recommendations?.length)
+      ?.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))[0];
 
-    if (allQuizRecs.length) {
-      const deduped = [...new Set(allQuizRecs.filter(r => typeof r === 'string' && r.includes('http')))];
-      const parsed = deduped.map(line => {
+    if (latestProgress && latestProgress.recommendations?.length) {
+      const parsed = latestProgress.recommendations.map(line => {
         const titleMatch = line.match(/"(.+?)"/);
         const linkMatch = line.match(/https?:\/\/[^\s]+/);
         const title = titleMatch ? titleMatch[1] : 'Untitled';
@@ -42,7 +41,6 @@ router.get('/recommendations', async (req, res) => {
 
       return res.status(200).json(parsed);
     }
-
 
     // Step 2: Fallback to language preference
     const lang = (user.languagePreference || '').toLowerCase();
