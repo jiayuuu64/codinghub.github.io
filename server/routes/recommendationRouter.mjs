@@ -8,16 +8,13 @@ router.get('/recommendations', async (req, res) => {
   if (!email) return res.status(400).json({ error: 'Missing email' });
 
   try {
-    const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ error: 'User not found' });
+    const allQuizRecs = user.progress
+      ?.filter(p => p.recommendations?.length && p.finalQuizScore < 0.8 * (p.recommendations.length || 1))
+      ?.flatMap(p => p.recommendations) || [];
 
-    // Step 1: Check if user has quiz-based recommendations
-    const latestProgress = user.progress
-      ?.filter(p => p.recommendations?.length)
-      ?.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))[0];
-
-    if (latestProgress && latestProgress.recommendations?.length) {
-      const parsed = latestProgress.recommendations.map(line => {
+    if (allQuizRecs.length > 0) {
+      const deduped = [...new Set(allQuizRecs)];
+      const parsed = deduped.map(line => {
         const titleMatch = line.match(/"(.+?)"/);
         const linkMatch = line.match(/https?:\/\/[^\s]+/);
         const title = titleMatch ? titleMatch[1] : 'Untitled';

@@ -108,7 +108,6 @@ router.post('/recommend', async (req, res) => {
       progress.finalQuizScore = score;
       progress.recommendations = recommendationLines;
     }
-
     await user.save();
     res.status(200).json({ recommendations: recommendationLines.join('\n') });
   } catch (err) {
