@@ -7,7 +7,7 @@ dotenv.config();
 
 const router = express.Router();
 
-const articles = [
+const pythonArticles = [
   { title: "Python Programming Guide for Beginners", link: "https://realpython.com/python-basics/" },
   { title: "W3Schools Python Tutorial", link: "https://www.w3schools.com/python/" },
   { title: "GeeksforGeeks Python Tutorial", link: "https://www.geeksforgeeks.org/python-programming-language/" },
@@ -24,7 +24,7 @@ const articles = [
   { title: "Python Tutor Visualizer", link: "https://pythontutor.com/" }
 ];
 
-const videos = [
+const pythonVideos = [
   { title: "Python Tutorial for Beginners", link: "https://www.youtube.com/watch?v=_uQrJ0TkZlc" },
   { title: "Learn Python - Full Course", link: "https://www.youtube.com/watch?v=rfscVS0vtbw" },
   { title: "Python Crash Course", link: "https://www.youtube.com/watch?v=JJmcL1N2KQs" },
@@ -37,13 +37,25 @@ const videos = [
   { title: "Python Practice Project", link: "https://www.youtube.com/watch?v=DLn3jOsNRVE" },
 ];
 
-// Random utility
+const htmlcssArticles = [
+  { title: "W3Schools HTML Tutorial", link: "https://www.w3schools.com/html/" },
+  { title: "W3Schools CSS Tutorial", link: "https://www.w3schools.com/css/" },
+  { title: "MDN HTML Docs", link: "https://developer.mozilla.org/en-US/docs/Web/HTML" },
+  { title: "MDN CSS Docs", link: "https://developer.mozilla.org/en-US/docs/Web/CSS" },
+  { title: "CSS Tricks", link: "https://css-tricks.com/guides/" }
+];
+
+const htmlcssVideos = [
+  { title: "HTML Full Course - freeCodeCamp", link: "https://www.youtube.com/watch?v=pQN-pnXPaVg" },
+  { title: "CSS Crash Course", link: "https://www.youtube.com/watch?v=1Rs2ND1ryYc" },
+  { title: "HTML & CSS Crash - Traversy", link: "https://www.youtube.com/watch?v=UB1O30fR-EE" }
+];
+
 function getRandomItems(arr, n) {
   const shuffled = arr.sort(() => 0.5 - Math.random());
   return shuffled.slice(0, n);
 }
 
-// Main route
 router.post('/recommend', async (req, res) => {
   const { score, courseTitle, email } = req.body;
 
@@ -58,8 +70,17 @@ router.post('/recommend', async (req, res) => {
     const course = await Course.findOne({ title: courseTitle });
     if (!course) return res.status(404).json({ error: 'Course not found' });
 
-    const selectedArticles = getRandomItems(articles, 2);
-    const selectedVideos = getRandomItems(videos, 1);
+    let selectedArticles = [];
+    let selectedVideos = [];
+
+    const lower = courseTitle.toLowerCase();
+    if (lower.includes('html') || lower.includes('css')) {
+      selectedArticles = getRandomItems(htmlcssArticles, 2);
+      selectedVideos = getRandomItems(htmlcssVideos, 1);
+    } else {
+      selectedArticles = getRandomItems(pythonArticles, 2);
+      selectedVideos = getRandomItems(pythonVideos, 1);
+    }
 
     const recommendationLines = [
       ...selectedVideos.map(v => `📺 Video: "${v.title}" - ${v.link}`),
@@ -73,7 +94,6 @@ router.post('/recommend', async (req, res) => {
     }
 
     await user.save();
-
     res.status(200).json({ recommendations: recommendationLines.join('\n') });
   } catch (err) {
     console.error('Recommendation Error:', err);

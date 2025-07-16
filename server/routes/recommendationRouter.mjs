@@ -12,12 +12,12 @@ router.get('/recommendations', async (req, res) => {
     if (!user) return res.status(404).json({ error: 'User not found' });
 
     // Step 1: Check if user has quiz-based recommendations
-    const latestProgress = user.progress
+    const allQuizRecommendations = user.progress
       ?.filter(p => p.recommendations?.length)
-      ?.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))[0];
+      ?.flatMap(p => p.recommendations) || [];
 
-    if (latestProgress && latestProgress.recommendations?.length) {
-      const parsed = latestProgress.recommendations.map(line => {
+    if (allQuizRecommendations.length > 0) {
+      const parsed = allQuizRecommendations.map(line => {
         const titleMatch = line.match(/"(.+?)"/);
         const linkMatch = line.match(/https?:\/\/[^\s]+/);
         const title = titleMatch ? titleMatch[1] : 'Untitled';
@@ -41,6 +41,7 @@ router.get('/recommendations', async (req, res) => {
 
       return res.status(200).json(parsed);
     }
+
 
     // Step 2: Fallback to language preference
     const lang = (user.languagePreference || '').toLowerCase();
