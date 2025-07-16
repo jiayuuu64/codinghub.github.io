@@ -8,40 +8,38 @@ router.get('/recommendations', async (req, res) => {
   if (!email) return res.status(400).json({ error: 'Missing email' });
 
   try {
-    const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ error: 'User not found' });
+    // Mix all failed final quizzes with recommendations
+const allQuizRecs = user.progress
+  ?.filter(p => p.recommendations?.length && p.finalQuizScore !== undefined && p.finalQuizScore < 6)
+  ?.flatMap(p => p.recommendations) || [];
 
-    // ✅ Mix recommendations from failed quizzes like Python and HTML/CSS
-    const allQuizRecs = user.progress
-      ?.filter(p => p.recommendations?.length && p.finalQuizScore !== undefined && p.finalQuizScore < 6)
-      ?.flatMap(p => p.recommendations) || [];
+if (allQuizRecs.length) {
+  const deduped = [...new Set(allQuizRecs.filter(r => typeof r === 'string' && r.includes('http')))];
+  const parsed = deduped.map(line => {
+    const titleMatch = line.match(/"(.+?)"/);
+    const linkMatch = line.match(/https?:\/\/[^\s]+/);
+    const title = titleMatch ? titleMatch[1] : 'Untitled';
+    const link = linkMatch ? linkMatch[0] : null;
+    const isVideo = line.includes('📺') || (link && link.includes('youtube.com/watch?v='));
+    const isArticle = line.includes('📰') || (!isVideo && line.includes('Article'));
+    const videoId = isVideo && link?.includes('v=') ? link.split('v=')[1].split('&')[0] : null;
 
-    if (allQuizRecs.length) {
-      const deduped = [...new Set(allQuizRecs.filter(r => typeof r === 'string' && r.includes('http')))];
-      const parsed = deduped.map(line => {
-        const titleMatch = line.match(/"(.+?)"/);
-        const linkMatch = line.match(/https?:\/\/[^\s]+/);
-        const title = titleMatch ? titleMatch[1] : 'Untitled';
-        const link = linkMatch ? linkMatch[0] : null;
-        const isVideo = line.includes('📺') || (link && link.includes('youtube.com/watch?v='));
-        const isArticle = line.includes('📰') || (!isVideo && line.includes('Article'));
-        const videoId = isVideo && link?.includes('v=') ? link.split('v=')[1].split('&')[0] : null;
+    return {
+      type: isVideo ? 'video' : 'article',
+      title,
+      link,
+      hostname: link ? new URL(link).hostname.replace('www.', '') : '',
+      thumbnail: isVideo && videoId
+        ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+        : isArticle && link
+          ? `https://www.google.com/s2/favicons?sz=128&domain_url=${encodeURIComponent(link)}`
+          : 'https://via.placeholder.com/160x90?text=Resource'
+    };
+  });
 
-        return {
-          type: isVideo ? 'video' : 'article',
-          title,
-          link,
-          hostname: link ? new URL(link).hostname.replace('www.', '') : '',
-          thumbnail: isVideo && videoId
-            ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
-            : isArticle && link
-              ? `https://www.google.com/s2/favicons?sz=128&domain_url=${encodeURIComponent(link)}`
-              : 'https://via.placeholder.com/160x90?text=Resource'
-        };
-      });
+  return res.status(200).json(parsed);
+}
 
-      return res.status(200).json(parsed);
-    }
     // Step 2: Fallback to language preference
     const lang = (user.languagePreference || '').toLowerCase();
     const fallbackMap = {
