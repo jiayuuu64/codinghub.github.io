@@ -4,9 +4,9 @@ import User from '../db/models/User.mjs';
 import Course from '../db/models/Course.mjs';
 
 dotenv.config();
-
 const router = express.Router();
 
+// Python Resources (unchanged)
 const articles = [
   { title: "Python Programming Guide for Beginners", link: "https://realpython.com/python-basics/" },
   { title: "W3Schools Python Tutorial", link: "https://www.w3schools.com/python/" },
@@ -37,13 +37,41 @@ const videos = [
   { title: "Python Practice Project", link: "https://www.youtube.com/watch?v=DLn3jOsNRVE" },
 ];
 
-// Random utility
+// HTML & CSS Resources
+const htmlcssResources = {
+  articles: [
+    { title: "W3Schools HTML Tutorial", link: "https://www.w3schools.com/html/" },
+    { title: "W3Schools CSS Tutorial", link: "https://www.w3schools.com/css/" },
+    { title: "MDN Web Docs: HTML", link: "https://developer.mozilla.org/en-US/docs/Web/HTML" },
+    { title: "MDN Web Docs: CSS", link: "https://developer.mozilla.org/en-US/docs/Web/CSS" },
+    { title: "HTML.com Beginner Guide", link: "https://html.com/" },
+    { title: "CSS-Tricks Guides", link: "https://css-tricks.com/guides/" },
+    { title: "FreeCodeCamp HTML/CSS Certification", link: "https://www.freecodecamp.org/learn/responsive-web-design/" },
+    { title: "GeeksforGeeks HTML Tutorial", link: "https://www.geeksforgeeks.org/html/" },
+    { title: "GeeksforGeeks CSS Tutorial", link: "https://www.geeksforgeeks.org/css/" },
+    { title: "HTML & CSS Handbook - CSS Tricks", link: "https://css-tricks.com/html-css-handbook/" }
+  ],
+  videos: [
+    { title: "HTML Full Course - freeCodeCamp", link: "https://www.youtube.com/watch?v=pQN-pnXPaVg" },
+    { title: "CSS Crash Course for Beginners", link: "https://www.youtube.com/watch?v=1Rs2ND1ryYc" },
+    { title: "HTML & CSS in 100 Seconds", link: "https://www.youtube.com/watch?v=OEV8gMkCHXQ" },
+    { title: "Responsive Web Design - Codevolution", link: "https://www.youtube.com/watch?v=HcOc7P5BMi4" },
+    { title: "HTML & CSS Crash Course - Traversy Media", link: "https://www.youtube.com/watch?v=UB1O30fR-EE" },
+    { title: "HTML Tutorial for Beginners - Mosh", link: "https://www.youtube.com/watch?v=qz0aGYrrlhU" },
+    { title: "CSS Tutorial for Beginners - Mosh", link: "https://www.youtube.com/watch?v=1PnVor36_40" },
+    { title: "HTML Project: Build a Landing Page", link: "https://www.youtube.com/watch?v=ErVdF7YfVKg" },
+    { title: "HTML/CSS Flexbox Tutorial", link: "https://www.youtube.com/watch?v=fYq5PXgSsbE" },
+    { title: "HTML/CSS Grid Layout Crash Course", link: "https://www.youtube.com/watch?v=rg7Fvvl3taU" }
+  ]
+};
+
+// Utility
 function getRandomItems(arr, n) {
   const shuffled = arr.sort(() => 0.5 - Math.random());
   return shuffled.slice(0, n);
 }
 
-// Main route
+// Route
 router.post('/recommend', async (req, res) => {
   const { score, courseTitle, email } = req.body;
 
@@ -58,8 +86,17 @@ router.post('/recommend', async (req, res) => {
     const course = await Course.findOne({ title: courseTitle });
     if (!course) return res.status(404).json({ error: 'Course not found' });
 
-    const selectedArticles = getRandomItems(articles, 2);
-    const selectedVideos = getRandomItems(videos, 1);
+    // Detect topic
+    const lower = courseTitle.toLowerCase();
+    const isHTMLCSS = lower.includes('html') || lower.includes('css');
+
+    const selectedArticles = isHTMLCSS
+      ? getRandomItems(htmlcssResources.articles, 2)
+      : getRandomItems(articles, 2);
+
+    const selectedVideos = isHTMLCSS
+      ? getRandomItems(htmlcssResources.videos, 1)
+      : getRandomItems(videos, 1);
 
     const recommendationLines = [
       ...selectedVideos.map(v => `📺 Video: "${v.title}" - ${v.link}`),
@@ -73,7 +110,6 @@ router.post('/recommend', async (req, res) => {
     }
 
     await user.save();
-
     res.status(200).json({ recommendations: recommendationLines.join('\n') });
   } catch (err) {
     console.error('Recommendation Error:', err);
