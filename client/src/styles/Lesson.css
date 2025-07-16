@@ -32,25 +32,29 @@
   color: #d8b4fe;
 }
 
-.lesson-progress-bar-wrapper {
-  display: flex;
-  justify-content: center;
-  flex: 1;
-}
-
 .lesson-progress-bar {
   display: flex;
+  flex-wrap: wrap;              
   justify-content: center;
-  align-items: center;
+  gap: 4px;
+  max-width: 100%;
 }
 
+
 .lesson-progress-step {
-  height: 6px;
-  width: 40px;
-  border-radius: 5px;
+  height: 5px;
+  width: 18px;                  
+  border-radius: 4px;
   background-color: #3c426d;
-  margin: 0 4px;
   transition: background-color 0.3s ease;
+}
+
+.lesson-progress-step.active {
+  background-color: #a78bfa;
+}
+
+.lesson-progress-step.active {
+  background-color: #a78bfa;
 }
 
 .lesson-progress-step.active {
@@ -216,9 +220,12 @@
     padding: 8px 16px;
   }
 
-  .lesson-bottom-bar {
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
+  .lesson-progress-bar {
+    gap: 3px;
+  }
+
+  .lesson-progress-step {
+    width: 16px;
+    height: 5px;
   }
 }

@@ -40,7 +40,7 @@ const Home = () => {
   }, [email]);
 
   const mergedData = courses.map(course => {
-    const courseProgress = progressData.find(p => p.courseId === course._id);
+    const courseProgress = progressData.find(p => p.courseId.toString() === course._id.toString());
     const completed = courseProgress?.completedLessons?.length || 0;
     const total = course.sections.reduce((sum, section) => sum + section.lessons.length, 0);
     const percent = total > 0 ? Math.round((completed / total) * 100) : 0;

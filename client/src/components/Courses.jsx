@@ -6,46 +6,69 @@ import '../styles/Courses.css';
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
-  const [progressData, setProgressData] = useState({});
+  const [progressData, setProgressData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const email = localStorage.getItem('email');
 
   useEffect(() => {
-    const fetchCourses = async () => {
+    const fetchAll = async () => {
       try {
-        const res = await axios.get('https://codinghub-r3bn.onrender.com/api/courses');
-        setCourses(res.data);
+        const baseUrl = import.meta.env.VITE_API_URL;
+
+        // Fetch courses
+        const courseRes = await axios.get(`${baseUrl.replace('/users', '')}/courses`);
+        setCourses(courseRes.data);
+
+        // Fetch user progress
+        if (email) {
+          const progressRes = await axios.get(`${baseUrl}/${email}/progress`);
+          setProgressData(progressRes.data || []);
+        }
+
+        setLoading(false);
       } catch (err) {
-        console.error('❌ Error fetching courses:', err);
+        console.error('❌ Error fetching data:', err);
+        setLoading(false);
       }
     };
 
-    const fetchProgressData = async () => {
-      try {
-        if (!email) return;
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/${email}/progress`);
-        const progressMap = {};
-        res.data.forEach(item => {
-          progressMap[item.courseId] = item.completedLessons;
-        });
-        setProgressData(progressMap);
-      } catch (err) {
-        console.error('❌ Error fetching progress:', err);
-      }
-    };
-
-    fetchCourses();
-    fetchProgressData();
+    fetchAll();
   }, [email]);
 
-  const calculateCourseProgress = (course) => {
-    let totalLessons = 0;
-    course.sections.forEach(section => {
-      totalLessons += section.lessons.length;
-    });
-    const completedLessons = progressData[course._id]?.length || 0;
-    if (totalLessons === 0) return 0;
-    return Math.round((completedLessons / totalLessons) * 100);
+  const mergedData = courses.map(course => {
+    const courseProgress = progressData.find(p =>
+      p.courseId.toString() === course._id.toString()
+    );
+
+    const completed = courseProgress?.completedLessons?.length || 0;
+    const total = course.sections.reduce((sum, section) => sum + section.lessons.length, 0);
+    const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+    return {
+      courseId: course._id,
+      courseName: course.title,
+      percent,
+      completed,
+      total
+    };
+  });
+
+  const handleCourseClick = (courseId) => {
+    if (courseId) navigate(`/courses/${courseId}`);
+  };
+
+  const getCourseLogo = (title) => {
+    const lower = title.toLowerCase();
+    if (lower.includes('python')) {
+      return 'https://img.icons8.com/color/48/python.png';
+    } else if (lower.includes('html')) {
+      return 'https://img.icons8.com/color/48/html-5.png';
+    } else if (lower.includes('javascript')) {
+      return 'https://img.icons8.com/color/48/javascript.png';
+    } else {
+      return 'https://img.icons8.com/color/48/classroom.png';
+    }
   };
 
   return (
@@ -53,39 +76,40 @@ const Courses = () => {
       <Navbar />
       <div className="courses-container">
         <h2 className="courses-heading">All Courses</h2>
-        <div className="course-cards">
-          {courses.map((course) => {
-            const progressPercentage = calculateCourseProgress(course);
-            return (
+        {loading ? (
+          <p style={{ color: 'white', textAlign: 'center' }}>Loading courses...</p>
+        ) : (
+          <div className="course-cards">
+            {mergedData.map((course, idx) => (
               <div
                 className="course-card-catalog"
-                key={course._id}
-                onClick={() => navigate(`/courses/${course._id}`)}
+                key={course.courseId}
+                onClick={() => handleCourseClick(course.courseId)}
               >
                 <img
-                  src="https://img.icons8.com/color/48/python.png"
+                  src={getCourseLogo(course.courseName)}
                   alt="course logo"
                   className="course-card-logo"
                 />
                 <div className="course-card-info">
-                  <p className="course-card-title">{course.title}</p>
-                  <p className="course-card-description"><em>{course.description}</em></p>
+                  <p className="course-card-title">{course.courseName}</p>
+                  <p className="course-card-description"><em>{courses[idx]?.description}</em></p>
 
                   {/* Progress Bar */}
                   <div className="progress-container">
                     <div className="progress-bar-wrapper">
                       <div
                         className="progress-bar-fill"
-                        style={{ width: `${progressPercentage}%` }}
+                        style={{ width: `${course.percent}%` }}
                       ></div>
                     </div>
-                    <p className="progress-percentage">{progressPercentage}% completed</p>
+                    <p className="progress-percentage">{course.percent}% completed</p>
                   </div>
                 </div>
               </div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </>
   );
