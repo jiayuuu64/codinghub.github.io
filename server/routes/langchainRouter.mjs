@@ -38,18 +38,28 @@ const pythonVideos = [
 ];
 
 const htmlcssArticles = [
-  { title: "W3Schools HTML Tutorial", link: "https://www.w3schools.com/html/" },
-  { title: "W3Schools CSS Tutorial", link: "https://www.w3schools.com/css/" },
-  { title: "MDN HTML Docs", link: "https://developer.mozilla.org/en-US/docs/Web/HTML" },
-  { title: "MDN CSS Docs", link: "https://developer.mozilla.org/en-US/docs/Web/CSS" },
-  { title: "CSS Tricks", link: "https://css-tricks.com/guides/" }
-];
+    { title: "W3Schools HTML Tutorial", link: "https://www.w3schools.com/html/" },
+    { title: "W3Schools CSS Tutorial", link: "https://www.w3schools.com/css/" },
+    { title: "MDN Web Docs: HTML", link: "https://developer.mozilla.org/en-US/docs/Web/HTML" },
+    { title: "MDN Web Docs: CSS", link: "https://developer.mozilla.org/en-US/docs/Web/CSS" },
+    { title: "HTML.com Beginner Guide", link: "https://html.com/" },
+    { title: "CSS-Tricks Guides", link: "https://css-tricks.com/guides/" },
+    { title: "FreeCodeCamp HTML/CSS Certification", link: "https://www.freecodecamp.org/learn/responsive-web-design/" },
+    { title: "GeeksforGeeks HTML Tutorial", link: "https://www.geeksforgeeks.org/html/" },
+    { title: "GeeksforGeeks CSS Tutorial", link: "https://www.geeksforgeeks.org/css/" },
+  ];
 
 const htmlcssVideos = [
-  { title: "HTML Full Course - freeCodeCamp", link: "https://www.youtube.com/watch?v=pQN-pnXPaVg" },
-  { title: "CSS Crash Course", link: "https://www.youtube.com/watch?v=1Rs2ND1ryYc" },
-  { title: "HTML & CSS Crash - Traversy", link: "https://www.youtube.com/watch?v=UB1O30fR-EE" }
-];
+    { title: "HTML Full Course - freeCodeCamp", link: "https://www.youtube.com/watch?v=pQN-pnXPaVg" },
+    { title: "CSS Crash Course for Beginners", link: "https://www.youtube.com/watch?v=1Rs2ND1ryYc" },
+    { title: "HTML & CSS in 100 Seconds", link: "https://www.youtube.com/watch?v=OEV8gMkCHXQ" },
+    { title: "Responsive Web Design - Codevolution", link: "https://www.youtube.com/watch?v=HcOc7P5BMi4" },
+    { title: "HTML & CSS Crash Course - Traversy Media", link: "https://www.youtube.com/watch?v=UB1O30fR-EE" },
+    { title: "HTML Tutorial for Beginners - Mosh", link: "https://www.youtube.com/watch?v=qz0aGYrrlhU" },
+    { title: "CSS Tutorial for Beginners - Mosh", link: "https://www.youtube.com/watch?v=1PnVor36_40" },
+    { title: "HTML/CSS Flexbox Tutorial", link: "https://www.youtube.com/watch?v=fYq5PXgSsbE" },
+    { title: "HTML/CSS Grid Layout Crash Course", link: "https://www.youtube.com/watch?v=rg7Fvvl3taU" }
+  ];
 
 function getRandomItems(arr, n) {
   const shuffled = arr.sort(() => 0.5 - Math.random());
