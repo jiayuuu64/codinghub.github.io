@@ -393,12 +393,12 @@ export const getProgress = async (req, res) => {
 export const getAllUserProgress = async (req, res) => {
   const { email } = req.params;
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).populate('progress.courseId');
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Return all progress
+    // Return populated progress
     res.status(200).json(user.progress || []);
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch progress', error: err.message });
