@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
   
   // ✅ Progress field added here
   progress: [{
-    courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
+    courseId: { type: String },
     completedLessons: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Lesson' }],
     completedQuiz: { type: Boolean, default: false },
     recommendations: [String], // REQUIRED for personalized recs

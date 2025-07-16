@@ -310,32 +310,37 @@ export const changePassword = async (req, res) => {
 };
 
 export const completeLesson = async (req, res) => {
-    const { courseId } = req.params;
-    const { email } = req.query;
-    const { lessonId } = req.body;
+  const { courseId } = req.params;
+  const { email } = req.query;
+  const { lessonId } = req.body;
 
-    if (!email) {
-        return res.status(400).json({ message: 'Email is required.' });
+  if (!email) {
+    return res.status(400).json({ message: 'Email is required.' });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const courseIdStr = courseId.toString(); // 🔑 force string
+    let progress = user.progress.find(p => p.courseId === courseIdStr);
+
+    if (!progress) {
+      progress = { courseId: courseIdStr, completedLessons: [], completedQuiz: false };
+      user.progress.push(progress);
     }
-    try {
-        const user = await User.findOne({ email });
-        if (!user) return res.status(404).json({ message: 'User not found' });
 
-        let progress = user.progress.find(p => p.courseId.equals(courseId));
-        if (!progress) {
-            progress = { courseId, completedLessons: [], completedQuiz: false };
-            user.progress.push(progress);
-        }
-        if (!progress.completedLessons.includes(lessonId)) {
-            progress.completedLessons.push(lessonId);
-        }
-
-        await user.save();
-        res.status(200).json({ message: 'Lesson marked as completed', progress });
-    } catch (err) {
-        res.status(500).json({ message: 'Failed to update progress', error: err.message });
+    if (!progress.completedLessons.includes(lessonId)) {
+      progress.completedLessons.push(lessonId);
     }
+
+    await user.save();
+    res.status(200).json({ message: 'Lesson marked as completed', progress });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to update progress', error: err.message });
+  }
 };
+
 
 
 export const completeQuiz = async (req, res) => {
