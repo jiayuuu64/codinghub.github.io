@@ -5,43 +5,43 @@ const router = express.Router();
 
 router.get('/recommendations', async (req, res) => {
   const { email } = req.query;
-  if (!email) return res.status(400).json({ error: 'Missing email' });
+  if (!email) return res.status(400).json({ error: 'Email is required' });
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).populate('progress.courseId');
     if (!user) return res.status(404).json({ error: 'User not found' });
 
-    // Step 1: Check if user has quiz-based recommendations
-    const allQuizRecommendations = user.progress
-      ?.filter(p => p.recommendations?.length)
-      ?.flatMap(p => p.recommendations) || [];
+    // ✅ STEP 1: Collect quiz-based recommendations
+    const allQuizRecs = user.progress.flatMap(p => p.recommendations || []);
+    const uniqueQuizRecs = [...new Set(allQuizRecs)];
 
-    if (allQuizRecommendations.length > 0) {
-      const parsed = allQuizRecommendations.map(line => {
-        const titleMatch = line.match(/"(.+?)"/);
-        const linkMatch = line.match(/https?:\/\/[^\s]+/);
-        const title = titleMatch ? titleMatch[1] : 'Untitled';
-        const link = linkMatch ? linkMatch[0] : null;
-        const isVideo = line.includes('📺') || (link && link.includes('youtube.com/watch?v='));
-        const isArticle = line.includes('📰') || (!isVideo && line.includes('Article'));
-        const videoId = isVideo && link?.includes('v=') ? link.split('v=')[1].split('&')[0] : null;
+    const parsed = uniqueQuizRecs.map(line => {
+      const titleMatch = line.match(/"(.+?)"/);
+      const linkMatch = line.match(/https?:\/\/[^\s]+/);
+      const title = titleMatch ? titleMatch[1] : 'Untitled';
+      const link = linkMatch ? linkMatch[0] : null;
+      const isVideo = line.includes('📺') || (link && link.includes('youtube.com/watch?v='));
+      const isArticle = line.includes('📰') || (!isVideo && line?.includes('Article'));
+      const videoId = isVideo && link?.includes('v=') ? link.split('v=')[1].split('&')[0] : null;
 
-        return {
-          type: isVideo ? 'video' : 'article',
-          title,
-          link,
-          hostname: link ? new URL(link).hostname.replace('www.', '') : '',
-          thumbnail: isVideo && videoId
-            ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
-            : isArticle && link
-              ? `https://www.google.com/s2/favicons?sz=128&domain_url=${encodeURIComponent(link)}`
-              : 'https://via.placeholder.com/160x90?text=Resource'
-        };
-      });
+      return {
+        type: isVideo ? 'video' : 'article',
+        title,
+        link,
+        hostname: link ? new URL(link).hostname.replace('www.', '') : '',
+        thumbnail: isVideo && videoId
+          ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+          : isArticle && link
+            ? `https://www.google.com/s2/favicons?sz=128&domain_url=${encodeURIComponent(link)}`
+            : 'https://via.placeholder.com/160x90?text=Resource'
+      };
+    });
 
-      return res.status(200).json(parsed);
+    if (parsed.length > 0) {
+      // ✅ If quiz-based recommendations exist, return 3 random
+      const random3 = parsed.sort(() => 0.5 - Math.random()).slice(0, 3);
+      return res.status(200).json(random3);
     }
-
 
     // Step 2: Fallback to language preference
     const lang = (user.languagePreference || '').toLowerCase();
