@@ -322,15 +322,20 @@ export const completeLesson = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    const courseIdStr = courseId.toString(); // 🔑 force string
-    let progress = user.progress.find(p => p.courseId === courseIdStr);
+    const courseIdStr = courseId.toString(); // Ensure string comparison
+    let progress = user.progress.find(p => p.courseId.toString() === courseIdStr);
 
     if (!progress) {
-      progress = { courseId: courseIdStr, completedLessons: [], completedQuiz: false };
+      progress = {
+        courseId: courseId, // Keep as ObjectId
+        completedLessons: [],
+        completedQuiz: false,
+        recommendations: []
+      };
       user.progress.push(progress);
     }
 
-    if (!progress.completedLessons.includes(lessonId)) {
+    if (!progress.completedLessons.map(id => id.toString()).includes(lessonId)) {
       progress.completedLessons.push(lessonId);
     }
 
@@ -343,27 +348,34 @@ export const completeLesson = async (req, res) => {
 
 
 
+
 export const completeQuiz = async (req, res) => {
-    const { email, courseId } = req.params;
+  const { email, courseId } = req.params;
 
-    try {
-        const user = await User.findOne({ email })
-        if (!user) return res.status(404).json({ message: 'User not found' });
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: 'User not found' });
 
-        let progress = user.progress.find(p => p.courseId.equals(courseId));
-        if (!progress) {
-            progress = { courseId, completedLessons: [], completedQuiz: true };
-            user.progress.push(progress);
-        } else {
-            progress.completedQuiz = true;
-        }
-
-        await user.save();
-        res.status(200).json({ message: 'Quiz marked as completed', progress });
-    } catch (err) {
-        res.status(500).json({ message: 'Failed to update quiz completion', error: err.message });
+    let progress = user.progress.find(p => p.courseId.toString() === courseId.toString());
+    if (!progress) {
+      progress = {
+        courseId: courseId, 
+        completedLessons: [],
+        completedQuiz: true,
+        recommendations: []
+      };
+      user.progress.push(progress);
+    } else {
+      progress.completedQuiz = true;
     }
+
+    await user.save();
+    res.status(200).json({ message: 'Quiz marked as completed', progress });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to update quiz completion', error: err.message });
+  }
 };
+
 
 export const getProgress = async (req, res) => {
     const { email, courseId } = req.params;
