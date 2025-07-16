@@ -117,7 +117,7 @@ const Lesson = () => {
                 onFinish={handleFinishLesson}
                 userAnswers={userAnswers}
                 setUserAnswers={setUserAnswers}
-                courseTitle={courseTitle} 
+                courseTitle={courseTitle}
               />
             );
           }
@@ -152,7 +152,17 @@ const Lesson = () => {
               return (
                 <div className="lesson-step-text-code">
                   <p className="lesson-step-text">{currentStep.text}</p>
-                  <pre className="lesson-step-code"><code>{currentStep.content}</code></pre>
+                  <div className="code-preview-wrapper">
+                    <pre className="lesson-step-code">
+                      <code>{currentStep.content}</code>
+                    </pre>
+                    {currentStep.language === 'html' && (
+                      <iframe
+                        srcDoc={`<body style="color:white; background-color:#1b1f3a; margin:0; padding:1rem;">${currentStep.content}</body>`}
+                        title="Live HTML Preview"
+                      />
+                    )}
+                  </div>
                 </div>
               );
             case 'quiz':
