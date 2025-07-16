@@ -1,4 +1,5 @@
-{
+[
+  {
   "title": "Python",
   "description": "Learn Python from the ground up, covering fundamentals, control flow, functions, and more.",
   "sections": [
@@ -573,4 +574,388 @@
       ]
     }
   ]
+},
+{
+  "title": "HTML & CSS",
+  "description": "Learn the fundamentals of HTML and CSS to build beautiful, structured, and styled web pages.",
+  "sections": [
+    {
+      "title": "HTML Basics",
+      "description": "Understand the structure of web pages and basic tags.",
+      "lessons": [
+        {
+          "title": "Introduction to HTML",
+          "steps": [
+            {
+              "type": "text",
+              "text": "HTML stands for HyperText Markup Language. It provides the basic structure of web pages using elements and tags."
+            },
+            {
+              "type": "text",
+              "text": "Every HTML document starts with <!DOCTYPE html> to specify the document type and version of HTML."
+            },
+            {
+              "type": "text-video",
+              "text": "This video explains the basic structure of an HTML document and its parts.",
+              "content": "https://www.youtube.com/embed/pQN-pnXPaVg"
+            },
+            {
+              "type": "text-code",
+              "text": "A basic HTML document example.",
+              "language": "html",
+              "content": "<!DOCTYPE html>\n<html>\n<head>\n  <title>My First Page</title>\n</head>\n<body>\n  <h1>Welcome!</h1>\n  <p>This is my first webpage.</p>\n</body>\n</html>"
+            },
+            {
+              "type": "quiz",
+              "question": "What does <!DOCTYPE html> tell the browser?",
+              "options": ["Specifies HTML version", "Adds a comment", "Links CSS", "Creates a heading"],
+              "answer": "Specifies HTML version",
+              "explanation": "It specifies this document uses HTML5."
+            },
+            {
+              "type": "quiz",
+              "question": "Where is the page title defined?",
+              "options": ["In the <head> section", "In the <body>", "In <footer>", "In <h1>"],
+              "answer": "In the <head> section",
+              "explanation": "The <title> tag is inside the <head> and controls the browser tab title."
+            },
+            {
+              "type": "quiz",
+              "question": "Which tag defines the visible page content?",
+              "options": ["<body>", "<head>", "<title>", "<meta>"],
+              "answer": "<body>",
+              "explanation": "The <body> tag holds all the visible content shown in the browser."
+            }
+          ]
+        },
+        {
+          "title": "Common HTML Elements",
+          "steps": [
+            {
+              "type": "text",
+              "text": "HTML has many elements like headings, paragraphs, links, images, and lists to organize and present content clearly."
+            },
+            {
+              "type": "text-video",
+              "text": "Watch this video for an overview of common HTML elements.",
+              "content": "https://www.youtube.com/embed/UB1O30fR-EE"
+            },
+            {
+              "type": "text-code",
+              "text": "Example using various elements.",
+              "language": "html",
+              "content": "<h2>About Me</h2>\n<p>I enjoy web development and design.</p>\n<a href=\"https://example.com\">My portfolio</a>\n<img src=\"profile.jpg\" alt=\"Profile picture\">\n<ul>\n  <li>HTML</li>\n  <li>CSS</li>\n</ul>"
+            },
+            {
+              "type": "quiz",
+              "question": "Which tag is used for hyperlinks?",
+              "options": ["<a>", "<link>", "<h1>", "<div>"],
+              "answer": "<a>",
+              "explanation": "The <a> tag is used to create hyperlinks."
+            },
+            {
+              "type": "quiz",
+              "question": "What does the <img> tag need to display an image?",
+              "options": ["src attribute", "href attribute", "id attribute", "alt only"],
+              "answer": "src attribute",
+              "explanation": "The src attribute defines the image file location."
+            },
+            {
+              "type": "quiz",
+              "question": "Which tag is used to create an unordered list?",
+              "options": ["<ul>", "<ol>", "<li>", "<list>"],
+              "answer": "<ul>",
+              "explanation": "<ul> defines unordered (bulleted) lists."
+            }
+          ]
+        },
+        {
+          "title": "Forms and Inputs",
+          "steps": [
+            {
+              "type": "text",
+              "text": "HTML forms allow you to collect user input using fields, checkboxes, radio buttons, and more."
+            },
+            {
+              "type": "text-video",
+              "text": "This video covers HTML forms and input types in detail.",
+              "content": "https://www.youtube.com/embed/fqeMHSzKX6g"
+            },
+            {
+              "type": "text-code",
+              "text": "Example form structure.",
+              "language": "html",
+              "content": "<form action=\"/submit\">\n  <label for=\"name\">Name:</label>\n  <input type=\"text\" id=\"name\" name=\"name\">\n  <input type=\"submit\" value=\"Submit\">\n</form>"
+            },
+            {
+              "type": "quiz",
+              "question": "Which tag defines a form?",
+              "options": ["<form>", "<input>", "<button>", "<label>"],
+              "answer": "<form>",
+              "explanation": "The <form> tag wraps input fields and handles data submission."
+            },
+            {
+              "type": "quiz",
+              "question": "What does the <label> tag do?",
+              "options": ["Describes input fields", "Submits forms", "Creates checkboxes", "Adds images"],
+              "answer": "Describes input fields",
+              "explanation": "Labels improve accessibility and describe inputs clearly."
+            },
+            {
+              "type": "quiz",
+              "question": "What type attribute makes an input a text field?",
+              "options": ["text", "submit", "checkbox", "radio"],
+              "answer": "text",
+              "explanation": "Using type=\"text\" creates a single-line text input."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "CSS Basics",
+      "description": "Style your HTML with CSS to make your pages visually appealing.",
+      "lessons": [
+        {
+          "title": "Introduction to CSS",
+          "steps": [
+            {
+              "type": "text",
+              "text": "CSS stands for Cascading Style Sheets and is used to style HTML elements: changing colors, fonts, spacing, and layout."
+            },
+            {
+              "type": "text-video",
+              "text": "Learn CSS basics and why we use it.",
+              "content": "https://www.youtube.com/embed/yfoY53QXEnI"
+            },
+            {
+              "type": "text-code",
+              "text": "Inline CSS example to color text.",
+              "language": "html",
+              "content": "<p style=\"color: red;\">This text is red.</p>"
+            },
+            {
+              "type": "quiz",
+              "question": "What does CSS stand for?",
+              "options": ["Colorful Style Sheets", "Cascading Style Sheets", "Creative Styling System", "Central Style Syntax"],
+              "answer": "Cascading Style Sheets",
+              "explanation": "CSS stands for Cascading Style Sheets and handles styling."
+            },
+            {
+              "type": "quiz",
+              "question": "Where can you write inline CSS?",
+              "options": ["Inside an element’s style attribute", "In a separate .css file", "Only in <head>", "Only in external sheets"],
+              "answer": "Inside an element’s style attribute",
+              "explanation": "Inline CSS is written directly in the element using the style attribute."
+            },
+            {
+              "type": "quiz",
+              "question": "Which property changes text color?",
+              "options": ["color", "background", "padding", "font-weight"],
+              "answer": "color",
+              "explanation": "The color property defines the text color."
+            }
+          ]
+        },
+        {
+          "title": "Selectors and Properties",
+          "steps": [
+            {
+              "type": "text",
+              "text": "Selectors target HTML elements, and properties define how those elements look (e.g., color, size)."
+            },
+            {
+              "type": "text-video",
+              "text": "Learn how to use classes, IDs, and element selectors in CSS.",
+              "content": "https://www.youtube.com/embed/l1mER1bV0N0"
+            },
+            {
+              "type": "text-code",
+              "text": "Example of class and ID selectors.",
+              "language": "css",
+              "content": ".highlight {\n  background-color: yellow;\n}\n#header {\n  text-align: center;\n}"
+            },
+            {
+              "type": "quiz",
+              "question": "Which symbol is used for class selectors?",
+              "options": [".", "#", "*", "/"],
+              "answer": ".",
+              "explanation": "The dot (.) selects classes in CSS."
+            },
+            {
+              "type": "quiz",
+              "question": "Which symbol is used for ID selectors?",
+              "options": ["#", ".", "*", ":"],
+              "answer": "#",
+              "explanation": "The hash (#) selects IDs in CSS."
+            },
+            {
+              "type": "quiz",
+              "question": "Which selector targets all elements?",
+              "options": ["*", ".", "#", ":"],
+              "answer": "*",
+              "explanation": "The universal selector (*) applies to all elements."
+            }
+          ]
+        }
+      ]
+    },
+    {
+  "title": "Summary Quiz",
+  "description": "Test your knowledge of HTML & CSS concepts.",
+  "lessons": [
+    {
+      "title": "Final Quiz",
+      "steps": [
+        {
+          "type": "quiz",
+          "question": "What tag creates a link to another page?",
+          "options": ["<a>", "<link>", "<div>", "<p>"],
+          "answer": "<a>",
+          "explanation": "The <a> tag is used for links."
+        },
+        {
+          "type": "quiz",
+          "question": "Which property controls text color in CSS?",
+          "options": ["color", "font-size", "background", "border"],
+          "answer": "color",
+          "explanation": "The color property changes text color."
+        },
+        {
+          "type": "quiz",
+          "question": "Which symbol is used to select classes in CSS?",
+          "options": [".", "#", "*", ":"],
+          "answer": ".",
+          "explanation": "Classes use a dot (.) in CSS."
+        },
+        {
+          "type": "quiz",
+          "question": "Which tag is used for images?",
+          "options": ["<img>", "<media>", "<src>", "<picture>"],
+          "answer": "<img>",
+          "explanation": "The <img> tag displays images."
+        },
+        {
+          "type": "quiz",
+          "question": "Which tag defines a form?",
+          "options": ["<form>", "<input>", "<button>", "<label>"],
+          "answer": "<form>",
+          "explanation": "<form> is used to create forms."
+        },
+        {
+          "type": "quiz",
+          "question": "What does HTML stand for?",
+          "options": ["Hyper Text Markup Language", "Home Tool Markup Language", "Hyperlinks and Text Markup Language", "Hyper Tool Multi Language"],
+          "answer": "Hyper Text Markup Language",
+          "explanation": "HTML stands for Hyper Text Markup Language."
+        },
+        {
+          "type": "quiz",
+          "question": "What is the correct tag for the largest heading?",
+          "options": ["<h1>", "<heading>", "<head>", "<h6>"],
+          "answer": "<h1>",
+          "explanation": "<h1> defines the most important heading."
+        },
+        {
+          "type": "quiz",
+          "question": "What HTML element is used to define a paragraph?",
+          "options": ["<p>", "<para>", "<text>", "<body>"],
+          "answer": "<p>",
+          "explanation": "<p> is used to define a paragraph."
+        },
+        {
+          "type": "quiz",
+          "question": "Which tag defines an unordered list?",
+          "options": ["<ul>", "<ol>", "<li>", "<list>"],
+          "answer": "<ul>",
+          "explanation": "<ul> is used to define an unordered list."
+        },
+        {
+          "type": "quiz",
+          "question": "Which tag defines a list item?",
+          "options": ["<li>", "<ul>", "<item>", "<list>"],
+          "answer": "<li>",
+          "explanation": "<li> is used to define list items."
+        },
+        {
+          "type": "quiz",
+          "question": "What tag is used to create a table row?",
+          "options": ["<tr>", "<td>", "<row>", "<table>"],
+          "answer": "<tr>",
+          "explanation": "<tr> defines a row in a table."
+        },
+        {
+          "type": "quiz",
+          "question": "What attribute provides alt text for images?",
+          "options": ["alt", "title", "src", "description"],
+          "answer": "alt",
+          "explanation": "The alt attribute provides alternative text for images."
+        },
+        {
+          "type": "quiz",
+          "question": "How do you apply a CSS rule to an element with id 'main'?",
+          "options": ["#main", ".main", "main", "*main"],
+          "answer": "#main",
+          "explanation": "IDs in CSS use a hash (#) prefix."
+        },
+        {
+          "type": "quiz",
+          "question": "Which CSS property controls the space outside an element?",
+          "options": ["margin", "padding", "border", "spacing"],
+          "answer": "margin",
+          "explanation": "Margin sets the space outside the element."
+        },
+        {
+          "type": "quiz",
+          "question": "Which property is used to change font size?",
+          "options": ["font-size", "text-size", "size", "font-style"],
+          "answer": "font-size",
+          "explanation": "Use font-size to change text size."
+        },
+        {
+          "type": "quiz",
+          "question": "What is the outermost layer in the CSS box model?",
+          "options": ["margin", "padding", "border", "content"],
+          "answer": "margin",
+          "explanation": "The margin is the outermost layer in the box model."
+        },
+        {
+          "type": "quiz",
+          "question": "Which CSS layout system is best for 1D layouts?",
+          "options": ["Flexbox", "Grid", "Float", "Table"],
+          "answer": "Flexbox",
+          "explanation": "Flexbox is ideal for 1-dimensional layouts."
+        },
+        {
+          "type": "quiz",
+          "question": "Which tag represents a semantic section in HTML5?",
+          "options": ["<section>", "<div>", "<span>", "<main>"],
+          "answer": "<section>",
+          "explanation": "<section> represents a standalone section."
+        },
+        {
+          "type": "quiz",
+          "question": "Which tag is used for emphasized text?",
+          "options": ["<em>", "<strong>", "<b>", "<i>"],
+          "answer": "<em>",
+          "explanation": "<em> emphasizes text semantically."
+        },
+        {
+          "type": "quiz",
+          "question": "Which rule applies styles to screen widths ≤ 600px?",
+          "options": [
+            "@media only screen and (max-width: 600px)",
+            "@media screen-min 600px",
+            "@responsive 600px",
+            "@screen and max-600"
+          ],
+          "answer": "@media only screen and (max-width: 600px)",
+          "explanation": "Use media queries to apply styles for smaller screens."
+        }
+      ]
+    }
+  ]
 }
+  ]
+}
+]
