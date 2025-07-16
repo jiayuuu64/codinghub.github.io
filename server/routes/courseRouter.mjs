@@ -13,8 +13,7 @@ router.get('/', async (req, res) => {
       throw new Error('⚠️ Course model is not defined or improperly imported');
     }
 
-    const courses = await Course.find().populate('sections.lessons');
-
+    const courses = await Course.find();
 
     if (!courses || courses.length === 0) {
       console.log('ℹ️ No courses found in the database');
