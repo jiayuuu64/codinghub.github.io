@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/finalquiz.css';
+import { speakText } from '../utils/textToSpeech';
 
 const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTitle }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -8,6 +9,14 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
   const [score, setScore] = useState(0);
   const [showAll, setShowAll] = useState(false);
   const [recommendations, setRecommendations] = useState([]);
+
+  const currentQn = questions[currentIndex];
+
+  useEffect(() => {
+    if (!showResults) {
+      speakText(currentQn.question);
+    }
+  }, [currentIndex, showResults, questions]);
 
   const handleOptionClick = (option) => {
     setUserAnswers((prev) => ({ ...prev, [currentIndex]: option }));
@@ -27,9 +36,7 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
 
   const handleSubmit = async () => {
     const unanswered = questions.length - Object.keys(userAnswers).length;
-    const confirmSubmit = window.confirm(
-      `You left ${unanswered} question(s) blank. Do you want to submit?`
-    );
+    const confirmSubmit = window.confirm(`You left ${unanswered} question(s) blank. Do you want to submit?`);
     if (!confirmSubmit) return;
 
     const correctCount = questions.filter((q, i) => userAnswers[i] === q.answer).length;
@@ -37,7 +44,6 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
     setShowResults(true);
 
     const email = localStorage.getItem('email');
-
     if (correctCount / questions.length > 0.8) return;
 
     try {
@@ -93,7 +99,6 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
     link.click();
   };
 
-  const currentQn = questions[currentIndex];
   const passedWell = score / questions.length > 0.8;
 
   return (
@@ -201,6 +206,7 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
                 })}
                 <div className="f-quiz-explanation">
                   <strong>Explanation:</strong> {q.explanation}
+                  <button onClick={() => speakText(q.explanation)} style={{ marginLeft: '10px' }}>🔊</button>
                 </div>
               </div>
             );
