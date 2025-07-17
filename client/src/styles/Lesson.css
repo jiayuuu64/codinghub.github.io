@@ -202,6 +202,16 @@
   cursor: not-allowed;
 }
 
+.tts-button {
+  margin-top: 0.5rem;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #fff;
+}
+
+
 @media (max-width: 768px) {
   .lesson-step-container {
     padding: 1rem;

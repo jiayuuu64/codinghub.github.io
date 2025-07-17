@@ -128,7 +128,7 @@ const Lesson = () => {
               return (
                 <div>
                   <p className="lesson-step-text">{currentStep.text}</p>
-                  <button className="tts-button" onClick={() => speakText(currentStep.text)}>🔊 Listen</button>
+                  <button className="speaker-btn" onClick={() => speakText(currentStep.text)}>🔊</button>
                 </div>
               );
             case 'code':
@@ -156,14 +156,14 @@ const Lesson = () => {
                     </video>
                   )}
                   <p className="lesson-step-text" style={{ marginTop: '1rem' }}>{currentStep.text}</p>
-                  <button className="tts-button" onClick={() => speakText(currentStep.text)}>🔊 Listen</button>
+                  <button className="speaker-btn" onClick={() => speakText(currentStep.text)}>🔊</button>
                 </div>
               );
             case 'text-code':
               return (
                 <div className="lesson-step-text-code">
                   <p className="lesson-step-text">{currentStep.text}</p>
-                  <button className="tts-button" onClick={() => speakText(currentStep.text)}>🔊 Listen</button>
+                  <button className="speaker-btn" onClick={() => speakText(currentStep.text)}>🔊</button>
                   <div className="code-preview-wrapper">
                     <pre className="lesson-step-code">
                       <code>{currentStep.content}</code>
@@ -180,12 +180,26 @@ const Lesson = () => {
             case 'quiz':
               return (
                 <div className="lesson-step-quiz">
-                  <h3 className="quiz-question">{currentStep.question}</h3>
+                  <h3 className="quiz-question">
+                    {currentStep.question}
+                    <button
+                      onClick={() => speakText(currentStep.question)}
+                      className="speaker-btn"
+                      title="Listen"
+                    >
+                      🔊
+                    </button>
+                  </h3>
                   <ul className="quiz-options">
                     {currentStep.options.map((option, idx) => (
                       <li
                         key={idx}
-                        className={`quiz-option ${selectedOption === option ? (isAnsweredCorrectly ? 'correct' : 'incorrect') : ''}`}
+                        className={`quiz-option ${selectedOption === option
+                            ? isAnsweredCorrectly
+                              ? 'correct'
+                              : 'incorrect'
+                            : ''
+                          }`}
                         onClick={() => !isAnsweredCorrectly && handleOptionSelect(option)}
                         tabIndex={0}
                         role="button"
@@ -198,6 +212,7 @@ const Lesson = () => {
                   </ul>
                 </div>
               );
+
             default:
               return <p>Unknown step type: {currentStep.type}</p>;
           }

@@ -216,6 +216,20 @@
   color: #999;
 }
 
+/* ========== Speaker ========== */
+
+.speaker-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-left: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: inherit;
+}
+
+
+
 /* ========== Responsive ========== */
 @media (max-width: 768px) {
   .recom-grid {

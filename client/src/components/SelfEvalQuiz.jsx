@@ -20,12 +20,6 @@ const SelfEvalQuiz = () => {
 
   const currentQn = quizData?.[currentIndex];
 
-  useEffect(() => {
-    if (!showResults && quizData) {
-      speakText(currentQn.question);
-    }
-  }, [currentIndex, showResults, quizData]);
-
   const handleOptionClick = (option) => {
     setUserAnswers((prev) => ({ ...prev, [currentIndex]: option }));
   };
@@ -100,7 +94,10 @@ const SelfEvalQuiz = () => {
         {!showResults ? (
           <div className="f-quiz-block">
             <h2 className="f-quiz-title">Self Evaluation Quiz</h2>
-            <h3 className="f-quiz-question">{currentQn.question}</h3>
+            <h3 className="f-quiz-question">
+              Q{currentIndex + 1}: {currentQn.question}
+              <button className="speaker-btn" onClick={() => speakText(currentQn.question)} title="Listen">🔊</button>
+            </h3>
 
             <ul className="f-quiz-options">
               {currentQn.options.map((opt, i) => (
@@ -144,33 +141,30 @@ const SelfEvalQuiz = () => {
 
               return (
                 <div key={i} className="f-quiz-result-item">
-                  <p><strong>Q{i + 1}:</strong> {q.question}</p>
+                  <p>
+                    <strong>Q{i + 1}:</strong> {q.question}
+                  </p>
                   {q.options.map((opt, j) => {
                     const isAnswer = opt === q.answer;
                     const isSelected = userAnswer === opt;
-                    const shouldColor = true;
 
                     return (
                       <div
                         key={j}
-                        className={`f-quiz-option ${shouldColor
-                          ? isAnswer
-                            ? 'correct'
-                            : isSelected
-                              ? 'incorrect'
-                              : ''
-                          : ''
-                          } ${isSelected ? 'selected' : ''}`}
+                        className={`f-quiz-option ${
+                          isAnswer ? 'correct' : ''
+                        } ${isSelected && !isAnswer ? 'incorrect' : ''} ${
+                          isSelected ? 'selected' : ''
+                        }`}
                       >
                         {opt}
-                        {shouldColor && isAnswer && <span className="tick">✓</span>}
-                        {shouldColor && isSelected && !isAnswer && <span className="cross">✗</span>}
+                        {isAnswer && <span className="tick">✓</span>}
+                        {isSelected && !isAnswer && <span className="cross">✗</span>}
                       </div>
                     );
                   })}
                   <div className="f-quiz-explanation">
                     <strong>Explanation:</strong> {q.explanation}
-                    <button onClick={() => speakText(q.explanation)} style={{ marginLeft: '10px' }}>🔊</button>
                   </div>
                 </div>
               );

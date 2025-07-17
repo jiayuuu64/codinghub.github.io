@@ -12,12 +12,6 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
 
   const currentQn = questions[currentIndex];
 
-  useEffect(() => {
-    if (!showResults) {
-      speakText(currentQn.question);
-    }
-  }, [currentIndex, showResults, questions]);
-
   const handleOptionClick = (option) => {
     setUserAnswers((prev) => ({ ...prev, [currentIndex]: option }));
   };
@@ -44,6 +38,7 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
     setShowResults(true);
 
     const email = localStorage.getItem('email');
+
     if (correctCount / questions.length > 0.8) return;
 
     try {
@@ -106,7 +101,10 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
       {!showResults ? (
         <div className="f-quiz-block">
           <h2 className="f-quiz-title">Final Quiz</h2>
-          <h3 className="f-quiz-question">{currentQn.question}</h3>
+          <h3 className="f-quiz-question">
+            Q{currentIndex + 1}: {currentQn.question}
+            <button className="speaker-btn" onClick={() => speakText(currentQn.question)} title="Listen">🔊</button>
+          </h3>
 
           <ul className="f-quiz-options">
             {currentQn.options.map((opt, i) => (
@@ -185,18 +183,18 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
 
             return (
               <div key={i} className="f-quiz-result-item">
-                <p><strong>Q{i + 1}:</strong> {q.question}</p>
+                <p>
+                  <strong>Q{i + 1}:</strong> {q.question}
+                </p>
                 {q.options.map((opt, j) => {
                   const isAnswer = opt === q.answer;
                   const isSelected = userAnswer === opt;
                   return (
                     <div
                       key={j}
-                      className={`f-quiz-option ${
-                        isAnswer ? 'correct' : ''
-                      } ${isSelected && !isAnswer ? 'incorrect' : ''} ${
-                        isSelected ? 'selected' : ''
-                      }`}
+                      className={`f-quiz-option ${isAnswer ? 'correct' : ''
+                        } ${isSelected && !isAnswer ? 'incorrect' : ''} ${isSelected ? 'selected' : ''
+                        }`}
                     >
                       {opt}
                       {isAnswer && <span className="tick">✓</span>}
@@ -206,7 +204,6 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
                 })}
                 <div className="f-quiz-explanation">
                   <strong>Explanation:</strong> {q.explanation}
-                  <button onClick={() => speakText(q.explanation)} style={{ marginLeft: '10px' }}>🔊</button>
                 </div>
               </div>
             );
