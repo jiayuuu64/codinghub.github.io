@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/finalquiz.css';
+import { speakText } from '../utils/textToSpeech';
 
 const SelfEvalQuiz = () => {
   const location = useLocation();
@@ -17,9 +18,13 @@ const SelfEvalQuiz = () => {
     if (!quizData) navigate('/self-evaluation');
   }, [quizData, navigate]);
 
-  if (!quizData) return null;
+  const currentQn = quizData?.[currentIndex];
 
-  const currentQn = quizData[currentIndex];
+  useEffect(() => {
+    if (!showResults && quizData) {
+      speakText(currentQn.question);
+    }
+  }, [currentIndex, showResults, quizData]);
 
   const handleOptionClick = (option) => {
     setUserAnswers((prev) => ({ ...prev, [currentIndex]: option }));
@@ -65,6 +70,8 @@ const SelfEvalQuiz = () => {
     link.download = 'self-eval-results.txt';
     link.click();
   };
+
+  if (!quizData) return null;
 
   return (
     <div className="lesson-fullscreen">
@@ -141,7 +148,7 @@ const SelfEvalQuiz = () => {
                   {q.options.map((opt, j) => {
                     const isAnswer = opt === q.answer;
                     const isSelected = userAnswer === opt;
-                    const shouldColor = true; // Always show correct/incorrect
+                    const shouldColor = true;
 
                     return (
                       <div
@@ -163,6 +170,7 @@ const SelfEvalQuiz = () => {
                   })}
                   <div className="f-quiz-explanation">
                     <strong>Explanation:</strong> {q.explanation}
+                    <button onClick={() => speakText(q.explanation)} style={{ marginLeft: '10px' }}>🔊</button>
                   </div>
                 </div>
               );
