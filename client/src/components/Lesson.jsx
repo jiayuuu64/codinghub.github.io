@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import FinalQuiz from './FinalQuiz';
 import '../styles/Lesson.css';
+import { speakText } from '../utils/textToSpeech';
 
 const Lesson = () => {
   const { lessonId } = useParams();
@@ -124,9 +125,18 @@ const Lesson = () => {
 
           switch (currentStep.type) {
             case 'text':
-              return <p className="lesson-step-text">{currentStep.text}</p>;
+              return (
+                <div>
+                  <p className="lesson-step-text">{currentStep.text}</p>
+                  <button className="tts-button" onClick={() => speakText(currentStep.text)}>🔊 Listen</button>
+                </div>
+              );
             case 'code':
-              return <pre className="lesson-step-code"><code>{currentStep.content}</code></pre>;
+              return (
+                <pre className="lesson-step-code">
+                  <code>{currentStep.content}</code>
+                </pre>
+              );
             case 'video':
               return currentStep.content.includes('youtube.com') ? (
                 <iframe className="lesson-step-video" src={currentStep.content} title="YouTube video" allowFullScreen></iframe>
@@ -146,12 +156,14 @@ const Lesson = () => {
                     </video>
                   )}
                   <p className="lesson-step-text" style={{ marginTop: '1rem' }}>{currentStep.text}</p>
+                  <button className="tts-button" onClick={() => speakText(currentStep.text)}>🔊 Listen</button>
                 </div>
               );
             case 'text-code':
               return (
                 <div className="lesson-step-text-code">
                   <p className="lesson-step-text">{currentStep.text}</p>
+                  <button className="tts-button" onClick={() => speakText(currentStep.text)}>🔊 Listen</button>
                   <div className="code-preview-wrapper">
                     <pre className="lesson-step-code">
                       <code>{currentStep.content}</code>
