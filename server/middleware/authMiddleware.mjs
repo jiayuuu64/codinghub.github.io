@@ -12,10 +12,14 @@ export const loginUser = async (req, res) => {
         if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
 
         const token = generateToken({ id: user._id, email: user.email });
-        res.status(200).json({ token, email, message: "Login successful" });
+
+        res.status(200).json({
+            token,
+            email,
+            isAdmin: user.isAdmin || false, // ✅ Return admin flag
+            message: "Login successful"
+        });
     } catch (err) {
         res.status(500).json({ message: "Server error" });
     }
 };
-
-
