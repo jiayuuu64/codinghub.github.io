@@ -12,7 +12,7 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true); // Start loading
+        setLoading(true);
 
         try {
             const response = await fetch(`${API_URL}/login`, {
@@ -24,10 +24,10 @@ const Login = () => {
             const data = await response.json();
 
             if (response.ok) {
-                Promise.all([
-                    localStorage.setItem('token', data.token),
-                    localStorage.setItem('email', data.email),
-                ]);
+                // ✅ Save login details including isAdmin
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('email', data.email);
+                localStorage.setItem('isAdmin', data.isAdmin); // 🔥 fixed line
 
                 if (data.languagePreference && data.experiencePreference && data.commitmentPreference) {
                     navigate('/home');

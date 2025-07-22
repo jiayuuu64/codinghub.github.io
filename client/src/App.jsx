@@ -16,6 +16,7 @@ import EditProfile from './components/EditProfile';
 import ChangePassword from './components/ChangePassword';
 import SelfEval from './pages/SelfEval';
 import SelfEvalQuiz from './components/SelfEvalQuiz';
+import AdminDashboard from './components/AdminDashboard';
 
 import { isAuthenticated } from './utils/auth';
 
@@ -45,6 +46,7 @@ const App = () => {
             <Route path="/change-password" element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />
             <Route path="/self-evaluation" element={<ProtectedRoute><SelfEval /></ProtectedRoute>} />
             <Route path="/self-eval/quiz" element={<ProtectedRoute><SelfEvalQuiz /></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
         </Routes>
     );
 };
