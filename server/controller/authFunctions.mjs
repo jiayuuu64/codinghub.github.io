@@ -111,6 +111,7 @@ export const loginUser = async (req, res) => {
         res.status(200).json({
             token,
             email: user.email,
+            isAdmin: user.isAdmin || false,
             languagePreference: user.languagePreference || null,
             experiencePreference: user.experiencePreference || null,
             commitmentPreference: user.commitmentPreference || null,
