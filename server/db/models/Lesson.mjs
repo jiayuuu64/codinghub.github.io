@@ -12,7 +12,8 @@ const stepSchema = new mongoose.Schema({
   question: String,      // For quizzes
   options: [String],     // For quizzes
   answer: String,        // For quizzes
-  explanation: String    // 2-try quiz feedback
+  explanation: String,    // 2-try quiz feedback
+  topic: String
 });
 
 const lessonSchema = new mongoose.Schema({

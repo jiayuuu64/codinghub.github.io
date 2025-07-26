@@ -1,6 +1,8 @@
 // routes/lessonRouter.mjs
 import express from 'express';
 import Lesson from '../db/models/Lesson.mjs';
+import Course from '../db/models/Course.mjs';
+import { authenticateToken, requireAdmin } from '../middleware/authMiddleware.mjs';
 
 const router = express.Router();
 
@@ -18,5 +20,56 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+
+router.post('/', authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const { courseId, sectionIndex, title, steps } = req.body;
+
+    if (!courseId || sectionIndex === undefined || !title || !steps) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    const formattedSteps = steps.map(step => {
+      if (step.type === 'quiz') {
+        return {
+          type: 'quiz',
+          question: step.question || '',
+          options: step.options || [],
+          answer: step.answer || '',
+          explanation: step.explanation || ''
+        };
+
+      } else {
+        return {
+          type: step.type,
+          text: step.text || '',
+          content: step.content || ''
+        };
+      }
+    });
+
+    const lesson = new Lesson({ title, steps: formattedSteps });
+    await lesson.save();
+
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({ error: 'Course not found' });
+    }
+
+    if (!course.sections[sectionIndex]) {
+      return res.status(404).json({ error: 'Section not found' });
+    }
+
+    course.sections[sectionIndex].lessons.push(lesson._id);
+    await course.save();
+
+    res.status(201).json({ message: 'Lesson created and added to section', lesson });
+  } catch (err) {
+    console.error('Error creating lesson:', err.message);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 
 export default router;

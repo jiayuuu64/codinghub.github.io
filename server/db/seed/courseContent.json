@@ -8,188 +8,152 @@
       "description": "Start with variables, data types, and basic operations.",
       "lessons": [
         {
-          "title": "Creating Variables",
-          "steps": [
-            {
-              "type": "text",
-              "text": "Variables are like labeled containers for storing data."
-            },
-            {
-              "type": "text-video",
-              "text": "Here's a video introduction to Python variables.",
-              "content": "https://www.youtube.com/embed/_uQrJ0TkZlc"
-            },
-            {
-              "type": "text-code",
-              "text": "Create and print a simple variable.",
-              "language": "python",
-              "content": "x = 5\nprint(x)"
-            },
-            {
-              "type": "text-code",
-              "text": "Reassign the value of a variable.",
-              "language": "python",
-              "content": "x = 10\nprint(x)"
-            },
-            {
-              "type": "quiz",
-              "question": "Which line assigns a string to a variable?",
-              "options": [
-                "name = 'Bob'",
-                "name == 'Bob'",
-                "False",
-                "1"
-              ],
-              "answer": "name = 'Bob'",
-              "explanation": "Use = to assign."
-            },
-            {
-              "type": "quiz",
-              "question": "What will this print?\nx = 5\nx = x + 2\nprint(x)",
-              "options": [
-                "1",
-                "7",
-                "5"
-              ],
-              "answer": "7",
-              "explanation": "x becomes 7"
-            },
-            {
-              "type": "quiz",
-              "question": "Which is a valid Python variable name?",
-              "options": [
-                "_name",
-                "1name",
-                "==",
-                "name!"
-              ],
-              "answer": "_name",
-              "explanation": "Can't start with digit or use !"
-            }
-          ]
-        },
+  "title": "Creating Variables",
+  "steps": [
+    {
+      "type": "text",
+      "text": "Variables are like labeled containers for storing data."
+    },
+    {
+      "type": "text-video",
+      "text": "Here's a video introduction to Python variables.",
+      "content": "https://www.youtube.com/embed/_uQrJ0TkZlc"
+    },
+    {
+      "type": "text-code",
+      "text": "Create and print a simple variable.",
+      "language": "python",
+      "content": "x = 5\nprint(x)"
+    },
+    {
+      "type": "text-code",
+      "text": "Reassign the value of a variable.",
+      "language": "python",
+      "content": "x = 10\nprint(x)"
+    },
+    {
+      "type": "quiz",
+      "question": "Which line assigns a string to a variable?",
+      "options": ["name = 'Bob'", "name == 'Bob'", "False", "1"],
+      "answer": "name = 'Bob'",
+      "explanation": "Use = to assign.",
+      "topic": "Creating Variables"
+    },
+    {
+      "type": "quiz",
+      "question": "What will this print?\nx = 5\nx = x + 2\nprint(x)",
+      "options": ["1", "7", "5"],
+      "answer": "7",
+      "explanation": "x becomes 7",
+      "topic": "Creating Variables"
+    },
+    {
+      "type": "quiz",
+      "question": "Which is a valid Python variable name?",
+      "options": ["_name", "1name", "==", "name!"],
+      "answer": "_name",
+      "explanation": "Can't start with digit or use !",
+      "topic": "Creating Variables"
+    }
+  ]
+},
+
         {
-          "title": "Data Types",
-          "steps": [
-            {
-              "type": "text",
-              "text": "Python supports int, float, str, and bool as basic data types."
-            },
-            {
-              "type": "text-video",
-              "text": "Watch this to understand different data types.",
-              "content": "https://www.youtube.com/embed/khKv-8q7YmY"
-            },
-            {
-              "type": "text-code",
-              "text": "Examples of different types.",
-              "language": "python",
-              "content": "age = 25\nheight = 5.7\nname = 'Sam'\nis_student = True"
-            },
-            {
-              "type": "text-code",
-              "text": "Use the type() function to check types.",
-              "language": "python",
-              "content": "print(type(name))  # str"
-            },
-            {
-              "type": "quiz",
-              "question": "What is the type of 5.0?",
-              "options": [
-                "0",
-                "float",
-                "int"
-              ],
-              "answer": "float",
-              "explanation": "Decimal = float"
-            },
-            {
-              "type": "quiz",
-              "question": "What is the result of bool(0)?",
-              "options": [
-                "True",
-                "False",
-                "1",
-                "False"
-              ],
-              "answer": "False",
-              "explanation": "0 is falsy"
-            },
-            {
-              "type": "quiz",
-              "question": "Which of the following is a string?",
-              "options": [
-                "None",
-                "'3'",
-                "3",
-                "Error"
-              ],
-              "answer": "'3'",
-              "explanation": "Surrounded by quotes = string"
-            }
-          ]
-        },
-        {
-          "title": "Basic Operations",
-          "steps": [
-            {
-              "type": "text",
-              "text": "Python supports arithmetic: +, -, *, /, %, //, **"
-            },
-            {
-              "type": "text-video",
-              "text": "Watch this breakdown of arithmetic operators.",
-              "content": "https://www.youtube.com/embed/kqtD5dpn9C8"
-            },
-            {
-              "type": "text-code",
-              "text": "Examples of arithmetic operations.",
-              "language": "python",
-              "content": "print(2 + 3)\nprint(5 * 4)"
-            },
-            {
-              "type": "text-code",
-              "text": "Order of operations matters (PEMDAS).",
-              "language": "python",
-              "content": "print(2 + 3 * 4)  # 14"
-            },
-            {
-              "type": "quiz",
-              "question": "What does 5 % 2 return?",
-              "options": [
-                "Error",
-                "1",
-                "2",
-                "=="
-              ],
-              "answer": "1",
-              "explanation": "5 divided by 2 = remainder 1"
-            },
-            {
-              "type": "quiz",
-              "question": "What is the output of 2 ** 3?",
-              "options": [
-                "1",
-                "8",
-                "6"
-              ],
-              "answer": "8",
-              "explanation": "2 to the power of 3"
-            },
-            {
-              "type": "quiz",
-              "question": "What is the output of 9 // 2?",
-              "options": [
-                "4",
-                "+=",
-                "True",
-                "4.5"
-              ],
-              "answer": "4",
-              "explanation": "// is floor division"
-            }
-          ]
-        }
+  "title": "Data Types",
+  "steps": [
+    {
+      "type": "text",
+      "text": "Python has several data types: int, float, str, bool, list, dict, etc."
+    },
+    {
+      "type": "text-video",
+      "text": "Here's a video that explains different data types.",
+      "content": "https://www.youtube.com/embed/khKv-8q7YmY"
+    },
+    {
+      "type": "text-code",
+      "text": "Example of int, float, str, and bool types.",
+      "language": "python",
+      "content": "x = 10        # int\ny = 3.14      # float\nname = 'Ali'  # str\nis_valid = True  # bool"
+    },
+    {
+      "type": "quiz",
+      "question": "What is the type of 5.0?",
+      "options": ["int", "float", "str", "bool"],
+      "answer": "float",
+      "explanation": "Decimal numbers are of type float.",
+      "topic": "Data Types"
+    },
+    {
+      "type": "quiz",
+      "question": "What type is the result of: 3 + 4.0?",
+      "options": ["int", "float", "str", "bool"],
+      "answer": "float",
+      "explanation": "Adding int and float results in float.",
+      "topic": "Data Types"
+    },
+    {
+      "type": "quiz",
+      "question": "What is the type of '123'?",
+      "options": ["int", "str", "float", "bool"],
+      "answer": "str",
+      "explanation": "Even though it looks like a number, it's in quotes so it's a string.",
+      "topic": "Data Types"
+    }
+  ]
+},
+
+       {
+  "title": "Basic Operations",
+  "steps": [
+    {
+      "type": "text",
+      "text": "Python supports addition (+), subtraction (-), multiplication (*), division (/), and more."
+    },
+    {
+      "type": "text-video",
+      "text": "This video covers basic arithmetic in Python.",
+      "content": "https://www.youtube.com/embed/yE9v9rt6ziw"
+    },
+    {
+      "type": "text-code",
+      "text": "Basic arithmetic operations example:",
+      "language": "python",
+      "content": "a = 10\nb = 3\nprint(a + b)\nprint(a - b)\nprint(a * b)\nprint(a / b)"
+    },
+    {
+      "type": "text-code",
+      "text": "Modulus (%) gives the remainder. Exponentiation (**) gives power.",
+      "language": "python",
+      "content": "print(10 % 3)  # 1\nprint(2 ** 3)  # 8"
+    },
+    {
+      "type": "quiz",
+      "question": "What does 10 % 3 return?",
+      "options": ["3", "1", "0", "10"],
+      "answer": "1",
+      "explanation": "10 divided by 3 leaves a remainder of 1.",
+      "topic": "Basic Operations"
+    },
+    {
+      "type": "quiz",
+      "question": "What does 2 ** 4 evaluate to?",
+      "options": ["8", "4", "16", "12"],
+      "answer": "16",
+      "explanation": "2 to the power of 4 is 16.",
+      "topic": "Basic Operations"
+    },
+    {
+      "type": "quiz",
+      "question": "What is the output of 10 / 2?",
+      "options": ["5", "5.0", "2", "0"],
+      "answer": "5.0",
+      "explanation": "Python division returns float by default.",
+      "topic": "Basic Operations"
+    }
+  ]
+}
+
       ]
     },
     {
@@ -197,382 +161,298 @@
       "description": "Write code that makes decisions and repeats actions.",
       "lessons": [
         {
-          "title": "If Statements",
-          "steps": [
-            {
-              "type": "text",
-              "text": "Control program decisions using if, elif, and else."
-            },
-            {
-              "type": "text-video",
-              "text": "Learn how to use if statements.",
-              "content": "https://www.youtube.com/embed/Z3b_JqJUe8o"
-            },
-            {
-              "type": "text-code",
-              "text": "Basic conditional logic.",
-              "language": "python",
-              "content": "if x > 0:\n  print('Positive')\nelse:\n  print('Not positive')"
-            },
-            {
-              "type": "quiz",
-              "question": "What keyword is used for checking multiple conditions?",
-              "options": [
-                "elif",
-                "1",
-                "True",
-                "else if"
-              ],
-              "answer": "elif",
-              "explanation": "Python uses elif"
-            },
-            {
-              "type": "quiz",
-              "question": "What happens if x = -1?",
-              "options": [
-                "Positive",
-                "+=",
-                "Not positive",
-                "False"
-              ],
-              "answer": "Not positive",
-              "explanation": "x is not > 0"
-            },
-            {
-              "type": "quiz",
-              "question": "Is else required?",
-              "options": [
-                "False",
-                "Yes",
-                "No"
-              ],
-              "answer": "No",
-              "explanation": "Optional if block ends with if"
-            }
-          ]
-        },
-        {
-          "title": "Loops",
-          "steps": [
-            {
-              "type": "text",
-              "text": "Use for loops or while loops to repeat code."
-            },
-            {
-              "type": "text-video",
-              "text": "Understand Python loops.",
-              "content": "https://www.youtube.com/embed/6iF8Xb7Z3wQ"
-            },
-            {
-              "type": "text-code",
-              "text": "Loop over a range.",
-              "language": "python",
-              "content": "for i in range(3):\n  print(i)"
-            },
-            {
-              "type": "text-code",
-              "text": "While loop example.",
-              "language": "python",
-              "content": "x = 0\nwhile x < 3:\n  print(x)\n  x += 1"
-            },
-            {
-              "type": "quiz",
-              "question": "What does range(3) output?",
-              "options": [
-                "0 1 2",
-                "1 2 3",
-                "==",
-                "0"
-              ],
-              "answer": "0 1 2",
-              "explanation": "Starts at 0"
-            },
-            {
-              "type": "quiz",
-              "question": "Which loop depends on condition?",
-              "options": [
-                "True",
-                "while",
-                "for",
-                "0"
-              ],
-              "answer": "while",
-              "explanation": "Runs while condition is True"
-            },
-            {
-              "type": "quiz",
-              "question": "What is the output of x=1; while x<3: print(x); x+=1?",
-              "options": [
-                "0 1",
-                "1 2",
-                "0",
-                "False"
-              ],
-              "answer": "1 2",
-              "explanation": "Loop runs while x<3"
-            }
-          ]
-        }
+  "title": "If Statements",
+  "steps": [
+    {
+      "type": "text",
+      "text": "Python uses `if`, `elif`, and `else` to make decisions."
+    },
+    {
+      "type": "text-video",
+      "text": "Watch this video on Python if-statements.",
+      "content": "https://www.youtube.com/embed/f4KOjWS_KZs"
+    },
+    {
+      "type": "text-code",
+      "text": "Example of a basic if-else:",
+      "language": "python",
+      "content": "x = 10\nif x > 5:\n    print('Greater than 5')\nelse:\n    print('5 or less')"
+    },
+    {
+      "type": "text-code",
+      "text": "Using elif to check multiple conditions:",
+      "language": "python",
+      "content": "age = 18\nif age < 13:\n    print('Child')\nelif age < 20:\n    print('Teenager')\nelse:\n    print('Adult')"
+    },
+    {
+      "type": "quiz",
+      "question": "What will this print?\nx = 3\nif x > 5:\n    print('A')\nelse:\n    print('B')",
+      "options": ["A", "B", "Error", "Nothing"],
+      "answer": "B",
+      "explanation": "Since x is not greater than 5, the else block runs.",
+      "topic": "If Statements"
+    },
+    {
+      "type": "quiz",
+      "question": "Which keyword checks a second condition after `if`?",
+      "options": ["elseif", "elif", "else", "when"],
+      "answer": "elif",
+      "explanation": "Python uses `elif`, not `elseif` like some other languages.",
+      "topic": "If Statements"
+    },
+    {
+      "type": "quiz",
+      "question": "What will this output?\nx = 10\nif x < 5:\n    print('Low')\nelif x == 10:\n    print('Perfect')\nelse:\n    print('High')",
+      "options": ["Low", "Perfect", "High", "Error"],
+      "answer": "Perfect",
+      "explanation": "x == 10 triggers the `elif` block.",
+      "topic": "If Statements"
+    }
+  ]
+},
+
+{
+  "title": "Loops",
+  "steps": [
+    {
+      "type": "text",
+      "text": "Loops let you repeat code. Python has `for` and `while` loops."
+    },
+    {
+      "type": "text-video",
+      "text": "This video shows how Python loops work.",
+      "content": "https://www.youtube.com/embed/6iF8Xb7Z3wQ"
+    },
+    {
+      "type": "text-code",
+      "text": "Example of a `for` loop:",
+      "language": "python",
+      "content": "for i in range(5):\n    print(i)"
+    },
+    {
+      "type": "text-code",
+      "text": "Example of a `while` loop:",
+      "language": "python",
+      "content": "count = 0\nwhile count < 3:\n    print(count)\n    count += 1"
+    },
+    {
+      "type": "quiz",
+      "question": "How many times will this run?\nfor i in range(3): print(i)",
+      "options": ["2", "3", "4", "0"],
+      "answer": "3",
+      "explanation": "range(3) gives 0, 1, 2 — total 3 times.",
+      "topic": "Loops"
+    },
+    {
+      "type": "quiz",
+      "question": "Which loop runs as long as a condition is true?",
+      "options": ["for", "while", "loop", "repeat"],
+      "answer": "while",
+      "explanation": "`while` keeps running until the condition is false.",
+      "topic": "Loops"
+    },
+    {
+      "type": "quiz",
+      "question": "What will this output?\ncount = 0\nwhile count < 2:\n    print(count)\n    count += 1",
+      "options": ["0 1", "1 2", "0 1 2", "infinite loop"],
+      "answer": "0 1",
+      "explanation": "It prints 0 and 1, then exits when count == 2.",
+      "topic": "Loops"
+    }
+  ]
+}
+
       ]
     },
     {
       "title": "Functions",
       "description": "Create reusable blocks of code.",
       "lessons": [
-        {
-          "title": "Defining Functions",
-          "steps": [
-            {
-              "type": "text",
-              "text": "Functions let you group and reuse logic."
-            },
-            {
-              "type": "text-video",
-              "text": "Intro to Python functions.",
-              "content": "https://www.youtube.com/embed/NSbOtYzIQI0"
-            },
-            {
-              "type": "text-code",
-              "text": "Define and call a function.",
-              "language": "python",
-              "content": "def greet(name):\n  print(f'Hello, {name}')\ngreet('Alex')"
-            },
-            {
-              "type": "text-code",
-              "text": "Function with return value.",
-              "language": "python",
-              "content": "def square(x):\n  return x * x\nprint(square(3))"
-            },
-            {
-              "type": "quiz",
-              "question": "What keyword defines a function?",
-              "options": [
-                "def",
-                "0",
-                "function"
-              ],
-              "answer": "def",
-              "explanation": "`def` starts a function"
-            },
-            {
-              "type": "quiz",
-              "question": "What does return do?",
-              "options": [
-                "sends value back",
-                "prints value",
-                "0",
-                "True"
-              ],
-              "answer": "sends value back",
-              "explanation": "Exits and returns"
-            },
-            {
-              "type": "quiz",
-              "question": "What is output of:\ndef f(): return 3\nprint(f())",
-              "options": [
-                "Error",
-                "3",
-                "str",
-                "None"
-              ],
-              "answer": "3",
-              "explanation": "Function returns 3"
-            }
-          ]
-        }
+{
+  "title": "Defining Functions",
+  "steps": [
+    {
+      "type": "text",
+      "text": "Functions let you group code that performs a task. Use `def` to define one."
+    },
+    {
+      "type": "text-video",
+      "text": "Watch this to learn how to define functions in Python.",
+      "content": "https://www.youtube.com/embed/NSbOtYzIQI0"
+    },
+    {
+      "type": "text-code",
+      "text": "Basic function example:",
+      "language": "python",
+      "content": "def greet():\n    print('Hello!')\ngreet()"
+    },
+    {
+      "type": "text-code",
+      "text": "Functions can take parameters and return values:",
+      "language": "python",
+      "content": "def add(a, b):\n    return a + b\n\nresult = add(2, 3)\nprint(result)"
+    },
+    {
+      "type": "quiz",
+      "question": "Which keyword is used to define a function?",
+      "options": ["function", "define", "def", "func"],
+      "answer": "def",
+      "explanation": "`def` is the correct keyword in Python.",
+      "topic": "Defining Functions"
+    },
+    {
+      "type": "quiz",
+      "question": "What does this print?\ndef say_hi():\n    print('Hi')\nsay_hi()",
+      "options": ["say_hi", "Hi", "None", "Error"],
+      "answer": "Hi",
+      "explanation": "The function is called and prints 'Hi'.",
+      "topic": "Defining Functions"
+    },
+    {
+      "type": "quiz",
+      "question": "How can you return a value from a function?",
+      "options": ["use print", "use return", "use output", "use send"],
+      "answer": "use return",
+      "explanation": "`return` sends a value back to the caller.",
+      "topic": "Defining Functions"
+    }
+  ]
+}
+
       ]
     },
     {
-      "title": "Summary Quiz",
-      "description": "Test your knowledge from all previous lessons.",
-      "lessons": [
+  "title": "Summary Quiz",
+  "description": "Test your knowledge from all previous lessons.",
+  "lessons": [
+    {
+      "title": "Final Quiz",
+      "steps": [
         {
-          "title": "Final Quiz",
-          "steps": [
-            {
-              "type": "quiz",
-              "question": "Which of these correctly assigns a value to a variable in Python?",
-              "options": [
-                "x == 10",
-                "x := 10",
-                "10 = x",
-                "x = 10"
-              ],
-              "answer": "x = 10",
-              "explanation": "`=` assigns a value to a variable."
-            },
-            {
-              "type": "quiz",
-              "question": "Which data type is used to represent decimal numbers in Python?",
-              "options": [
-                "int",
-                "float",
-                "bool",
-                "str"
-              ],
-              "answer": "float",
-              "explanation": "Decimals are stored as `float`."
-            },
-            {
-              "type": "quiz",
-              "question": "What will be the result of: print(3 + 2 * 2)?",
-              "options": [
-                "10",
-                "7",
-                "9",
-                "12"
-              ],
-              "answer": "7",
-              "explanation": "Multiplication happens before addition: 2*2=4, then 3+4=7."
-            },
-            {
-              "type": "quiz",
-              "question": "What keyword is used to define a function in Python?",
-              "options": [
-                "func",
-                "define",
-                "def",
-                "function"
-              ],
-              "answer": "def",
-              "explanation": "`def` is used to define a function."
-            },
-            {
-              "type": "quiz",
-              "question": "Which of the following is a Boolean value in Python?",
-              "options": [
-                "'True'",
-                "1",
-                "True",
-                "'False'"
-              ],
-              "answer": "True",
-              "explanation": "`True` (without quotes) is a Boolean."
-            },
-            {
-              "type": "quiz",
-              "question": "Which operator is used for exponentiation?",
-              "options": [
-                "^",
-                "**",
-                "^^",
-                "//"
-              ],
-              "answer": "**",
-              "explanation": "`**` is used for powers like 2 ** 3 = 8."
-            },
-            {
-              "type": "quiz",
-              "question": "What is the output of: print(type('Hello'))?",
-              "options": [
-                "<class 'int'>",
-                "<class 'str'>",
-                "<class 'bool'>",
-                "<class 'float'>"
-              ],
-              "answer": "<class 'str'>",
-              "explanation": "The value is a string."
-            },
-            {
-              "type": "quiz",
-              "question": "Which of the following are valid ways to loop in Python?",
-              "options": [
-                "do-while",
-                "for",
-                "foreach",
-                "while"
-              ],
-              "answer": "for",
-              "explanation": "`for` and `while` are valid. `foreach` is not used in Python."
-            },
-            {
-              "type": "quiz",
-              "question": "What is the result of: bool(0)?",
-              "options": [
-                "True",
-                "False",
-                "None",
-                "0"
-              ],
-              "answer": "False",
-              "explanation": "0 evaluates to `False` in Boolean context."
-            },
-            {
-              "type": "quiz",
-              "question": "What will this output?\n\nx = 5\nx += 2\nprint(x)",
-              "options": [
-                "7",
-                "5",
-                "2",
-                "Error"
-              ],
-              "answer": "7",
-              "explanation": "x is increased by 2."
-            },
-            {
-              "type": "quiz",
-              "question": "What is the purpose of a return statement in a function?",
-              "options": [
-                "To print a value",
-                "To exit the loop",
-                "To stop the program",
-                "To send back a value"
-              ],
-              "answer": "To send back a value",
-              "explanation": "Return gives output from the function."
-            },
-            {
-              "type": "quiz",
-              "question": "What will this print?\n\nfor i in range(2): print(i)",
-              "options": [
-                "1 2",
-                "0 1",
-                "0 1 2",
-                "2 3"
-              ],
-              "answer": "0 1",
-              "explanation": "`range(2)` includes 0 and 1."
-            },
-            {
-              "type": "quiz",
-              "question": "Which keyword is used for alternative conditions?",
-              "options": [
-                "elseif",
-                "elif",
-                "else if",
-                "alt"
-              ],
-              "answer": "elif",
-              "explanation": "Python uses `elif` instead of `else if`."
-            },
-            {
-              "type": "quiz",
-              "question": "Which function tells you the data type of a variable?",
-              "options": [
-                "type()",
-                "data()",
-                "typeof()",
-                "class()"
-              ],
-              "answer": "type()",
-              "explanation": "`type()` is the correct Python function."
-            },
-            {
-              "type": "quiz",
-              "question": "What does the // operator do?",
-              "options": [
-                "Divide and round up",
-                "Divide and return remainder",
-                "Floor division",
-                "Exponentiation"
-              ],
-              "answer": "Floor division",
-              "explanation": "`//` returns the quotient rounded down."
-            }
-          ]
+          "type": "quiz",
+          "topic": "Creating Variables",
+          "question": "Which of these correctly assigns a value to a variable in Python?",
+          "options": ["x == 10", "x := 10", "10 = x", "x = 10"],
+          "answer": "x = 10",
+          "explanation": "`=` assigns a value to a variable."
+        },
+        {
+          "type": "quiz",
+          "topic": "Data Types",
+          "question": "Which data type is used to represent decimal numbers in Python?",
+          "options": ["int", "float", "bool", "str"],
+          "answer": "float",
+          "explanation": "Decimals are stored as `float`."
+        },
+        {
+          "type": "quiz",
+          "topic": "Basic Operations",
+          "question": "What will be the result of: print(3 + 2 * 2)?",
+          "options": ["10", "7", "9", "12"],
+          "answer": "7",
+          "explanation": "Multiplication happens before addition: 2*2=4, then 3+4=7."
+        },
+        {
+          "type": "quiz",
+          "topic": "Defining Functions",
+          "question": "What keyword is used to define a function in Python?",
+          "options": ["func", "define", "def", "function"],
+          "answer": "def",
+          "explanation": "`def` is used to define a function."
+        },
+        {
+          "type": "quiz",
+          "topic": "Data Types",
+          "question": "Which of the following is a Boolean value in Python?",
+          "options": ["'True'", "1", "True", "'False'"],
+          "answer": "True",
+          "explanation": "`True` (without quotes) is a Boolean."
+        },
+        {
+          "type": "quiz",
+          "topic": "Basic Operations",
+          "question": "Which operator is used for exponentiation?",
+          "options": ["^", "**", "^^", "//"],
+          "answer": "**",
+          "explanation": "`**` is used for powers like 2 ** 3 = 8."
+        },
+        {
+          "type": "quiz",
+          "topic": "Data Types",
+          "question": "What is the output of: print(type('Hello'))?",
+          "options": ["<class 'int'>", "<class 'str'>", "<class 'bool'>", "<class 'float'>"],
+          "answer": "<class 'str'>",
+          "explanation": "The value is a string."
+        },
+        {
+          "type": "quiz",
+          "topic": "Loops",
+          "question": "Which of the following are valid ways to loop in Python?",
+          "options": ["do-while", "for", "foreach", "while"],
+          "answer": "for",
+          "explanation": "`for` and `while` are valid. `foreach` is not used in Python."
+        },
+        {
+          "type": "quiz",
+          "topic": "Data Types",
+          "question": "What is the result of: bool(0)?",
+          "options": ["True", "False", "None", "0"],
+          "answer": "False",
+          "explanation": "0 evaluates to `False` in Boolean context."
+        },
+        {
+          "type": "quiz",
+          "topic": "Basic Operations",
+          "question": "What will this output?\n\nx = 5\nx += 2\nprint(x)",
+          "options": ["7", "5", "2", "Error"],
+          "answer": "7",
+          "explanation": "x is increased by 2."
+        },
+        {
+          "type": "quiz",
+          "topic": "Defining Functions",
+          "question": "What is the purpose of a return statement in a function?",
+          "options": ["To print a value", "To exit the loop", "To stop the program", "To send back a value"],
+          "answer": "To send back a value",
+          "explanation": "Return gives output from the function."
+        },
+        {
+          "type": "quiz",
+          "topic": "Loops",
+          "question": "What will this print?\n\nfor i in range(2): print(i)",
+          "options": ["1 2", "0 1", "0 1 2", "2 3"],
+          "answer": "0 1",
+          "explanation": "`range(2)` includes 0 and 1."
+        },
+        {
+          "type": "quiz",
+          "topic": "If Statements",
+          "question": "Which keyword is used for alternative conditions?",
+          "options": ["elseif", "elif", "else if", "alt"],
+          "answer": "elif",
+          "explanation": "Python uses `elif` instead of `else if`."
+        },
+        {
+          "type": "quiz",
+          "topic": "Data Types",
+          "question": "Which function tells you the data type of a variable?",
+          "options": ["type()", "data()", "typeof()", "class()"],
+          "answer": "type()",
+          "explanation": "`type()` is the correct Python function."
+        },
+        {
+          "type": "quiz",
+          "topic": "Basic Operations",
+          "question": "What does the // operator do?",
+          "options": ["Divide and round up", "Divide and return remainder", "Floor division", "Exponentiation"],
+          "answer": "Floor division",
+          "explanation": "`//` returns the quotient rounded down."
         }
       ]
     }
+  ]
+}
+
   ]
 },
 {
@@ -584,132 +464,142 @@
       "description": "Understand the structure of web pages and basic tags.",
       "lessons": [
         {
-          "title": "Introduction to HTML",
-          "steps": [
-            {
-              "type": "text",
-              "text": "HTML stands for HyperText Markup Language. It provides the basic structure of web pages using elements and tags."
-            },
-            {
-              "type": "text",
-              "text": "Every HTML document starts with <!DOCTYPE html> to specify the document type and version of HTML."
-            },
-            {
-              "type": "text-video",
-              "text": "This video explains the basic structure of an HTML document and its parts.",
-              "content": "https://www.youtube.com/embed/pQN-pnXPaVg"
-            },
-            {
-              "type": "text-code",
-              "text": "A basic HTML document example.",
-              "language": "html",
-              "content": "<!DOCTYPE html>\n<html>\n<head>\n  <title>My First Page</title>\n</head>\n<body>\n  <h1>Welcome!</h1>\n  <p>This is my first webpage.</p>\n</body>\n</html>"
-            },
-            {
-              "type": "quiz",
-              "question": "What does <!DOCTYPE html> tell the browser?",
-              "options": ["Specifies HTML version", "Adds a comment", "Links CSS", "Creates a heading"],
-              "answer": "Specifies HTML version",
-              "explanation": "It specifies this document uses HTML5."
-            },
-            {
-              "type": "quiz",
-              "question": "Where is the page title defined?",
-              "options": ["In the <head> section", "In the <body>", "In <footer>", "In <h1>"],
-              "answer": "In the <head> section",
-              "explanation": "The <title> tag is inside the <head> and controls the browser tab title."
-            },
-            {
-              "type": "quiz",
-              "question": "Which tag defines the visible page content?",
-              "options": ["<body>", "<head>", "<title>", "<meta>"],
-              "answer": "<body>",
-              "explanation": "The <body> tag holds all the visible content shown in the browser."
-            }
-          ]
-        },
+  "title": "Introduction to HTML",
+  "steps": [
+    {
+      "type": "text",
+      "text": "HTML stands for HyperText Markup Language. It provides the basic structure of web pages using elements and tags."
+    },
+    {
+      "type": "text",
+      "text": "Every HTML document starts with <!DOCTYPE html> to specify the document type and version of HTML."
+    },
+    {
+      "type": "text-video",
+      "text": "This video explains the basic structure of an HTML document and its parts.",
+      "content": "https://www.youtube.com/embed/pQN-pnXPaVg"
+    },
+    {
+      "type": "text-code",
+      "text": "A basic HTML document example.",
+      "language": "html",
+      "content": "<!DOCTYPE html>\n<html>\n<head>\n  <title>My First Page</title>\n</head>\n<body>\n  <h1>Welcome!</h1>\n  <p>This is my first webpage.</p>\n</body>\n</html>"
+    },
+    {
+      "type": "quiz",
+      "question": "What does <!DOCTYPE html> tell the browser?",
+      "options": ["Specifies HTML version", "Adds a comment", "Links CSS", "Creates a heading"],
+      "answer": "Specifies HTML version",
+      "explanation": "It specifies this document uses HTML5.",
+      "topic": "Introduction to HTML"
+    },
+    {
+      "type": "quiz",
+      "question": "Where is the page title defined?",
+      "options": ["In the <head> section", "In the <body>", "In <footer>", "In <h1>"],
+      "answer": "In the <head> section",
+      "explanation": "The <title> tag is inside the <head> and controls the browser tab title.",
+      "topic": "Introduction to HTML"
+    },
+    {
+      "type": "quiz",
+      "question": "Which tag defines the visible page content?",
+      "options": ["<body>", "<head>", "<title>", "<meta>"],
+      "answer": "<body>",
+      "explanation": "The <body> tag holds all the visible content shown in the browser.",
+      "topic": "Introduction to HTML"
+    }
+  ]
+},
         {
-          "title": "Common HTML Elements",
-          "steps": [
-            {
-              "type": "text",
-              "text": "HTML has many elements like headings, paragraphs, links, images, and lists to organize and present content clearly."
-            },
-            {
-              "type": "text-video",
-              "text": "Watch this video for an overview of common HTML elements.",
-              "content": "https://www.youtube.com/embed/UB1O30fR-EE"
-            },
-            {
-              "type": "text-code",
-              "text": "Example using various elements.",
-              "language": "html",
-              "content": "<h2>About Me</h2>\n<p>I enjoy web development and design.</p>\n<a href=\"https://example.com\">My portfolio</a>\n<img src=\"profile.jpg\" alt=\"Profile picture\">\n<ul>\n  <li>HTML</li>\n  <li>CSS</li>\n</ul>"
-            },
-            {
-              "type": "quiz",
-              "question": "Which tag is used for hyperlinks?",
-              "options": ["<a>", "<link>", "<h1>", "<div>"],
-              "answer": "<a>",
-              "explanation": "The <a> tag is used to create hyperlinks."
-            },
-            {
-              "type": "quiz",
-              "question": "What does the <img> tag need to display an image?",
-              "options": ["src attribute", "href attribute", "id attribute", "alt only"],
-              "answer": "src attribute",
-              "explanation": "The src attribute defines the image file location."
-            },
-            {
-              "type": "quiz",
-              "question": "Which tag is used to create an unordered list?",
-              "options": ["<ul>", "<ol>", "<li>", "<list>"],
-              "answer": "<ul>",
-              "explanation": "<ul> defines unordered (bulleted) lists."
-            }
-          ]
-        },
-        {
-          "title": "Forms and Inputs",
-          "steps": [
-            {
-              "type": "text",
-              "text": "HTML forms allow you to collect user input using fields, checkboxes, radio buttons, and more."
-            },
-            {
-              "type": "text-video",
-              "text": "This video covers HTML forms and input types in detail.",
-              "content": "https://www.youtube.com/embed/fqeMHSzKX6g"
-            },
-            {
-              "type": "text-code",
-              "text": "Example form structure.",
-              "language": "html",
-              "content": "<form action=\"/submit\">\n  <label for=\"name\">Name:</label>\n  <input type=\"text\" id=\"name\" name=\"name\">\n  <input type=\"submit\" value=\"Submit\">\n</form>"
-            },
-            {
-              "type": "quiz",
-              "question": "Which tag defines a form?",
-              "options": ["<form>", "<input>", "<button>", "<label>"],
-              "answer": "<form>",
-              "explanation": "The <form> tag wraps input fields and handles data submission."
-            },
-            {
-              "type": "quiz",
-              "question": "What does the <label> tag do?",
-              "options": ["Describes input fields", "Submits forms", "Creates checkboxes", "Adds images"],
-              "answer": "Describes input fields",
-              "explanation": "Labels improve accessibility and describe inputs clearly."
-            },
-            {
-              "type": "quiz",
-              "question": "What type attribute makes an input a text field?",
-              "options": ["text", "submit", "checkbox", "radio"],
-              "answer": "text",
-              "explanation": "Using type=\"text\" creates a single-line text input."
-            }
-          ]
-        }
+  "title": "Common HTML Elements",
+  "steps": [
+    {
+      "type": "text",
+      "text": "HTML has many elements like headings, paragraphs, links, images, and lists to organize and present content clearly."
+    },
+    {
+      "type": "text-video",
+      "text": "Watch this video for an overview of common HTML elements.",
+      "content": "https://www.youtube.com/embed/UB1O30fR-EE"
+    },
+    {
+      "type": "text-code",
+      "text": "Example using various elements.",
+      "language": "html",
+      "content": "<h2>About Me</h2>\n<p>I enjoy web development and design.</p>\n<a href=\"https://example.com\">My portfolio</a>\n<img src=\"profile.jpg\" alt=\"Profile picture\">\n<ul>\n  <li>HTML</li>\n  <li>CSS</li>\n</ul>"
+    },
+    {
+      "type": "quiz",
+      "topic": "Common HTML Elements",
+      "question": "Which tag is used for hyperlinks?",
+      "options": ["<a>", "<link>", "<h1>", "<div>"],
+      "answer": "<a>",
+      "explanation": "The <a> tag is used to create hyperlinks."
+    },
+    {
+      "type": "quiz",
+      "topic": "Common HTML Elements",
+      "question": "What does the <img> tag need to display an image?",
+      "options": ["src attribute", "href attribute", "id attribute", "alt only"],
+      "answer": "src attribute",
+      "explanation": "The src attribute defines the image file location."
+    },
+    {
+      "type": "quiz",
+      "topic": "Common HTML Elements",
+      "question": "Which tag is used to create an unordered list?",
+      "options": ["<ul>", "<ol>", "<li>", "<list>"],
+      "answer": "<ul>",
+      "explanation": "<ul> defines unordered (bulleted) lists."
+    }
+  ]
+},
+{
+  "title": "Forms and Inputs",
+  "steps": [
+    {
+      "type": "text",
+      "text": "HTML forms allow you to collect user input using fields, checkboxes, radio buttons, and more."
+    },
+    {
+      "type": "text-video",
+      "text": "This video covers HTML forms and input types in detail.",
+      "content": "https://www.youtube.com/embed/fqeMHSzKX6g"
+    },
+    {
+      "type": "text-code",
+      "text": "Example form structure.",
+      "language": "html",
+      "content": "<form action=\"/submit\">\n  <label for=\"name\">Name:</label>\n  <input type=\"text\" id=\"name\" name=\"name\">\n  <input type=\"submit\" value=\"Submit\">\n</form>"
+    },
+    {
+      "type": "quiz",
+      "topic": "Forms and Inputs",
+      "question": "Which tag defines a form?",
+      "options": ["<form>", "<input>", "<button>", "<label>"],
+      "answer": "<form>",
+      "explanation": "The <form> tag wraps input fields and handles data submission."
+    },
+    {
+      "type": "quiz",
+      "topic": "Forms and Inputs",
+      "question": "What does the <label> tag do?",
+      "options": ["Describes input fields", "Submits forms", "Creates checkboxes", "Adds images"],
+      "answer": "Describes input fields",
+      "explanation": "Labels improve accessibility and describe inputs clearly."
+    },
+    {
+      "type": "quiz",
+      "topic": "Forms and Inputs",
+      "question": "What type attribute makes an input a text field?",
+      "options": ["text", "submit", "checkbox", "radio"],
+      "answer": "text",
+      "explanation": "Using type=\"text\" creates a single-line text input."
+    }
+  ]
+}
+
       ]
     },
     {
@@ -717,240 +607,1396 @@
       "description": "Style your HTML with CSS to make your pages visually appealing.",
       "lessons": [
         {
-          "title": "Introduction to CSS",
-          "steps": [
-            {
-              "type": "text",
-              "text": "CSS stands for Cascading Style Sheets and is used to style HTML elements: changing colors, fonts, spacing, and layout."
-            },
-            {
-              "type": "text-video",
-              "text": "Learn CSS basics and why we use it.",
-              "content": "https://www.youtube.com/embed/yfoY53QXEnI"
-            },
-            {
-              "type": "text-code",
-              "text": "Inline CSS example to color text.",
-              "language": "html",
-              "content": "<p style=\"color: red;\">This text is red.</p>"
-            },
-            {
-              "type": "quiz",
-              "question": "What does CSS stand for?",
-              "options": ["Colorful Style Sheets", "Cascading Style Sheets", "Creative Styling System", "Central Style Syntax"],
-              "answer": "Cascading Style Sheets",
-              "explanation": "CSS stands for Cascading Style Sheets and handles styling."
-            },
-            {
-              "type": "quiz",
-              "question": "Where can you write inline CSS?",
-              "options": ["Inside an element’s style attribute", "In a separate .css file", "Only in <head>", "Only in external sheets"],
-              "answer": "Inside an element’s style attribute",
-              "explanation": "Inline CSS is written directly in the element using the style attribute."
-            },
-            {
-              "type": "quiz",
-              "question": "Which property changes text color?",
-              "options": ["color", "background", "padding", "font-weight"],
-              "answer": "color",
-              "explanation": "The color property defines the text color."
-            }
-          ]
-        },
-        {
-          "title": "Selectors and Properties",
-          "steps": [
-            {
-              "type": "text",
-              "text": "Selectors target HTML elements, and properties define how those elements look (e.g., color, size)."
-            },
-            {
-              "type": "text-video",
-              "text": "Learn how to use classes, IDs, and element selectors in CSS.",
-              "content": "https://www.youtube.com/embed/l1mER1bV0N0"
-            },
-            {
-              "type": "text-code",
-              "text": "Example of class and ID selectors.",
-              "language": "css",
-              "content": ".highlight {\n  background-color: yellow;\n}\n#header {\n  text-align: center;\n}"
-            },
-            {
-              "type": "quiz",
-              "question": "Which symbol is used for class selectors?",
-              "options": [".", "#", "*", "/"],
-              "answer": ".",
-              "explanation": "The dot (.) selects classes in CSS."
-            },
-            {
-              "type": "quiz",
-              "question": "Which symbol is used for ID selectors?",
-              "options": ["#", ".", "*", ":"],
-              "answer": "#",
-              "explanation": "The hash (#) selects IDs in CSS."
-            },
-            {
-              "type": "quiz",
-              "question": "Which selector targets all elements?",
-              "options": ["*", ".", "#", ":"],
-              "answer": "*",
-              "explanation": "The universal selector (*) applies to all elements."
-            }
-          ]
-        }
+  "title": "Introduction to CSS",
+  "steps": [
+    {
+      "type": "text",
+      "text": "CSS stands for Cascading Style Sheets and is used to style HTML elements: changing colors, fonts, spacing, and layout."
+    },
+    {
+      "type": "text-video",
+      "text": "Learn CSS basics and why we use it.",
+      "content": "https://www.youtube.com/embed/yfoY53QXEnI"
+    },
+    {
+      "type": "text-code",
+      "text": "Inline CSS example to color text.",
+      "language": "html",
+      "content": "<p style=\"color: red;\">This text is red.</p>"
+    },
+    {
+      "type": "quiz",
+      "topic": "Introduction to CSS",
+      "question": "What does CSS stand for?",
+      "options": ["Colorful Style Sheets", "Cascading Style Sheets", "Creative Styling System", "Central Style Syntax"],
+      "answer": "Cascading Style Sheets",
+      "explanation": "CSS stands for Cascading Style Sheets and handles styling."
+    },
+    {
+      "type": "quiz",
+      "topic": "Introduction to CSS",
+      "question": "Where can you write inline CSS?",
+      "options": ["Inside an element’s style attribute", "In a separate .css file", "Only in <head>", "Only in external sheets"],
+      "answer": "Inside an element’s style attribute",
+      "explanation": "Inline CSS is written directly in the element using the style attribute."
+    },
+    {
+      "type": "quiz",
+      "topic": "Introduction to CSS",
+      "question": "Which property changes text color?",
+      "options": ["color", "background", "padding", "font-weight"],
+      "answer": "color",
+      "explanation": "The color property defines the text color."
+    }
+  ]
+},
+       {
+  "title": "Selectors and Properties",
+  "steps": [
+    {
+      "type": "text",
+      "text": "Selectors target HTML elements, and properties define how those elements look (e.g., color, size)."
+    },
+    {
+      "type": "text-video",
+      "text": "Learn how to use classes, IDs, and element selectors in CSS.",
+      "content": "https://www.youtube.com/embed/l1mER1bV0N0"
+    },
+    {
+      "type": "text-code",
+      "text": "Example of class and ID selectors.",
+      "language": "css",
+      "content": ".highlight {\n  background-color: yellow;\n}\n#header {\n  text-align: center;\n}"
+    },
+    {
+      "type": "quiz",
+      "topic": "Selectors and Properties",
+      "question": "Which symbol is used for class selectors?",
+      "options": [".", "#", "*", "/"],
+      "answer": ".",
+      "explanation": "The dot (.) selects classes in CSS."
+    },
+    {
+      "type": "quiz",
+      "topic": "Selectors and Properties",
+      "question": "Which symbol is used for ID selectors?",
+      "options": ["#", ".", "*", ":"],
+      "answer": "#",
+      "explanation": "The hash (#) selects IDs in CSS."
+    },
+    {
+      "type": "quiz",
+      "topic": "Selectors and Properties",
+      "question": "Which selector targets all elements?",
+      "options": ["*", ".", "#", ":"],
+      "answer": "*",
+      "explanation": "The universal selector (*) applies to all elements."
+    }
+  ]
+}
+
       ]
     },
     {
   "title": "Summary Quiz",
   "description": "Test your knowledge of HTML & CSS concepts.",
   "lessons": [
+{
+  "title": "Final Quiz",
+  "steps": [
+    {
+      "type": "quiz",
+      "topic": "Common HTML Elements",
+      "question": "What tag creates a link to another page?",
+      "options": ["<a>", "<link>", "<div>", "<p>"],
+      "answer": "<a>",
+      "explanation": "The <a> tag is used for links."
+    },
+    {
+      "type": "quiz",
+      "topic": "Introduction to CSS",
+      "question": "Which property controls text color in CSS?",
+      "options": ["color", "font-size", "background", "border"],
+      "answer": "color",
+      "explanation": "The color property changes text color."
+    },
+    {
+      "type": "quiz",
+      "topic": "Selectors and Properties",
+      "question": "Which symbol is used to select classes in CSS?",
+      "options": [".", "#", "*", ":"],
+      "answer": ".",
+      "explanation": "Classes use a dot (.) in CSS."
+    },
+    {
+      "type": "quiz",
+      "topic": "Common HTML Elements",
+      "question": "Which tag is used for images?",
+      "options": ["<img>", "<media>", "<src>", "<picture>"],
+      "answer": "<img>",
+      "explanation": "The <img> tag displays images."
+    },
+    {
+      "type": "quiz",
+      "topic": "Forms and Inputs",
+      "question": "Which tag defines a form?",
+      "options": ["<form>", "<input>", "<button>", "<label>"],
+      "answer": "<form>",
+      "explanation": "<form> is used to create forms."
+    },
+    {
+      "type": "quiz",
+      "topic": "Introduction to HTML",
+      "question": "What does HTML stand for?",
+      "options": [
+        "Hyper Text Markup Language",
+        "Home Tool Markup Language",
+        "Hyperlinks and Text Markup Language",
+        "Hyper Tool Multi Language"
+      ],
+      "answer": "Hyper Text Markup Language",
+      "explanation": "HTML stands for Hyper Text Markup Language."
+    },
+    {
+      "type": "quiz",
+      "topic": "Common HTML Elements",
+      "question": "What is the correct tag for the largest heading?",
+      "options": ["<h1>", "<heading>", "<head>", "<h6>"],
+      "answer": "<h1>",
+      "explanation": "<h1> defines the most important heading."
+    },
+    {
+      "type": "quiz",
+      "topic": "Common HTML Elements",
+      "question": "What HTML element is used to define a paragraph?",
+      "options": ["<p>", "<para>", "<text>", "<body>"],
+      "answer": "<p>",
+      "explanation": "<p> is used to define a paragraph."
+    },
+    {
+      "type": "quiz",
+      "topic": "Common HTML Elements",
+      "question": "Which tag defines an unordered list?",
+      "options": ["<ul>", "<ol>", "<li>", "<list>"],
+      "answer": "<ul>",
+      "explanation": "<ul> is used to define an unordered list."
+    },
+    {
+      "type": "quiz",
+      "topic": "Common HTML Elements",
+      "question": "Which tag defines a list item?",
+      "options": ["<li>", "<ul>", "<item>", "<list>"],
+      "answer": "<li>",
+      "explanation": "<li> is used to define list items."
+    },
+    {
+      "type": "quiz",
+      "topic": "Common HTML Elements",
+      "question": "What tag is used to create a table row?",
+      "options": ["<tr>", "<td>", "<row>", "<table>"],
+      "answer": "<tr>",
+      "explanation": "<tr> defines a row in a table."
+    },
+    {
+      "type": "quiz",
+      "topic": "Common HTML Elements",
+      "question": "What attribute provides alt text for images?",
+      "options": ["alt", "title", "src", "description"],
+      "answer": "alt",
+      "explanation": "The alt attribute provides alternative text for images."
+    },
+    {
+      "type": "quiz",
+      "topic": "Selectors and Properties",
+      "question": "How do you apply a CSS rule to an element with id 'main'?",
+      "options": ["#main", ".main", "main", "*main"],
+      "answer": "#main",
+      "explanation": "IDs in CSS use a hash (#) prefix."
+    },
+    {
+      "type": "quiz",
+      "topic": "Selectors and Properties",
+      "question": "Which CSS property controls the space outside an element?",
+      "options": ["margin", "padding", "border", "spacing"],
+      "answer": "margin",
+      "explanation": "Margin sets the space outside the element."
+    },
+    {
+      "type": "quiz",
+      "topic": "Introduction to CSS",
+      "question": "Which property is used to change font size?",
+      "options": ["font-size", "text-size", "size", "font-style"],
+      "answer": "font-size",
+      "explanation": "Use font-size to change text size."
+    },
+    {
+      "type": "quiz",
+      "topic": "Introduction to CSS",
+      "question": "What is the outermost layer in the CSS box model?",
+      "options": ["margin", "padding", "border", "content"],
+      "answer": "margin",
+      "explanation": "The margin is the outermost layer in the box model."
+    },
+    {
+      "type": "quiz",
+      "topic": "Selectors and Properties",
+      "question": "Which CSS layout system is best for 1D layouts?",
+      "options": ["Flexbox", "Grid", "Float", "Table"],
+      "answer": "Flexbox",
+      "explanation": "Flexbox is ideal for 1-dimensional layouts."
+    },
+    {
+      "type": "quiz",
+      "topic": "Common HTML Elements",
+      "question": "Which tag represents a semantic section in HTML5?",
+      "options": ["<section>", "<div>", "<span>", "<main>"],
+      "answer": "<section>",
+      "explanation": "<section> represents a standalone section."
+    },
+    {
+      "type": "quiz",
+      "topic": "Common HTML Elements",
+      "question": "Which tag is used for emphasized text?",
+      "options": ["<em>", "<strong>", "<b>", "<i>"],
+      "answer": "<em>",
+      "explanation": "<em> emphasizes text semantically."
+    },
+    {
+      "type": "quiz",
+      "topic": "Selectors and Properties",
+      "question": "Which rule applies styles to screen widths ≤ 600px?",
+      "options": [
+        "@media only screen and (max-width: 600px)",
+        "@media screen-min 600px",
+        "@responsive 600px",
+        "@screen and max-600"
+      ],
+      "answer": "@media only screen and (max-width: 600px)",
+      "explanation": "Use media queries to apply styles for smaller screens."
+    }
+  ]
+}
+
+  ]
+}
+  ]
+},
+{
+  "title": "JavaScript",
+  "description": "Learn JavaScript from scratch. This course will guide you through the basics of variables, data types, functions, and control flow.",
+  "sections": [
+    {
+      "title": "JavaScript Basics",
+      "description": "Understand how JavaScript powers interactivity on websites.",
+      "lessons": [
+        {
+          "title": "Introduction to JavaScript",
+          "steps": [
+            {
+              "type": "text",
+              "text": "JavaScript is a programming language used to create dynamic content on web pages — like image sliders, form validation, and interactive features."
+            },
+            {
+              "type": "text",
+              "text": "JavaScript runs in the browser and can update both HTML and CSS in real time using the DOM (Document Object Model)."
+            },
+            {
+              "type": "text-video",
+              "text": "This video explains how JavaScript fits into modern web development.",
+              "content": "https://www.youtube.com/embed/hdI2bqOjy3c"
+            },
+            {
+              "type": "text-code",
+              "text": "This is how you display a message in the browser's console using JavaScript.",
+              "language": "javascript",
+              "content": "console.log('Hello, world!');"
+            },
+            {
+              "type": "quiz",
+              "topic": "Introduction to JavaScript",
+              "question": "What is JavaScript mainly used for?",
+              "options": ["Styling websites", "Structuring content", "Making websites interactive", "Hosting websites"],
+              "answer": "Making websites interactive",
+              "explanation": "JavaScript adds interactivity to web pages."
+            },
+            {
+              "type": "quiz",
+              "topic": "Introduction to JavaScript",
+              "question": "Where does JavaScript run?",
+              "options": ["Only on servers", "In web browsers", "Only in databases", "Only in HTML files"],
+              "answer": "In web browsers",
+              "explanation": "JavaScript code runs in the user's browser."
+            },
+            {
+              "type": "quiz",
+              "topic": "Introduction to JavaScript",
+              "question": "Which JavaScript function prints to the browser console?",
+              "options": ["print()", "log()", "console.log()", "alert()"],
+              "answer": "console.log()",
+              "explanation": "console.log() sends output to the browser's console."
+            }
+          ]
+        },
+        {
+          "title": "Creating Variables",
+          "steps": [
+            {
+              "type": "text",
+              "text": "In JavaScript, variables store data values. You can declare them using `let`, `const`, or the older `var` keyword."
+            },
+            {
+              "type": "text",
+              "text": "`let` allows you to reassign values, while `const` creates a constant that cannot be changed after it's assigned."
+            },
+            {
+              "type": "text-video",
+              "text": "Watch this video to understand how to declare variables in JavaScript.",
+              "content": "https://www.youtube.com/embed/Bv_5Zv5c-Ts"
+            },
+            {
+              "type": "text-code",
+              "text": "Example of variable declarations using `let` and `const`.",
+              "language": "javascript",
+              "content": "let age = 20;\nconst name = 'Ali';\nage = 21; // This is allowed\nname = 'John'; // ❌ Error: Cannot reassign a const"
+            },
+            {
+              "type": "quiz",
+              "topic": "Creating Variables",
+              "question": "Which keyword is used to declare a constant variable?",
+              "options": ["let", "var", "const", "static"],
+              "answer": "const",
+              "explanation": "`const` is used when the value should not be reassigned."
+            },
+            {
+              "type": "quiz",
+              "topic": "Creating Variables",
+              "question": "Which variable declaration allows reassignment?",
+              "options": ["const", "let", "static", "final"],
+              "answer": "let",
+              "explanation": "`let` allows you to change the value later."
+            },
+            {
+              "type": "quiz",
+              "topic": "Creating Variables",
+              "question": "What will this code output?\n\nlet x = 5;\nx = 10;\nconsole.log(x);",
+              "options": ["5", "10", "undefined", "Error"],
+              "answer": "10",
+              "explanation": "The variable x was reassigned to 10."
+            }
+          ]
+        },
+        {
+          "title": "Basic Operations",
+          "steps": [
+            {
+              "type": "text",
+              "text": "JavaScript supports arithmetic operations like addition (+), subtraction (-), multiplication (*), division (/), and modulus (%)."
+            },
+            {
+              "type": "text-video",
+              "text": "Watch this to understand how JavaScript handles basic math operations.",
+              "content": "https://www.youtube.com/embed/kR2DdJYVbFA"
+            },
+            {
+              "type": "text-code",
+              "text": "Examples of arithmetic operations in JavaScript:",
+              "language": "javascript",
+              "content": "let a = 10;\nlet b = 3;\nconsole.log(a + b); // 13\nconsole.log(a - b); // 7\nconsole.log(a * b); // 30\nconsole.log(a / b); // 3.33\nconsole.log(a % b); // 1"
+            },
+            {
+              "type": "quiz",
+              "topic": "Basic Operations",
+              "question": "What will `console.log(4 + 5);` print?",
+              "options": ["9", "45", "Error", "undefined"],
+              "answer": "9",
+              "explanation": "4 + 5 equals 9 in arithmetic."
+            },
+            {
+              "type": "quiz",
+              "topic": "Basic Operations",
+              "question": "What does the `%` operator do in JavaScript?",
+              "options": ["Division", "Exponentiation", "Modulus", "Subtraction"],
+              "answer": "Modulus",
+              "explanation": "Modulus returns the remainder of division."
+            },
+            {
+              "type": "quiz",
+              "topic": "Basic Operations",
+              "question": "What will `console.log(10 / 2);` output?",
+              "options": ["5", "0", "2", "10"],
+              "answer": "5",
+              "explanation": "10 divided by 2 is 5."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Control Flow",
+      "description": "Learn how to make decisions in code using if statements and loops.",
+      "lessons": [
+        {
+          "title": "If Statements",
+          "steps": [
+            {
+              "type": "text",
+              "text": "JavaScript uses if statements to control the flow of code based on conditions. This helps your program make decisions."
+            },
+            {
+              "type": "text-video",
+              "text": "This video explains how if-else conditions work in JavaScript.",
+              "content": "https://www.youtube.com/embed/fjXEVaBNz6I"
+            },
+            {
+              "type": "text-code",
+              "text": "Example of if-else logic:",
+              "language": "javascript",
+              "content": "let score = 85;\nif (score >= 90) {\n  console.log(\"Grade: A\");\n} else if (score >= 75) {\n  console.log(\"Grade: B\");\n} else {\n  console.log(\"Grade: C or below\");\n}"
+            },
+            {
+              "type": "quiz",
+              "topic": "If Statements",
+              "question": "What does an `if` statement do in JavaScript?",
+              "options": ["Loops through items", "Executes code conditionally", "Defines variables", "Creates functions"],
+              "answer": "Executes code conditionally",
+              "explanation": "`if` checks a condition and runs code only if it's true."
+            },
+            {
+              "type": "quiz",
+              "topic": "If Statements",
+              "question": "Which keyword follows an `if` block for alternate logic?",
+              "options": ["while", "for", "else", "switch"],
+              "answer": "else",
+              "explanation": "`else` defines code to run when the `if` condition is false."
+            },
+            {
+              "type": "quiz",
+              "topic": "If Statements",
+              "question": "What will this code print?\n\nlet age = 20;\nif (age >= 18) {\n  console.log(\"Adult\");\n}",
+              "options": ["Nothing", "Teenager", "Adult", "Error"],
+              "answer": "Adult",
+              "explanation": "Since age is 20 (>= 18), the condition is true."
+            }
+          ]
+        },
+        {
+          "title": "Loops",
+          "steps": [
+            {
+              "type": "text",
+              "text": "Loops let you repeat code automatically. JavaScript supports `for`, `while`, and `do...while` loops."
+            },
+            {
+              "type": "text-video",
+              "text": "This video explains how loops work in JavaScript with examples.",
+              "content": "https://www.youtube.com/embed/s9wW2PpJsmQ"
+            },
+            {
+              "type": "text-code",
+              "text": "Example using a `for` loop:",
+              "language": "javascript",
+              "content": "for (let i = 0; i < 5; i++) {\n  console.log(\"Number: \" + i);\n}"
+            },
+            {
+              "type": "quiz",
+              "topic": "Loops",
+              "question": "What is the purpose of a loop in JavaScript?",
+              "options": ["To perform actions only once", "To repeat actions automatically", "To create conditions", "To store values"],
+              "answer": "To repeat actions automatically",
+              "explanation": "Loops execute code repeatedly while a condition is true."
+            },
+            {
+              "type": "quiz",
+              "topic": "Loops",
+              "question": "Which loop checks the condition before running?",
+              "options": ["do...while", "if", "for", "switch"],
+              "answer": "for",
+              "explanation": "The `for` loop checks the condition before each iteration."
+            },
+            {
+              "type": "quiz",
+              "topic": "Loops",
+              "question": "What will this loop print?\n\nfor (let i = 0; i < 3; i++) {\n  console.log(i);\n}",
+              "options": ["1 2 3", "0 1 2", "0 1 2 3", "undefined"],
+              "answer": "0 1 2",
+              "explanation": "The loop prints 0, 1, 2. It stops before i reaches 3."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Functions",
+      "description": "Learn how to create reusable blocks of code using functions.",
+      "lessons": [
+        {
+          "title": "Defining Functions",
+          "steps": [
+            {
+              "type": "text",
+              "text": "Functions are reusable blocks of code. You define a function once and call it whenever needed."
+            },
+            {
+              "type": "text-video",
+              "text": "This video shows how to define and use functions in JavaScript.",
+              "content": "https://www.youtube.com/embed/xR4B07gHfN8"
+            },
+            {
+              "type": "text-code",
+              "text": "Example of a function definition and call:",
+              "language": "javascript",
+              "content": "function greet(name) {\n  console.log(\"Hello, \" + name + \"!\");\n}\n\ngreet(\"Ali\");"
+            },
+            {
+              "type": "quiz",
+              "topic": "Defining Functions",
+              "question": "What keyword is used to define a function in JavaScript?",
+              "options": ["define", "func", "function", "method"],
+              "answer": "function",
+              "explanation": "JavaScript functions start with the `function` keyword."
+            },
+            {
+              "type": "quiz",
+              "topic": "Defining Functions",
+              "question": "What is the output of `greet('Ava')` if greet is defined as `function greet(name) { console.log('Hi ' + name); }`?",
+              "options": ["Hi", "Ava", "Hi Ava", "greet"],
+              "answer": "Hi Ava",
+              "explanation": "It prints 'Hi Ava' by combining the string with the parameter."
+            },
+            {
+              "type": "quiz",
+              "topic": "Defining Functions",
+              "question": "What are parameters in a function?",
+              "options": ["The function name", "The returned result", "Inputs to the function", "Loop counters"],
+              "answer": "Inputs to the function",
+              "explanation": "Parameters are placeholders for values passed into the function."
+            }
+          ]
+        }
+      ]
+    },
+{
+  "title": "Summary Quiz",
+  "description": "Final review of all JavaScript concepts.",
+  "lessons": [
     {
       "title": "Final Quiz",
       "steps": [
         {
           "type": "quiz",
-          "question": "What tag creates a link to another page?",
-          "options": ["<a>", "<link>", "<div>", "<p>"],
-          "answer": "<a>",
-          "explanation": "The <a> tag is used for links."
+          "topic": "Creating Variables",
+          "question": "What keyword is used to declare a variable in JavaScript?",
+          "options": ["var", "let", "const", "All of the above"],
+          "answer": "All of the above",
+          "explanation": "`var`, `let`, and `const` are all used to declare variables."
         },
         {
           "type": "quiz",
-          "question": "Which property controls text color in CSS?",
-          "options": ["color", "font-size", "background", "border"],
-          "answer": "color",
-          "explanation": "The color property changes text color."
+          "topic": "Data Types",
+          "question": "Which of the following is a string?",
+          "options": ["42", "'hello'", "true", "null"],
+          "answer": "'hello'",
+          "explanation": "Strings are surrounded by quotes."
         },
         {
           "type": "quiz",
-          "question": "Which symbol is used to select classes in CSS?",
-          "options": [".", "#", "*", ":"],
-          "answer": ".",
-          "explanation": "Classes use a dot (.) in CSS."
+          "topic": "Basic Operations",
+          "question": "What operator is used to add numbers?",
+          "options": ["+", "-", "*", "/"],
+          "answer": "+",
+          "explanation": "`+` adds two numbers."
         },
         {
           "type": "quiz",
-          "question": "Which tag is used for images?",
-          "options": ["<img>", "<media>", "<src>", "<picture>"],
-          "answer": "<img>",
-          "explanation": "The <img> tag displays images."
+          "topic": "Data Types",
+          "question": "What will `typeof true` return?",
+          "options": ["boolean", "string", "object", "undefined"],
+          "answer": "boolean",
+          "explanation": "The `typeof` operator returns the data type, and `true` is a boolean."
         },
         {
           "type": "quiz",
-          "question": "Which tag defines a form?",
-          "options": ["<form>", "<input>", "<button>", "<label>"],
-          "answer": "<form>",
-          "explanation": "<form> is used to create forms."
+          "topic": "Comments",
+          "question": "Which of the following creates a comment in JavaScript?",
+          "options": ["<!-- comment -->", "// comment", "# comment", "** comment **"],
+          "answer": "// comment",
+          "explanation": "`//` is used for single-line comments in JavaScript."
         },
         {
           "type": "quiz",
-          "question": "What does HTML stand for?",
-          "options": ["Hyper Text Markup Language", "Home Tool Markup Language", "Hyperlinks and Text Markup Language", "Hyper Tool Multi Language"],
-          "answer": "Hyper Text Markup Language",
-          "explanation": "HTML stands for Hyper Text Markup Language."
+          "topic": "Basic Operations",
+          "question": "What does `===` check in JavaScript?",
+          "options": ["Value only", "Type only", "Value and type", "Nothing"],
+          "answer": "Value and type",
+          "explanation": "`===` checks both value and data type."
         },
         {
           "type": "quiz",
-          "question": "What is the correct tag for the largest heading?",
-          "options": ["<h1>", "<heading>", "<head>", "<h6>"],
-          "answer": "<h1>",
-          "explanation": "<h1> defines the most important heading."
+          "topic": "Loops",
+          "question": "Which loop repeats while a condition is true?",
+          "options": ["for", "while", "if", "switch"],
+          "answer": "while",
+          "explanation": "A `while` loop continues while its condition is true."
         },
         {
           "type": "quiz",
-          "question": "What HTML element is used to define a paragraph?",
-          "options": ["<p>", "<para>", "<text>", "<body>"],
-          "answer": "<p>",
-          "explanation": "<p> is used to define a paragraph."
+          "topic": "Defining Functions",
+          "question": "Which keyword is used to define a function?",
+          "options": ["def", "function", "func", "method"],
+          "answer": "function",
+          "explanation": "`function` is the correct keyword in JavaScript."
         },
         {
           "type": "quiz",
-          "question": "Which tag defines an unordered list?",
-          "options": ["<ul>", "<ol>", "<li>", "<list>"],
-          "answer": "<ul>",
-          "explanation": "<ul> is used to define an unordered list."
+          "topic": "Data Types",
+          "question": "What is the output of: `console.log(3 + '3')`?",
+          "options": ["6", "33", "Error", "NaN"],
+          "answer": "33",
+          "explanation": "The number 3 is converted to a string and concatenated: '3' + '3'."
         },
         {
           "type": "quiz",
-          "question": "Which tag defines a list item?",
-          "options": ["<li>", "<ul>", "<item>", "<list>"],
-          "answer": "<li>",
-          "explanation": "<li> is used to define list items."
+          "topic": "Data Types",
+          "question": "What is the correct syntax to create an array?",
+          "options": ["{}", "()", "[]", "<>"],
+          "answer": "[]",
+          "explanation": "Square brackets `[]` define an array."
         },
         {
           "type": "quiz",
-          "question": "What tag is used to create a table row?",
-          "options": ["<tr>", "<td>", "<row>", "<table>"],
-          "answer": "<tr>",
-          "explanation": "<tr> defines a row in a table."
+          "topic": "If Statements",
+          "question": "Which of the following is a valid if statement?",
+          "options": ["if x > 5 then", "if x > 5:", "if (x > 5)", "if x > 5 {}"],
+          "answer": "if (x > 5)",
+          "explanation": "JavaScript `if` statements use parentheses for conditions."
         },
         {
           "type": "quiz",
-          "question": "What attribute provides alt text for images?",
-          "options": ["alt", "title", "src", "description"],
-          "answer": "alt",
-          "explanation": "The alt attribute provides alternative text for images."
+          "topic": "Loops",
+          "question": "What keyword stops a loop early?",
+          "options": ["exit", "break", "stop", "halt"],
+          "answer": "break",
+          "explanation": "`break` exits a loop early."
         },
         {
           "type": "quiz",
-          "question": "How do you apply a CSS rule to an element with id 'main'?",
-          "options": ["#main", ".main", "main", "*main"],
-          "answer": "#main",
-          "explanation": "IDs in CSS use a hash (#) prefix."
+          "topic": "Debugging",
+          "question": "Which function displays a message in the browser console?",
+          "options": ["console.write()", "log()", "console.log()", "print()"],
+          "answer": "console.log()",
+          "explanation": "`console.log()` prints output to the browser console."
         },
         {
           "type": "quiz",
-          "question": "Which CSS property controls the space outside an element?",
-          "options": ["margin", "padding", "border", "spacing"],
-          "answer": "margin",
-          "explanation": "Margin sets the space outside the element."
+          "topic": "Basic Operations",
+          "question": "What will `3 + 2 * 2` evaluate to?",
+          "options": ["10", "7", "8", "9"],
+          "answer": "7",
+          "explanation": "Order of operations: 2*2=4, 3+4=7."
         },
         {
           "type": "quiz",
-          "question": "Which property is used to change font size?",
-          "options": ["font-size", "text-size", "size", "font-style"],
-          "answer": "font-size",
-          "explanation": "Use font-size to change text size."
+          "topic": "Data Types",
+          "question": "What is the value of `typeof undefined`?",
+          "options": ["undefined", "null", "false", "object"],
+          "answer": "undefined",
+          "explanation": "The `typeof` operator returns `undefined` for an undefined variable."
         },
         {
           "type": "quiz",
-          "question": "What is the outermost layer in the CSS box model?",
-          "options": ["margin", "padding", "border", "content"],
-          "answer": "margin",
-          "explanation": "The margin is the outermost layer in the box model."
+          "topic": "Basic Operations",
+          "question": "Which operator is used to assign a value?",
+          "options": ["=", "==", "===", ":="],
+          "answer": "=",
+          "explanation": "`=` assigns a value to a variable."
         },
         {
           "type": "quiz",
-          "question": "Which CSS layout system is best for 1D layouts?",
-          "options": ["Flexbox", "Grid", "Float", "Table"],
-          "answer": "Flexbox",
-          "explanation": "Flexbox is ideal for 1-dimensional layouts."
+          "topic": "Creating Variables",
+          "question": "How do you create a constant variable?",
+          "options": ["let x = 5", "var x = 5", "const x = 5", "constant x = 5"],
+          "answer": "const x = 5",
+          "explanation": "`const` is used for variables that shouldn't change."
         },
         {
           "type": "quiz",
-          "question": "Which tag represents a semantic section in HTML5?",
-          "options": ["<section>", "<div>", "<span>", "<main>"],
-          "answer": "<section>",
-          "explanation": "<section> represents a standalone section."
+          "topic": "Data Types",
+          "question": "Which of these is a boolean?",
+          "options": ["'true'", "yes", "1", "false"],
+          "answer": "false",
+          "explanation": "`false` is the JavaScript boolean literal."
         },
         {
           "type": "quiz",
-          "question": "Which tag is used for emphasized text?",
-          "options": ["<em>", "<strong>", "<b>", "<i>"],
-          "answer": "<em>",
-          "explanation": "<em> emphasizes text semantically."
+          "topic": "Defining Functions",
+          "question": "How do you call a function named `add()`?",
+          "options": ["call add", "add", "add[]", "add()"],
+          "answer": "add()",
+          "explanation": "Functions are executed with parentheses: `add()`."
         },
         {
           "type": "quiz",
-          "question": "Which rule applies styles to screen widths ≤ 600px?",
+          "topic": "Data Types",
+          "question": "What does `NaN` mean?",
+          "options": ["Not a Number", "Null and None", "Next available Number", "Negative"],
+          "answer": "Not a Number",
+          "explanation": "`NaN` is a JavaScript value meaning Not a Number."
+        }
+      ]
+    }
+  ]
+}
+  ]
+},
+{
+  "title": "SQL",
+  "description": "Learn SQL from the ground up. This course teaches you how to create and manipulate databases.",
+  "sections": [
+    {
+      "title": "SQL Basics",
+      "description": "Start with foundational concepts like what SQL is, how to create tables, and insert data.",
+      "lessons": [
+        {
+          "title": "Introduction to SQL",
+          "steps": [
+            {
+              "type": "text",
+              "text": "SQL (Structured Query Language) is used to communicate with databases. It's the standard language for relational database management systems."
+            },
+            {
+              "type": "text",
+              "text": "You can use SQL to create tables, insert data, update records, and run queries to retrieve useful information."
+            },
+            {
+              "type": "text-video",
+              "text": "This video explains what SQL is and why it's used in applications.",
+              "content": "https://www.youtube.com/embed/27axs9dO7AE"
+            },
+            {
+              "type": "text-code",
+              "text": "Here's a simple SQL query that selects all records from a table called `students`:",
+              "language": "sql",
+              "content": "SELECT * FROM students;"
+            },
+            {
+              "type": "quiz",
+              "topic": "Introduction to SQL",
+              "question": "What does SQL stand for?",
+              "options": ["Structured Query Language", "Simple Query Language", "Sequential Query Language", "Strong Query Logic"],
+              "answer": "Structured Query Language",
+              "explanation": "SQL stands for Structured Query Language, used for managing relational databases."
+            },
+            {
+              "type": "quiz",
+              "topic": "Introduction to SQL",
+              "question": "Which SQL statement retrieves data from a database?",
+              "options": ["INSERT", "SELECT", "DELETE", "UPDATE"],
+              "answer": "SELECT",
+              "explanation": "The SELECT statement retrieves data from a database."
+            },
+            {
+              "type": "quiz",
+              "topic": "Introduction to SQL",
+              "question": "What symbol is used to end an SQL statement?",
+              "options": [";", ":", ".", ","],
+              "answer": ";",
+              "explanation": "Most SQL statements end with a semicolon."
+            }
+          ]
+        },
+        {
+          "title": "Creating Tables",
+          "steps": [
+            {
+              "type": "text",
+              "text": "You can create a new table in a database using the CREATE TABLE statement."
+            },
+            {
+              "type": "text",
+              "text": "Each column in the table must have a name and a data type such as INT, VARCHAR, DATE, etc."
+            },
+            {
+              "type": "text-video",
+              "text": "Watch this video to learn how to create tables in SQL.",
+              "content": "https://www.youtube.com/embed/X4gRxKp7Yac"
+            },
+            {
+              "type": "text-code",
+              "text": "Example of a table creation query:",
+              "language": "sql",
+              "content": "CREATE TABLE students (\n  id INT PRIMARY KEY,\n  name VARCHAR(50),\n  age INT\n);"
+            },
+            {
+              "type": "quiz",
+              "topic": "Creating Tables",
+              "question": "What does the CREATE TABLE command do?",
+              "options": ["Adds data to a table", "Creates a new database", "Creates a new table", "Deletes a table"],
+              "answer": "Creates a new table",
+              "explanation": "CREATE TABLE is used to define a new table structure."
+            },
+            {
+              "type": "quiz",
+              "topic": "Creating Tables",
+              "question": "Which data type is used for text?",
+              "options": ["INT", "VARCHAR", "DATE", "BOOLEAN"],
+              "answer": "VARCHAR",
+              "explanation": "VARCHAR is used for variable-length text."
+            },
+            {
+              "type": "quiz",
+              "topic": "Creating Tables",
+              "question": "Which column is typically used as a unique identifier?",
+              "options": ["name", "id", "age", "date"],
+              "answer": "id",
+              "explanation": "The 'id' column often acts as the PRIMARY KEY to uniquely identify records."
+            }
+          ]
+        },
+        {
+          "title": "Inserting Data",
+          "steps": [
+            {
+              "type": "text",
+              "text": "To add data to a table, you use the INSERT INTO statement."
+            },
+            {
+              "type": "text",
+              "text": "You can insert one row at a time or multiple rows using VALUES."
+            },
+            {
+              "type": "text-video",
+              "text": "This video explains how to insert data into your SQL tables.",
+              "content": "https://www.youtube.com/embed/e1IyzVyrLSU"
+            },
+            {
+              "type": "text-code",
+              "text": "Example of inserting a record into the `students` table:",
+              "language": "sql",
+              "content": "INSERT INTO students (id, name, age)\nVALUES (1, 'Ali', 19);"
+            },
+            {
+              "type": "quiz",
+              "topic": "Inserting Data",
+              "question": "Which SQL command is used to insert data?",
+              "options": ["SELECT", "INSERT INTO", "UPDATE", "CREATE"],
+              "answer": "INSERT INTO",
+              "explanation": "INSERT INTO adds new records to a table."
+            },
+            {
+              "type": "quiz",
+              "topic": "Inserting Data",
+              "question": "How do you insert multiple values into a table?",
+              "options": ["VALUES clause", "ADD clause", "MERGE clause", "JOIN clause"],
+              "answer": "VALUES clause",
+              "explanation": "The VALUES keyword is used to specify the values to insert."
+            },
+            {
+              "type": "quiz",
+              "topic": "Inserting Data",
+              "question": "Which of the following is a correct syntax?",
+              "options": [
+                "INSERT students (1, 'John', 20);",
+                "INSERT INTO students VALUES (1, 'John', 20);",
+                "INSERT INTO students (1, 'John', 20);",
+                "ADD TO students VALUES (1, 'John', 20);"
+              ],
+              "answer": "INSERT INTO students VALUES (1, 'John', 20);",
+              "explanation": "That’s the correct syntax when you don't list the column names explicitly."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Querying Data",
+      "description": "Learn how to select and filter data using SQL queries.",
+      "lessons": [
+        {
+          "title": "SELECT Statements",
+          "steps": [
+            {
+              "type": "text",
+              "text": "The SELECT statement retrieves data from one or more tables."
+            },
+            {
+              "type": "text-video",
+              "text": "Learn how to write SELECT statements with this video.",
+              "content": "https://www.youtube.com/embed/Tt08KmFfIYQ"
+            },
+            {
+              "type": "text-code",
+              "text": "Example: Retrieve all students.",
+              "language": "sql",
+              "content": "SELECT * FROM students;"
+            },
+            {
+              "type": "quiz",
+              "topic": "SELECT Statements",
+              "question": "What does `SELECT *` do?",
+              "options": ["Deletes all rows", "Selects all columns", "Creates a table", "Filters data"],
+              "answer": "Selects all columns",
+              "explanation": "`*` means all columns in SQL."
+            },
+            {
+              "type": "quiz",
+              "topic": "SELECT Statements",
+              "question": "Which keyword comes before a table name in a SELECT query?",
+              "options": ["FROM", "WHERE", "INTO", "WITH"],
+              "answer": "FROM",
+              "explanation": "The FROM clause specifies the table name in a SELECT statement."
+            },
+            {
+              "type": "quiz",
+              "topic": "SELECT Statements",
+              "question": "What does this return? `SELECT name FROM students;`",
+              "options": ["All rows and all columns", "Only names of students", "Only student IDs", "All students under 18"],
+              "answer": "Only names of students",
+              "explanation": "It returns just the 'name' column."
+            }
+          ]
+        },
+        {
+          "title": "WHERE Clause",
+          "steps": [
+            {
+              "type": "text",
+              "text": "Use the WHERE clause to filter records that meet a condition."
+            },
+            {
+              "type": "text-video",
+              "text": "This video shows how to use WHERE in SQL.",
+              "content": "https://www.youtube.com/embed/9Pzj7Aj25lw"
+            },
+            {
+              "type": "text-code",
+              "text": "Example: Select students older than 18.",
+              "language": "sql",
+              "content": "SELECT * FROM students WHERE age > 18;"
+            },
+            {
+              "type": "quiz",
+              "topic": "WHERE Clause",
+              "question": "What does the WHERE clause do?",
+              "options": ["Sorts data", "Filters data", "Updates data", "Joins tables"],
+              "answer": "Filters data",
+              "explanation": "WHERE filters records based on a condition."
+            },
+            {
+              "type": "quiz",
+              "topic": "WHERE Clause",
+              "question": "Which of the following is valid?",
+              "options": [
+                "WHERE age > 18 SELECT * FROM students;",
+                "SELECT * FROM students WHERE age > 18;",
+                "SELECT age FROM students IF age > 18;",
+                "FILTER age > 18 FROM students;"
+              ],
+              "answer": "SELECT * FROM students WHERE age > 18;",
+              "explanation": "Correct order is SELECT... FROM... WHERE..."
+            },
+            {
+              "type": "quiz",
+              "topic": "WHERE Clause",
+              "question": "What does `=` mean in SQL?",
+              "options": ["Assign a value", "Check for equality", "Compare columns", "Check for NULL"],
+              "answer": "Check for equality",
+              "explanation": "The equals sign `=` compares two values in SQL."
+            }
+          ]
+        },
+        {
+          "title": "ORDER BY and LIMIT",
+          "steps": [
+            {
+              "type": "text",
+              "text": "`ORDER BY` is used to sort results. `LIMIT` restricts how many rows you get back."
+            },
+            {
+              "type": "text-video",
+              "text": "This video covers how ORDER BY and LIMIT work.",
+              "content": "https://www.youtube.com/embed/h0nxCDiD-zg"
+            },
+            {
+              "type": "text-code",
+              "text": "Example: Get the top 5 oldest students:",
+              "language": "sql",
+              "content": "SELECT * FROM students ORDER BY age DESC LIMIT 5;"
+            },
+            {
+              "type": "quiz",
+              "topic": "ORDER BY and LIMIT",
+              "question": "What does ORDER BY do?",
+              "options": ["Creates a new table", "Joins two tables", "Sorts the results", "Filters results"],
+              "answer": "Sorts the results",
+              "explanation": "ORDER BY controls the order of the query result."
+            },
+            {
+              "type": "quiz",
+              "topic": "ORDER BY and LIMIT",
+              "question": "What does LIMIT 5 do?",
+              "options": ["Shows only 5 columns", "Sorts by 5 values", "Returns only 5 rows", "Deletes 5 records"],
+              "answer": "Returns only 5 rows",
+              "explanation": "LIMIT restricts how many rows are returned."
+            },
+            {
+              "type": "quiz",
+              "topic": "ORDER BY and LIMIT",
+              "question": "Which of the following orders results from oldest to youngest?",
+              "options": [
+                "ORDER BY age ASC",
+                "ORDER BY age DESC",
+                "ORDER BY name DESC",
+                "SORT BY age ASC"
+              ],
+              "answer": "ORDER BY age DESC",
+              "explanation": "DESC sorts in descending order."
+            }
+          ]
+        }
+      ]
+    },
+    {
+  "title": "Filtering and Aggregation",
+  "description": "Learn how to filter data more precisely and summarize it using aggregate functions.",
+  "lessons": [
+    {
+      "title": "Filtering with LIKE and IN",
+      "steps": [
+        {
+          "type": "text",
+          "text": "SQL provides the `LIKE` and `IN` operators to filter data based on patterns or specific values."
+        },
+        {
+          "type": "text-video",
+          "text": "Watch this video to understand how to use `LIKE` and `IN` to filter results effectively.",
+          "content": "https://www.youtube.com/embed/pB_k5XzEUWU"
+        },
+        {
+          "type": "text-code",
+          "text": "Using `LIKE` to find names that start with 'A':",
+          "language": "sql",
+          "content": "SELECT * FROM students WHERE name LIKE 'A%';"
+        },
+        {
+          "type": "text-code",
+          "text": "Using `IN` to filter by specific values:",
+          "language": "sql",
+          "content": "SELECT * FROM students WHERE grade IN ('A', 'B');"
+        },
+        {
+          "type": "quiz",
+          "topic": "Filtering with LIKE and IN",
+          "question": "What does the `%` symbol mean in a `LIKE` statement?",
+          "options": ["Wildcard", "Equal sign", "Not equal", "Comma"],
+          "answer": "Wildcard",
+          "explanation": "The `%` symbol acts as a wildcard to match any number of characters."
+        },
+        {
+          "type": "quiz",
+          "topic": "Filtering with LIKE and IN",
+          "question": "Which query finds students in class '1A', '2B', or '3C'?",
           "options": [
-            "@media only screen and (max-width: 600px)",
-            "@media screen-min 600px",
-            "@responsive 600px",
-            "@screen and max-600"
+            "SELECT * FROM students WHERE class IN ('1A', '2B', '3C');",
+            "SELECT * FROM students WHERE class = '1A' AND '2B' AND '3C';",
+            "SELECT * FROM students WHERE class LIKE '1A|2B|3C';",
+            "SELECT * FROM students WHERE class BETWEEN '1A' AND '3C';"
           ],
-          "answer": "@media only screen and (max-width: 600px)",
-          "explanation": "Use media queries to apply styles for smaller screens."
+          "answer": "SELECT * FROM students WHERE class IN ('1A', '2B', '3C');",
+          "explanation": "`IN` matches any value in the list."
+        },
+        {
+          "type": "quiz",
+          "topic": "Filtering with LIKE and IN",
+          "question": "What will this query return?\n\nSELECT * FROM books WHERE title LIKE '%SQL%';",
+          "options": [
+            "Books with 'SQL' in the title",
+            "Books starting with 'SQL'",
+            "Books ending with 'SQL'",
+            "Books that don’t mention SQL"
+          ],
+          "answer": "Books with 'SQL' in the title",
+          "explanation": "`%SQL%` matches any title containing 'SQL' anywhere."
+        }
+      ]
+    },
+    {
+      "title": "Aggregate Functions",
+      "steps": [
+        {
+          "type": "text",
+          "text": "Aggregate functions in SQL allow you to calculate values like totals, averages, and counts over groups of rows."
+        },
+        {
+          "type": "text-video",
+          "text": "Learn how functions like COUNT, SUM, AVG, MIN, and MAX work in SQL.",
+          "content": "https://www.youtube.com/embed/vfGW0Qiy2I0"
+        },
+        {
+          "type": "text-code",
+          "text": "Example using COUNT and AVG:",
+          "language": "sql",
+          "content": "SELECT COUNT(*) FROM students;\nSELECT AVG(score) FROM students;"
+        },
+        {
+          "type": "text-code",
+          "text": "Example using MAX and MIN:",
+          "language": "sql",
+          "content": "SELECT MAX(score) FROM students;\nSELECT MIN(score) FROM students;"
+        },
+        {
+          "type": "quiz",
+          "topic": "Aggregate Functions",
+          "question": "Which function gives the number of rows in a table?",
+          "options": ["SUM()", "COUNT()", "AVG()", "TOTAL()"],
+          "answer": "COUNT()",
+          "explanation": "`COUNT()` returns the number of rows."
+        },
+        {
+          "type": "quiz",
+          "topic": "Aggregate Functions",
+          "question": "What does `AVG(score)` return?",
+          "options": ["The total of all scores", "The lowest score", "The average score", "The highest score"],
+          "answer": "The average score",
+          "explanation": "`AVG()` returns the arithmetic mean of a column."
+        },
+        {
+          "type": "quiz",
+          "topic": "Aggregate Functions",
+          "question": "Which function would you use to find the highest price?",
+          "options": ["MAX()", "MIN()", "SUM()", "COUNT()"],
+          "answer": "MAX()",
+          "explanation": "`MAX()` returns the highest value in a column."
+        }
+      ]
+    },
+    {
+      "title": "GROUP BY and HAVING",
+      "steps": [
+        {
+          "type": "text",
+          "text": "GROUP BY allows you to group rows that have the same values. HAVING is used to filter groups, similar to how WHERE filters rows."
+        },
+        {
+          "type": "text-video",
+          "text": "This video explains GROUP BY and HAVING clauses with clear examples.",
+          "content": "https://www.youtube.com/embed/Iv93yjdvkWI"
+        },
+        {
+          "type": "text-code",
+          "text": "Count students per class using GROUP BY:",
+          "language": "sql",
+          "content": "SELECT class, COUNT(*) FROM students GROUP BY class;"
+        },
+        {
+          "type": "text-code",
+          "text": "Use HAVING to filter grouped results:",
+          "language": "sql",
+          "content": "SELECT class, COUNT(*) FROM students GROUP BY class HAVING COUNT(*) > 5;"
+        },
+        {
+          "type": "quiz",
+          "topic": "GROUP BY and HAVING",
+          "question": "What does `GROUP BY` do in SQL?",
+          "options": [
+            "It filters rows",
+            "It sorts data",
+            "It combines rows with the same value",
+            "It deletes duplicates"
+          ],
+          "answer": "It combines rows with the same value",
+          "explanation": "`GROUP BY` groups rows that share a value in a column."
+        },
+        {
+          "type": "quiz",
+          "topic": "GROUP BY and HAVING",
+          "question": "Which clause is used to filter grouped data?",
+          "options": ["WHERE", "HAVING", "ORDER BY", "GROUP BY"],
+          "answer": "HAVING",
+          "explanation": "`HAVING` filters groups created by GROUP BY."
+        },
+        {
+          "type": "quiz",
+          "topic": "GROUP BY and HAVING",
+          "question": "What will this query return?\n\nSELECT department, COUNT(*) FROM staff GROUP BY department HAVING COUNT(*) > 3;",
+          "options": [
+            "All departments",
+            "Departments with more than 3 staff",
+            "Only 3 departments",
+            "Departments with less than 3 staff"
+          ],
+          "answer": "Departments with more than 3 staff",
+          "explanation": "HAVING filters the grouped departments."
+        }
+      ]
+    }
+  ]
+},
+{
+  "title": "Summary Quiz",
+  "description": "Final review of all SQL concepts across all lessons.",
+  "lessons": [
+    {
+      "title": "Final Quiz",
+      "steps": [
+        {
+          "type": "quiz",
+          "topic": "Creating Tables",
+          "question": "Which keyword is used to create a new table?",
+          "options": ["CREATE", "INSERT", "SELECT", "TABLE"],
+          "answer": "CREATE",
+          "explanation": "`CREATE TABLE` is the correct syntax."
+        },
+        {
+          "type": "quiz",
+          "topic": "SELECT Statements",
+          "question": "What does `SELECT * FROM users;` do?",
+          "options": ["Selects all columns from the users table", "Deletes all users", "Creates a new table", "Updates the users table"],
+          "answer": "Selects all columns from the users table",
+          "explanation": "`*` selects all columns."
+        },
+        {
+          "type": "quiz",
+          "topic": "WHERE Clause",
+          "question": "Which SQL clause filters rows?",
+          "options": ["GROUP BY", "WHERE", "ORDER BY", "IN"],
+          "answer": "WHERE",
+          "explanation": "The `WHERE` clause is used to filter rows."
+        },
+        {
+          "type": "quiz",
+          "topic": "Filtering with LIKE and IN",
+          "question": "Which operator allows pattern matching?",
+          "options": ["IN", "LIKE", "=", "AS"],
+          "answer": "LIKE",
+          "explanation": "`LIKE` is used for partial text matching."
+        },
+        {
+          "type": "quiz",
+          "topic": "Aggregate Functions",
+          "question": "Which function calculates the average?",
+          "options": ["MAX()", "COUNT()", "AVG()", "SUM()"],
+          "answer": "AVG()",
+          "explanation": "`AVG()` returns the average of a column."
+        },
+        {
+          "type": "quiz",
+          "topic": "GROUP BY and HAVING",
+          "question": "What does `GROUP BY` do?",
+          "options": ["Groups rows with the same value", "Deletes rows", "Creates columns", "Filters data"],
+          "answer": "Groups rows with the same value",
+          "explanation": "`GROUP BY` groups data by a specific column."
+        },
+        {
+          "type": "quiz",
+          "topic": "Introduction to SQL",
+          "question": "SQL stands for:",
+          "options": ["Structured Query Language", "Simple Query Logic", "Server Query Log", "Standard Quick Language"],
+          "answer": "Structured Query Language",
+          "explanation": "SQL = Structured Query Language."
+        },
+        {
+          "type": "quiz",
+          "topic": "Inserting Data",
+          "question": "What does `INSERT INTO` do?",
+          "options": ["Deletes a table", "Creates a table", "Adds a new row", "Updates existing rows"],
+          "answer": "Adds a new row",
+          "explanation": "`INSERT INTO` adds new data to a table."
+        },
+        {
+          "type": "quiz",
+          "topic": "WHERE Clause",
+          "question": "Which operator checks for equality?",
+          "options": ["==", "EQUALS", "=", "<>"],
+          "answer": "=",
+          "explanation": "`=` checks for equality in SQL."
+        },
+        {
+          "type": "quiz",
+          "topic": "ORDER BY and LIMIT",
+          "question": "What does `ORDER BY score DESC` do?",
+          "options": ["Orders scores from low to high", "Orders scores from high to low", "Limits to one row", "Sorts randomly"],
+          "answer": "Orders scores from high to low",
+          "explanation": "`DESC` means descending order."
+        },
+        {
+          "type": "quiz",
+          "topic": "Filtering with LIKE and IN",
+          "question": "What will `LIKE '%abc%'` match?",
+          "options": ["Anything starting with abc", "Only 'abc'", "Anything containing abc", "Anything ending with abc"],
+          "answer": "Anything containing abc",
+          "explanation": "`%abc%` matches any string with 'abc' in it."
+        },
+        {
+          "type": "quiz",
+          "topic": "Aggregate Functions",
+          "question": "What does `COUNT(*)` do?",
+          "options": ["Counts all rows", "Adds numbers", "Counts columns", "Multiplies rows"],
+          "answer": "Counts all rows",
+          "explanation": "`COUNT(*)` counts total rows returned."
+        },
+        {
+          "type": "quiz",
+          "topic": "ORDER BY and LIMIT",
+          "question": "How do you sort results alphabetically by name?",
+          "options": ["ORDER BY name ASC", "GROUP BY name", "SORT name BY ASC", "ORDER name"],
+          "answer": "ORDER BY name ASC",
+          "explanation": "`ORDER BY name ASC` sorts in alphabetical order."
+        },
+        {
+          "type": "quiz",
+          "topic": "GROUP BY and HAVING",
+          "question": "Which clause filters after grouping?",
+          "options": ["WHERE", "HAVING", "LIMIT", "IN"],
+          "answer": "HAVING",
+          "explanation": "`HAVING` filters groups, not individual rows."
+        },
+        {
+          "type": "quiz",
+          "topic": "Creating Tables",
+          "question": "What keyword starts a table definition?",
+          "options": ["CREATE", "ADD", "SELECT", "SET"],
+          "answer": "CREATE",
+          "explanation": "`CREATE TABLE` is used to make new tables."
+        },
+        {
+          "type": "quiz",
+          "topic": "Inserting Data",
+          "question": "Which clause specifies values in an INSERT statement?",
+          "options": ["VALUES", "SET", "INTO", "INPUT"],
+          "answer": "VALUES",
+          "explanation": "`VALUES` provides the actual data to insert."
+        },
+        {
+          "type": "quiz",
+          "topic": "SELECT Statements",
+          "question": "How do you select specific columns?",
+          "options": ["SELECT (columns)", "SELECT column1, column2", "GET column1 AND column2", "CHOOSE column1, column2"],
+          "answer": "SELECT column1, column2",
+          "explanation": "Comma-separated columns in SELECT specify which to retrieve."
+        },
+        {
+          "type": "quiz",
+          "topic": "Filtering with LIKE and IN",
+          "question": "Which operator checks if a value matches any value in a list?",
+          "options": ["IN", "LIKE", "BETWEEN", "ALL"],
+          "answer": "IN",
+          "explanation": "`IN` matches values in a provided list."
+        },
+        {
+          "type": "quiz",
+          "topic": "Aggregate Functions",
+          "question": "Which function gives the highest value?",
+          "options": ["MAX()", "AVG()", "COUNT()", "MIN()"],
+          "answer": "MAX()",
+          "explanation": "`MAX()` returns the largest value."
+        },
+        {
+          "type": "quiz",
+          "topic": "ORDER BY and LIMIT",
+          "question": "What does `LIMIT 5` do?",
+          "options": ["Shows first 5 rows", "Skips 5 rows", "Shows last 5 rows", "Deletes 5 rows"],
+          "answer": "Shows first 5 rows",
+          "explanation": "`LIMIT` restricts the number of returned rows."
         }
       ]
     }

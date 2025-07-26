@@ -1,25 +1,36 @@
-import bcrypt from "bcrypt";
-import { generateToken } from "../utils/token.mjs";
-import db from "../db/conn.mjs";
+import jwt from 'jsonwebtoken';
+import User from '../db/models/User.mjs';
 
-export const loginUser = async (req, res) => {
-    const { email, password } = req.body;
-    try {
-        const user = await db.collection("users").findOne({ email });
-        if (!user) return res.status(401).json({ message: "User not found" });
+const APP_SECRET = process.env.APP_SECRET || "fallback_secret_for_dev";
 
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
+export const authenticateToken = async (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
 
-        const token = generateToken({ id: user._id, email: user.email });
+  if (!token) {
+    return res.status(401).json({ message: 'Missing token' });
+  }
 
-        res.status(200).json({
-            token,
-            email,
-            isAdmin: user.isAdmin || false, // ✅ Return admin flag
-            message: "Login successful"
-        });
-    } catch (err) {
-        res.status(500).json({ message: "Server error" });
+  try {
+    const decoded = jwt.verify(token, APP_SECRET); // ✅ Match signing secret
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(403).json({ message: 'User not found' });
     }
+
+    req.user = user;
+    next();
+  } catch (err) {
+    console.error('❌ JWT verification failed:', err.message);
+    return res.status(403).json({ message: 'Invalid or expired token' });
+  }
+};
+
+export const requireAdmin = (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    return res.status(403).json({ message: 'Access denied. Admins only.' });
+  }
 };

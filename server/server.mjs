@@ -8,6 +8,8 @@ import lessonRouter from './routes/lessonRouter.mjs';
 import quizGenRouter from './routes/quizGenRouter.mjs';
 import langchainRouter from './routes/langchainRouter.mjs';
 import recommendationRouter from "./routes/recommendationRouter.mjs";
+import quizHistoryRouter from './routes/quizHistoryRouter.mjs';
+
 
 dotenv.config();
 
@@ -46,6 +48,7 @@ app.use('/api/lessons', lessonRouter);
 app.use('/api/quiz-generator', quizGenRouter);
 app.use('/api/ai', langchainRouter);
 app.use("/api", recommendationRouter);
+app.use('/api/quiz-history', quizHistoryRouter);
 
 app.listen(PORT, () => {
     console.log(`🚀 Server is running on port: http://localhost:${PORT}`);

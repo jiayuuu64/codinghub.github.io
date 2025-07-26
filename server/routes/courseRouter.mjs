@@ -1,5 +1,6 @@
 import express from 'express';
 import Course from '../db/models/Course.mjs';
+import { authenticateToken, requireAdmin } from '../middleware/authMiddleware.mjs';
 
 const router = express.Router();
 
@@ -49,5 +50,38 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ error: 'Server error: ' + err.message });
   }
 });
+
+router.post('/', authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    const newCourse = new Course({ title, description, sections: [] });
+    await newCourse.save();
+    res.status(201).json(newCourse);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post('/:id/sections', authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    const course = await Course.findById(req.params.id);
+    course.sections.push({ title, description, lessons: [] });
+    await course.save();
+    res.json(course);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+    await Course.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Course deleted' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 export default router;
