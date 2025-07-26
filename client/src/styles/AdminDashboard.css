@@ -1,0 +1,85 @@
+.admin-container {
+  padding: 30px;
+  background-color: #2c3579;
+  color: white;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.admin-container h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.admin-container p {
+  margin-bottom: 20px;
+  color: #c0c0c0;
+}
+
+.cards-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background-color: #1a1f3c;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  flex: 1;
+  min-width: 300px;
+}
+
+.card h2 {
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+.card input,
+.card select {
+  display: block;
+  margin: 8px 0;
+  padding: 8px;
+  width: 100%;
+  border: none;
+  border-radius: 6px;
+  background-color: #303862;
+  color: white;
+}
+
+.card button {
+  background-color: #6a5acd;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.card button:hover {
+  background-color: #5b4eca;
+}
+
+.courses-display {
+  margin-top: 30px;
+}
+
+.course-card {
+  background-color: #1f274e;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.section-card {
+  margin-left: 16px;
+  margin-top: 10px;
+}
+
+.section-card ul {
+  margin-top: 5px;
+  margin-left: 20px;
+}

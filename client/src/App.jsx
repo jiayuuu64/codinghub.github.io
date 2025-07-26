@@ -10,11 +10,10 @@ import ExperiencePreference from './components/ExperiencePreference';
 import CommitmentPreference from './components/CommitmentPreference';
 import Profile from './components/Profile';
 import Courses from './components/Courses';
-import Sections from './components/Sections'; 
-import Lesson from './components/Lesson';  
-import EditProfile from './components/EditProfile';  
+import Sections from './components/Sections';
+import Lesson from './components/Lesson';
+import EditProfile from './components/EditProfile';
 import ChangePassword from './components/ChangePassword';
-import SelfEval from './pages/SelfEval';
 import SelfEvalQuiz from './components/SelfEvalQuiz';
 import AdminDashboard from './components/AdminDashboard';
 
@@ -24,6 +23,16 @@ const ProtectedRoute = ({ children }) => {
     if (!isAuthenticated()) {
         return <Navigate to="/" />;
     }
+    return children;
+};
+
+const AdminRoute = ({ children }) => {
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    const isAuth = isAuthenticated();
+
+    if (!isAuth) return <Navigate to="/" />;
+    if (!isAdmin) return <Navigate to="/home" />;
+
     return children;
 };
 
@@ -37,16 +46,15 @@ const App = () => {
             <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
             <Route path="/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
             <Route path="/courses/:courseId" element={<ProtectedRoute><Sections /></ProtectedRoute>} />
-            <Route path="/lesson/:lessonId" element={<ProtectedRoute><Lesson /></ProtectedRoute>} /> 
+            <Route path="/lesson/:lessonId" element={<ProtectedRoute><Lesson /></ProtectedRoute>} />
             <Route path="/language-preference" element={<LanguagePreference />} />
             <Route path="/experience-preference" element={<ExperiencePreference />} />
             <Route path="/commitment-preference" element={<CommitmentPreference />} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
             <Route path="/change-password" element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />
-            <Route path="/self-evaluation" element={<ProtectedRoute><SelfEval /></ProtectedRoute>} />
-            <Route path="/self-eval/quiz" element={<ProtectedRoute><SelfEvalQuiz /></ProtectedRoute>} />
-            <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/self-eval-quiz" element={<ProtectedRoute><SelfEvalQuiz /></ProtectedRoute>} />
+            <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
         </Routes>
     );
 };

@@ -62,10 +62,35 @@ const Lesson = () => {
     }
   };
 
-  const handleOptionSelect = (option) => {
-    setSelectedOption(option);
-    setIsAnsweredCorrectly(option === lesson.steps[currentStepIndex].answer);
-  };
+  // const handleOptionSelect = (option) => {
+  //   setSelectedOption(option);
+  //   setIsAnsweredCorrectly(option === currentStep.answer);
+  // };
+
+  const handleOptionSelect = async (option) => {
+  setSelectedOption(option);
+  const isCorrect = option === currentStep.answer;
+  setIsAnsweredCorrectly(isCorrect);
+
+  const topic = currentStep.topic || "Unknown";
+  const email = localStorage.getItem('email');
+
+  try {
+    await fetch('https://codinghub-r3bn.onrender.com/api/quiz-history/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        topic,
+        score: isCorrect ? 1 : 0,
+        total: 1
+      }),
+    });
+  } catch (err) {
+    console.error('❌ Failed to save quiz history:', err);
+  }
+};
+
 
   const handleFinishLesson = async () => {
     if (!email) {
@@ -99,10 +124,7 @@ const Lesson = () => {
             {lesson.steps.map((_, index) => {
               const isActive = isSummaryQuiz ? !!userAnswers[index] : index <= currentStepIndex;
               return (
-                <div
-                  key={index}
-                  className={`lesson-progress-step ${isActive ? 'active' : ''}`}
-                ></div>
+                <div key={index} className={`lesson-progress-step ${isActive ? 'active' : ''}`}></div>
               );
             })}
           </div>
@@ -212,7 +234,6 @@ const Lesson = () => {
                   </ul>
                 </div>
               );
-
             default:
               return <p>Unknown step type: {currentStep.type}</p>;
           }

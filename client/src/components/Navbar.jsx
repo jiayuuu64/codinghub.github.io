@@ -7,6 +7,7 @@ const logo = '/assets/images/coding.png';
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
 
     const handleLogout = () => {
         logout();
@@ -21,11 +22,23 @@ const Navbar = () => {
             </div>
 
             <div className="navbar-center">
-                <NavLink to="/home" className="nav-link" end>Home</NavLink>
-                <span className="divider">|</span>
-                <NavLink to="/courses" className="nav-link">Courses</NavLink>
-                <span className="divider">|</span>
-                <NavLink to="/profile" className="nav-link">Profile</NavLink>
+                {isAdmin ? (
+                    // Admin View
+                    <>
+                        <NavLink to="/admin" className="nav-link">Admin Panel</NavLink>
+                        <span className="divider">|</span>
+                        <NavLink to="/courses" className="nav-link">Courses</NavLink>
+                    </>
+                ) : (
+                    // Normal User View
+                    <>
+                        <NavLink to="/home" className="nav-link" end>Home</NavLink>
+                        <span className="divider">|</span>
+                        <NavLink to="/courses" className="nav-link">Courses</NavLink>
+                        <span className="divider">|</span>
+                        <NavLink to="/profile" className="nav-link">Profile</NavLink>
+                    </>
+                )}
             </div>
 
             <button className="logout-button" onClick={handleLogout}>Logout</button>

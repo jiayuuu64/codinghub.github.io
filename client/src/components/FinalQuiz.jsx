@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import '../styles/finalquiz.css';
 import { speakText } from '../utils/textToSpeech';
@@ -10,6 +10,7 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
   const [showAll, setShowAll] = useState(false);
   const [recommendations, setRecommendations] = useState([]);
 
+  const email = localStorage.getItem('email');
   const currentQn = questions[currentIndex];
 
   const handleOptionClick = (option) => {
@@ -37,7 +38,26 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
     setScore(correctCount);
     setShowResults(true);
 
-    const email = localStorage.getItem('email');
+    const topicScores = {};
+    questions.forEach((q, i) => {
+      const topic = q.topic || "Unknown";
+      const correct = userAnswers[i] === q.answer;
+      if (!topicScores[topic]) topicScores[topic] = { score: 0, total: 0 };
+      topicScores[topic].score += correct ? 1 : 0;
+      topicScores[topic].total += 1;
+    });
+
+    for (const [topic, { score, total }] of Object.entries(topicScores)) {
+      try {
+        await fetch('https://codinghub-r3bn.onrender.com/api/quiz-history/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, topic, score, total }),
+        });
+      } catch (err) {
+        console.error('❌ Error saving final quiz score:', err);
+      }
+    }
 
     if (correctCount / questions.length > 0.8) return;
 
@@ -183,18 +203,14 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
 
             return (
               <div key={i} className="f-quiz-result-item">
-                <p>
-                  <strong>Q{i + 1}:</strong> {q.question}
-                </p>
+                <p><strong>Q{i + 1}:</strong> {q.question}</p>
                 {q.options.map((opt, j) => {
                   const isAnswer = opt === q.answer;
                   const isSelected = userAnswer === opt;
                   return (
                     <div
                       key={j}
-                      className={`f-quiz-option ${isAnswer ? 'correct' : ''
-                        } ${isSelected && !isAnswer ? 'incorrect' : ''} ${isSelected ? 'selected' : ''
-                        }`}
+                      className={`f-quiz-option ${isAnswer ? 'correct' : ''} ${isSelected && !isAnswer ? 'incorrect' : ''} ${isSelected ? 'selected' : ''}`}
                     >
                       {opt}
                       {isAnswer && <span className="tick">✓</span>}

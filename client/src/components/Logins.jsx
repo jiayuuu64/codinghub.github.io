@@ -27,13 +27,15 @@ const Login = () => {
                 // ✅ Save login details including isAdmin
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('email', data.email);
-                localStorage.setItem('isAdmin', data.isAdmin); // 🔥 fixed line
+                localStorage.setItem('isAdmin', data.isAdmin);
 
-                if (data.languagePreference && data.experiencePreference && data.commitmentPreference) {
-                    navigate('/home');
-                } else {
-                    navigate('/language-preference');
-                }
+                    if (data.isAdmin) {
+                        navigate('/admin');
+                    } else if (data.languagePreference && data.experiencePreference && data.commitmentPreference) {
+                        navigate('/home');
+                    } else {
+                        navigate('/language-preference');
+                    }
 
                 setLoading(false);
                 setError('');

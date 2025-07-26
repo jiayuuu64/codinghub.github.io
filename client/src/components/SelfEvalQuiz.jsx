@@ -3,11 +3,37 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/finalquiz.css';
 import { speakText } from '../utils/textToSpeech';
 
+const parseQuizText = (text) => {
+  const questions = text.split(/\n(?=\d+\.)/).map((qBlock) => {
+    const qMatch = qBlock.match(/^\d+\.\s*(.*?)\n/i);
+    const question = qMatch?.[1]?.trim() || '';
+
+    const options = [];
+    const optionRegex = /[A-D]\.\s*(.*)/g;
+    let match;
+    while ((match = optionRegex.exec(qBlock))) {
+      options.push(match[1].trim());
+    }
+
+    const answerMatch = qBlock.match(/Answer:\s*(.*)/i);
+    const explanationMatch = qBlock.match(/Explanation:\s*(.*)/i);
+
+    return {
+      question,
+      options,
+      answer: answerMatch?.[1]?.trim() || '',
+      explanation: explanationMatch?.[1]?.trim() || ''
+    };
+  });
+
+  return questions.filter(q => q.question && q.options.length === 4);
+};
+
 const SelfEvalQuiz = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const quizData = location.state?.quiz;
-
+  const rawQuiz = location.state?.quiz;
+  const [quizData, setQuizData] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState({});
   const [showResults, setShowResults] = useState(false);
@@ -15,10 +41,15 @@ const SelfEvalQuiz = () => {
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    if (!quizData) navigate('/self-evaluation');
-  }, [quizData, navigate]);
+    if (!rawQuiz) {
+      navigate('/');
+    } else {
+      const parsed = parseQuizText(rawQuiz);
+      setQuizData(parsed);
+    }
+  }, [rawQuiz, navigate]);
 
-  const currentQn = quizData?.[currentIndex];
+  const currentQn = quizData[currentIndex];
 
   const handleOptionClick = (option) => {
     setUserAnswers((prev) => ({ ...prev, [currentIndex]: option }));
@@ -46,7 +77,7 @@ const SelfEvalQuiz = () => {
     setShowResults(true);
   };
 
-  const handleExit = () => navigate('/self-evaluation');
+  const handleExit = () => navigate('/');
 
   const downloadResults = () => {
     const lines = [`Self Evaluation Score: ${score}/${quizData.length}\n`];
@@ -65,7 +96,7 @@ const SelfEvalQuiz = () => {
     link.click();
   };
 
-  if (!quizData) return null;
+  if (!quizData.length) return <p style={{ padding: "2rem", color: "#fff" }}>Loading quiz...</p>;
 
   return (
     <div className="lesson-fullscreen">
@@ -141,9 +172,7 @@ const SelfEvalQuiz = () => {
 
               return (
                 <div key={i} className="f-quiz-result-item">
-                  <p>
-                    <strong>Q{i + 1}:</strong> {q.question}
-                  </p>
+                  <p><strong>Q{i + 1}:</strong> {q.question}</p>
                   {q.options.map((opt, j) => {
                     const isAnswer = opt === q.answer;
                     const isSelected = userAnswer === opt;

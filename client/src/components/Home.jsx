@@ -8,27 +8,36 @@ const Home = () => {
   const [courses, setCourses] = useState([]);
   const [progressData, setProgressData] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
+  const [aiQuiz, setAiQuiz] = useState(null);
+  const [weakTopics, setWeakTopics] = useState([]);
   const email = localStorage.getItem('email');
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAll = async () => {
       try {
-        const baseUrl = import.meta.env.VITE_API_URL;
+        const baseUrl = 'https://codinghub-r3bn.onrender.com/api';
 
         // Fetch courses
-        const coursesRes = await axios.get(`${baseUrl.replace('/users', '')}/courses`);
+        const coursesRes = await axios.get(`${baseUrl}/courses`);
         setCourses(coursesRes.data);
 
         // Fetch user progress
         if (email) {
-          const progressRes = await axios.get(`${baseUrl}/${email}/progress`);
+          const progressRes = await axios.get(`${baseUrl}/users/${email}/progress`);
           setProgressData(progressRes.data || []);
+        }
+
+        // Fetch AI quiz
+        if (email) {
+          const quizRes = await axios.post(`${baseUrl}/quiz-generator/personalized`, { email });
+          setAiQuiz(quizRes.data.quiz || []);
+          setWeakTopics(quizRes.data.weakTopics || []);
         }
 
         // Fetch recommendations
         if (email) {
-          const recRes = await axios.get(`${baseUrl.replace('/users', '')}/recommendations?email=${email}`);
+          const recRes = await axios.get(`${baseUrl}/recommendations?email=${email}`);
           setRecommendations(recRes.data || []);
         }
       } catch (err) {
@@ -63,6 +72,10 @@ const Home = () => {
     if (courseId) navigate(`/courses/${courseId}`);
   };
 
+  const handleStartQuiz = () => {
+    navigate('/self-eval-quiz', { state: { quiz: aiQuiz, weakTopics } });
+  };
+
   return (
     <>
       <Navbar />
@@ -92,12 +105,20 @@ const Home = () => {
 
         <section className="self-eval-section">
           <h2>Challenge Yourself</h2>
-          <button
-            className="self-eval-button"
-            onClick={() => navigate('/self-evaluation')}
-          >
-            Take Self Evaluation Quiz
-          </button>
+          {weakTopics.length > 0 && aiQuiz?.length > 0 ? (
+            <>
+              <p style={{ color: '#ccc', marginBottom: '10px' }}>
+                Based on your previous quizzes, you struggled with: <strong>{weakTopics.join(', ')}</strong>. We've generated a quiz just for you.
+              </p>
+              <button className="self-eval-button" onClick={handleStartQuiz}>
+                Start Personalized Quiz
+              </button>
+            </>
+          ) : (
+            <p style={{ color: '#ccc' }}>
+              Complete some quizzes first to unlock personalized challenges!
+            </p>
+          )}
         </section>
 
         <section className="recommended-section">
