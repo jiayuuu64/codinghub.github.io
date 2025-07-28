@@ -77,7 +77,7 @@ const SelfEvalQuiz = () => {
     setShowResults(true);
   };
 
-  const handleExit = () => navigate('/');
+  const handleExit = () => navigate('/home');
 
   const downloadResults = () => {
     const lines = [`Self Evaluation Score: ${score}/${quizData.length}\n`];
@@ -131,13 +131,30 @@ const SelfEvalQuiz = () => {
             </h3>
 
             <ul className="f-quiz-options">
-              {currentQn.options.map((opt, i) => (
+              {currentQn.options.map((option, idx) => (
                 <li
-                  key={i}
-                  className={`f-quiz-option ${userAnswers[currentIndex] === opt ? 'selected' : ''}`}
-                  onClick={() => handleOptionClick(opt)}
+                  key={idx}
+                  className={`f-quiz-option ${userAnswers[currentIndex] === option ? 'selected' : ''}`}
+                  onClick={() => handleOptionClick(option)}
+                  role="button"
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    color: '#ffed91'
+                  }}
                 >
-                  {opt}
+                  <span className="option-text">{option}</span>
+                  <div
+                    className="option-right"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      speakText(option);
+                    }}
+                    title="Listen to option"
+                  >
+                    🔊
+                  </div>
                 </li>
               ))}
             </ul>
@@ -180,11 +197,7 @@ const SelfEvalQuiz = () => {
                     return (
                       <div
                         key={j}
-                        className={`f-quiz-option ${
-                          isAnswer ? 'correct' : ''
-                        } ${isSelected && !isAnswer ? 'incorrect' : ''} ${
-                          isSelected ? 'selected' : ''
-                        }`}
+                        className={`f-quiz-option ${isAnswer ? 'correct' : ''} ${isSelected && !isAnswer ? 'incorrect' : ''} ${isSelected ? 'selected' : ''}`}
                       >
                         {opt}
                         {isAnswer && <span className="tick">✓</span>}

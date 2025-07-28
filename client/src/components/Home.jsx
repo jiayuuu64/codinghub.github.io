@@ -107,7 +107,7 @@ const Home = () => {
           <h2>Challenge Yourself</h2>
           {weakTopics.length > 0 && aiQuiz?.length > 0 ? (
             <>
-              <p style={{ color: '#ccc', marginBottom: '10px' }}>
+              <p style={{ color: '#ccc', marginBottom: '10px', textAlign: 'center' }}>
                 Based on your previous quizzes, you struggled with: <strong>{weakTopics.join(', ')}</strong>. We've generated a quiz just for you.
               </p>
               <button className="self-eval-button" onClick={handleStartQuiz}>
@@ -115,7 +115,7 @@ const Home = () => {
               </button>
             </>
           ) : (
-            <p style={{ color: '#ccc' }}>
+            <p style={{ color: '#ccc', textAlign: 'center', marginTop: '1rem' }}>
               Complete some quizzes first to unlock personalized challenges!
             </p>
           )}
@@ -123,6 +123,11 @@ const Home = () => {
 
         <section className="recommended-section">
           <h2>Recommended For You</h2>
+          {recommendations.length > 0 && weakTopics.length > 0 && (
+            <p style={{ color: '#ccc', marginBottom: '10px', textAlign: 'center' }}>
+             Based on your recent <strong>Final Quiz</strong>, we've added some helpful videos and articles below to improve your understanding in those courses.
+            </p>
+          )}
           <div className="recommendation-grid">
             {recommendations.map((rec, idx) => (
               <div

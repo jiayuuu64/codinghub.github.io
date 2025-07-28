@@ -4,7 +4,6 @@ import Navbar from './Navbar';
 import '../styles/Profile.css';
 import axios from 'axios';
 
-
 const Profile = () => {
     const navigate = useNavigate();
     const email = localStorage.getItem('email');
@@ -18,6 +17,7 @@ const Profile = () => {
     });
 
     const [preview, setPreview] = useState(null);
+    const [courseProgress, setCourseProgress] = useState({ completed: 0, total: 0 });
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -28,14 +28,44 @@ const Profile = () => {
                 console.error("Error fetching profile:", err);
             }
         };
-        fetchProfile();
+
+        const fetchProgress = async () => {
+            try {
+                const baseUrl = import.meta.env.VITE_API_URL;
+                const progressRes = await axios.get(`${baseUrl}/${email}/progress`);
+                const progressList = progressRes.data || [];
+
+                const courseRes = await axios.get(`${baseUrl.replace('/users', '')}/courses`);
+                const courses = courseRes.data;
+
+                let completedCourses = 0;
+
+                courses.forEach(course => {
+                    const progress = progressList.find(p => p.courseId === course._id);
+                    const totalLessons = course.sections.reduce((sum, sec) => sum + sec.lessons.length, 0);
+                    const completedLessons = progress?.completedLessons?.length || 0;
+
+                    if (totalLessons > 0 && completedLessons === totalLessons) {
+                        completedCourses += 1;
+                    }
+                });
+
+                setCourseProgress({ completed: completedCourses, total: courses.length });
+            } catch (error) {
+                console.error("Error fetching course progress:", error);
+            }
+        };
+
+        if (email) {
+            fetchProfile();
+            fetchProgress();
+        }
     }, [email]);
 
     const handleAvatarUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
-        // ✅ Allow up to 5MB
         if (file.size > 5 * 1024 * 1024) {
             alert("Please select an image smaller than 5MB.");
             return;
@@ -105,9 +135,16 @@ const Profile = () => {
                 <div className="profile-section">
                     <h3>Course Progress</h3>
                     <div className="profile-progress-bar">
-                        <div className="fill" style={{ width: '60%' }}></div>
+                        <div
+                            className="fill"
+                            style={{
+                                width: courseProgress.total > 0
+                                    ? `${(courseProgress.completed / courseProgress.total) * 100}%`
+                                    : '0%'
+                            }}
+                        ></div>
                     </div>
-                    <p>6 of 10 courses completed</p>
+                    <p>{courseProgress.completed} of {courseProgress.total} courses completed</p>
                 </div>
 
                 <div className="profile-footer">

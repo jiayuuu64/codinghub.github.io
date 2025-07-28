@@ -9,7 +9,6 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
   const [score, setScore] = useState(0);
   const [showAll, setShowAll] = useState(false);
   const [recommendations, setRecommendations] = useState([]);
-
   const email = localStorage.getItem('email');
   const currentQn = questions[currentIndex];
 
@@ -97,24 +96,19 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
     }
   };
 
-  const downloadResults = () => {
-    const lines = [`Final Quiz Score: ${score}/${questions.length}\n`];
-    questions.forEach((q, i) => {
-      const userAns = userAnswers[i] || "Not answered";
-      lines.push(`Q${i + 1}: ${q.question}`);
-      lines.push(`Your Answer: ${userAns}`);
-      lines.push(`Correct Answer: ${q.answer}`);
-      lines.push(`Explanation: ${q.explanation}\n`);
-    });
+  const passedWell = score / questions.length > 0.8;
 
-    const blob = new Blob([lines.join("\n")], { type: "text/plain" });
+  const downloadResults = () => {
+    const content = questions.map((q, i) => {
+      return `Q${i + 1}: ${q.question}\nYour Answer: ${userAnswers[i] || 'Not Answered'}\nCorrect Answer: ${q.answer}\nExplanation: ${q.explanation}\n\n`;
+    }).join('');
+
+    const blob = new Blob([content], { type: 'text/plain' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = 'final-quiz-results.txt';
+    link.download = 'quiz_results.txt';
     link.click();
   };
-
-  const passedWell = score / questions.length > 0.8;
 
   return (
     <div className="f-quiz-container">
@@ -125,15 +119,31 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
             Q{currentIndex + 1}: {currentQn.question}
             <button className="speaker-btn" onClick={() => speakText(currentQn.question)} title="Listen">🔊</button>
           </h3>
-
           <ul className="f-quiz-options">
-            {currentQn.options.map((opt, i) => (
+            {questions[currentIndex]?.options.map((option, idx) => (
               <li
-                key={i}
-                className={`f-quiz-option ${userAnswers[currentIndex] === opt ? 'selected' : ''}`}
-                onClick={() => handleOptionClick(opt)}
+                key={idx}
+                className={`f-quiz-option ${userAnswers[currentIndex] === option ? 'selected' : ''}`}
+                onClick={() => handleOptionClick(option)}
+                role="button"
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  color: '#ffed91'
+                }}
               >
-                {opt}
+                <span className="option-text">{option}</span>
+                <div
+                  className="option-right"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    speakText(option);
+                  }}
+                  title="Listen to option"
+                >
+                  🔊
+                </div>
               </li>
             ))}
           </ul>

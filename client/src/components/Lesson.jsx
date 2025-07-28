@@ -68,28 +68,28 @@ const Lesson = () => {
   // };
 
   const handleOptionSelect = async (option) => {
-  setSelectedOption(option);
-  const isCorrect = option === currentStep.answer;
-  setIsAnsweredCorrectly(isCorrect);
+    setSelectedOption(option);
+    const isCorrect = option === currentStep.answer;
+    setIsAnsweredCorrectly(isCorrect);
 
-  const topic = currentStep.topic || "Unknown";
-  const email = localStorage.getItem('email');
+    const topic = currentStep.topic || "Unknown";
+    const email = localStorage.getItem('email');
 
-  try {
-    await fetch('https://codinghub-r3bn.onrender.com/api/quiz-history/save', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email,
-        topic,
-        score: isCorrect ? 1 : 0,
-        total: 1
-      }),
-    });
-  } catch (err) {
-    console.error('❌ Failed to save quiz history:', err);
-  }
-};
+    try {
+      await fetch('https://codinghub-r3bn.onrender.com/api/quiz-history/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          topic,
+          score: isCorrect ? 1 : 0,
+          total: 1
+        }),
+      });
+    } catch (err) {
+      console.error('❌ Failed to save quiz history:', err);
+    }
+  };
 
 
   const handleFinishLesson = async () => {
@@ -217,23 +217,42 @@ const Lesson = () => {
                       <li
                         key={idx}
                         className={`quiz-option ${selectedOption === option
-                            ? isAnsweredCorrectly
-                              ? 'correct'
-                              : 'incorrect'
-                            : ''
+                          ? isAnsweredCorrectly
+                            ? 'correct'
+                            : 'incorrect'
+                          : ''
                           }`}
                         onClick={() => !isAnsweredCorrectly && handleOptionSelect(option)}
                         tabIndex={0}
                         role="button"
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          color: '#ffed91',
+                        }}
                       >
                         <span className="option-text">{option}</span>
-                        {selectedOption === option && isAnsweredCorrectly && <span className="option-feedback">✓</span>}
-                        {selectedOption === option && !isAnsweredCorrectly && <span className="option-feedback">✗</span>}
+                        <div className="option-right" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              speakText(option);
+                            }}
+                            className="speaker-btn"
+                            title="Listen to option"
+                          >
+                            🔊
+                          </button>
+                          {selectedOption === option && isAnsweredCorrectly && <span className="option-feedback">✓</span>}
+                          {selectedOption === option && !isAnsweredCorrectly && <span className="option-feedback">✗</span>}
+                        </div>
                       </li>
                     ))}
                   </ul>
                 </div>
               );
+
             default:
               return <p>Unknown step type: {currentStep.type}</p>;
           }

@@ -211,6 +211,14 @@
   color: #fff;
 }
 
+.quiz-option {
+  padding: 10px 12px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+
 
 @media (max-width: 768px) {
   .lesson-step-container {
