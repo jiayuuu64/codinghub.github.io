@@ -223,11 +223,13 @@ router.get('/recommendations', async (req, res) => {
     const user = await User.findOne({ email }).populate('progress.courseId');
     if (!user) return res.status(404).json({ error: 'User not found' });
 
-    // ✅ Check for quiz-based recommendations first
-    const attempted = user.progress.filter(p => p.completedQuiz && Array.isArray(p.recommendations) && p.recommendations.length > 0);
+    // ✅ Step 1: Check if the user has quiz-based recommendations
+    const quizBased = user.progress.filter(
+      p => p.completedQuiz && Array.isArray(p.recommendations) && p.recommendations.length > 0
+    );
 
-    if (attempted.length > 0) {
-      const allQuizRecs = attempted.flatMap(p => p.recommendations);
+    if (quizBased.length > 0) {
+      const allQuizRecs = quizBased.flatMap(p => p.recommendations);
       const uniqueRecs = [...new Set(allQuizRecs)];
 
       const parsed = uniqueRecs.map(line => {
@@ -252,14 +254,16 @@ router.get('/recommendations', async (req, res) => {
         };
       });
 
+      // ✅ Pick 3 random quiz-based recommendations
       const random3 = parsed.sort(() => 0.5 - Math.random()).slice(0, 3);
       return res.status(200).json(random3);
     }
 
-    // ✅ If no quiz attempted, fallback to languagePreference
+    // ✅ Step 2: Fallback to language preference if no quizzes done
     const lang = (user.languagePreference || '').toLowerCase();
     const fallback = fallbackMap[lang] || fallbackMap['python'];
-    return res.status(200).json(fallback.slice(0, 3));
+    const fallbackRandom3 = fallback.sort(() => 0.5 - Math.random()).slice(0, 3);
+    return res.status(200).json(fallbackRandom3);
   } catch (err) {
     console.error('Error fetching recommendations:', err);
     res.status(500).json({ error: 'Internal server error' });
