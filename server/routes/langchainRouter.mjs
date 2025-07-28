@@ -38,28 +38,64 @@ const pythonVideos = [
 ];
 
 const htmlcssArticles = [
-    { title: "W3Schools HTML Tutorial", link: "https://www.w3schools.com/html/" },
-    { title: "W3Schools CSS Tutorial", link: "https://www.w3schools.com/css/" },
-    { title: "MDN Web Docs: HTML", link: "https://developer.mozilla.org/en-US/docs/Web/HTML" },
-    { title: "MDN Web Docs: CSS", link: "https://developer.mozilla.org/en-US/docs/Web/CSS" },
-    { title: "HTML.com Beginner Guide", link: "https://html.com/" },
-    { title: "CSS-Tricks Guides", link: "https://css-tricks.com/guides/" },
-    { title: "FreeCodeCamp HTML/CSS Certification", link: "https://www.freecodecamp.org/learn/responsive-web-design/" },
-    { title: "GeeksforGeeks HTML Tutorial", link: "https://www.geeksforgeeks.org/html/" },
-    { title: "GeeksforGeeks CSS Tutorial", link: "https://www.geeksforgeeks.org/css/" },
-  ];
+  { title: "W3Schools HTML Tutorial", link: "https://www.w3schools.com/html/" },
+  { title: "W3Schools CSS Tutorial", link: "https://www.w3schools.com/css/" },
+  { title: "MDN Web Docs: HTML", link: "https://developer.mozilla.org/en-US/docs/Web/HTML" },
+  { title: "MDN Web Docs: CSS", link: "https://developer.mozilla.org/en-US/docs/Web/CSS" },
+  { title: "HTML.com Beginner Guide", link: "https://html.com/" },
+  { title: "CSS-Tricks Guides", link: "https://css-tricks.com/guides/" },
+  { title: "FreeCodeCamp HTML/CSS Certification", link: "https://www.freecodecamp.org/learn/responsive-web-design/" },
+  { title: "GeeksforGeeks HTML Tutorial", link: "https://www.geeksforgeeks.org/html/" },
+  { title: "GeeksforGeeks CSS Tutorial", link: "https://www.geeksforgeeks.org/css/" },
+];
 
 const htmlcssVideos = [
-    { title: "HTML Full Course - freeCodeCamp", link: "https://www.youtube.com/watch?v=pQN-pnXPaVg" },
-    { title: "CSS Crash Course for Beginners", link: "https://www.youtube.com/watch?v=1Rs2ND1ryYc" },
-    { title: "HTML & CSS in 100 Seconds", link: "https://www.youtube.com/watch?v=OEV8gMkCHXQ" },
-    { title: "Responsive Web Design - Codevolution", link: "https://www.youtube.com/watch?v=HcOc7P5BMi4" },
-    { title: "HTML & CSS Crash Course - Traversy Media", link: "https://www.youtube.com/watch?v=UB1O30fR-EE" },
-    { title: "HTML Tutorial for Beginners - Mosh", link: "https://www.youtube.com/watch?v=qz0aGYrrlhU" },
-    { title: "CSS Tutorial for Beginners - Mosh", link: "https://www.youtube.com/watch?v=1PnVor36_40" },
-    { title: "HTML/CSS Flexbox Tutorial", link: "https://www.youtube.com/watch?v=fYq5PXgSsbE" },
-    { title: "HTML/CSS Grid Layout Crash Course", link: "https://www.youtube.com/watch?v=rg7Fvvl3taU" }
-  ];
+  { title: "HTML Full Course - freeCodeCamp", link: "https://www.youtube.com/watch?v=pQN-pnXPaVg" },
+  { title: "CSS Crash Course for Beginners", link: "https://www.youtube.com/watch?v=1Rs2ND1ryYc" },
+  { title: "HTML & CSS in 100 Seconds", link: "https://www.youtube.com/watch?v=OEV8gMkCHXQ" },
+  { title: "Responsive Web Design - Codevolution", link: "https://www.youtube.com/watch?v=HcOc7P5BMi4" },
+  { title: "HTML & CSS Crash Course - Traversy Media", link: "https://www.youtube.com/watch?v=UB1O30fR-EE" },
+  { title: "HTML Tutorial for Beginners - Mosh", link: "https://www.youtube.com/watch?v=qz0aGYrrlhU" },
+  { title: "CSS Tutorial for Beginners - Mosh", link: "https://www.youtube.com/watch?v=1PnVor36_40" },
+  { title: "HTML/CSS Flexbox Tutorial", link: "https://www.youtube.com/watch?v=fYq5PXgSsbE" },
+  { title: "HTML/CSS Grid Layout Crash Course", link: "https://www.youtube.com/watch?v=rg7Fvvl3taU" }
+];
+
+const jsArticles = [
+  { title: "W3Schools JavaScript Tutorial", link: "https://www.w3schools.com/js/" },
+  { title: "MDN Web Docs: JavaScript Guide", link: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide" },
+  { title: "JavaScript.info - Modern JS Tutorial", link: "https://javascript.info/" },
+  { title: "FreeCodeCamp JS Certification", link: "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/" },
+  { title: "GeeksforGeeks JavaScript Guide", link: "https://www.geeksforgeeks.org/javascript/" },
+  { title: "TutorialsPoint JavaScript", link: "https://www.tutorialspoint.com/javascript/index.htm" },
+  { title: "Programiz JavaScript Guide", link: "https://www.programiz.com/javascript" }
+];
+
+const jsVideos = [
+  { title: "JavaScript Tutorial for Beginners - Mosh", link: "https://www.youtube.com/watch?v=W6NZfCO5SIk" },
+  { title: "JavaScript Crash Course - Traversy Media", link: "https://www.youtube.com/watch?v=hdI2bqOjy3c" },
+  { title: "JavaScript Full Course - FreeCodeCamp", link: "https://www.youtube.com/watch?v=jS4aFq5-91M" },
+  { title: "Learn JavaScript in 12 Minutes", link: "https://www.youtube.com/watch?v=Ukg_U3CnJWI" },
+  { title: "JS in 100 Seconds", link: "https://www.youtube.com/watch?v=DHjqpvDnNGE" }
+];
+
+const sqlArticles = [
+  { title: "W3Schools SQL Tutorial", link: "https://www.w3schools.com/sql/" },
+  { title: "Mode SQL Tutorial for Beginners", link: "https://mode.com/sql-tutorial/" },
+  { title: "FreeCodeCamp SQL Certification", link: "https://www.freecodecamp.org/learn/relational-database/" },
+  { title: "SQLBolt Interactive Tutorial", link: "https://sqlbolt.com/" },
+  { title: "GeeksforGeeks SQL Guide", link: "https://www.geeksforgeeks.org/sql-tutorial/" },
+  { title: "TutorialsPoint SQL", link: "https://www.tutorialspoint.com/sql/" }
+];
+
+const sqlVideos = [
+  { title: "SQL Tutorial - Full Database Course for Beginners", link: "https://www.youtube.com/watch?v=HXV3zeQKqGY" },
+  { title: "SQL in 100 Seconds", link: "https://www.youtube.com/watch?v=zsjvFFKOm3c" },
+  { title: "Learn SQL in 1 Hour", link: "https://www.youtube.com/watch?v=9Pzj7Aj25lw" },
+  { title: "MySQL Full Course - Programming with Mosh", link: "https://www.youtube.com/watch?v=7S_tz1z_5bA" }
+];
+
+
 
 function getRandomItems(arr, n) {
   const shuffled = arr.sort(() => 0.5 - Math.random());
@@ -87,6 +123,12 @@ router.post('/recommend', async (req, res) => {
     if (lower.includes('html') || lower.includes('css')) {
       selectedArticles = getRandomItems(htmlcssArticles, 2);
       selectedVideos = getRandomItems(htmlcssVideos, 1);
+    } else if (lower.includes('javascript')) {
+      selectedArticles = getRandomItems(jsArticles, 2);
+      selectedVideos = getRandomItems(jsVideos, 1);
+    } else if (lower.includes('sql')) {
+      selectedArticles = getRandomItems(sqlArticles, 2);
+      selectedVideos = getRandomItems(sqlVideos, 1);
     } else {
       selectedArticles = getRandomItems(pythonArticles, 2);
       selectedVideos = getRandomItems(pythonVideos, 1);
