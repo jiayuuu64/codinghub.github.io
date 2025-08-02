@@ -38,12 +38,23 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
     setShowResults(true);
 
     const topicScores = {};
+    const questionDetails = [];
+
     questions.forEach((q, i) => {
       const topic = q.topic || "Unknown";
-      const correct = userAnswers[i] === q.answer;
+      const userAns = userAnswers[i] || '';
+      const correct = userAns === q.answer;
+
       if (!topicScores[topic]) topicScores[topic] = { score: 0, total: 0 };
       topicScores[topic].score += correct ? 1 : 0;
       topicScores[topic].total += 1;
+
+      questionDetails.push({
+        question: q.question,
+        userAnswer: userAns,
+        correctAnswer: q.answer,
+        wasCorrect: correct
+      });
     });
 
     for (const [topic, { score, total }] of Object.entries(topicScores)) {
@@ -51,7 +62,13 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
         await fetch('https://codinghub-r3bn.onrender.com/api/quiz-history/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, topic, score, total }),
+          body: JSON.stringify({
+            email,
+            topic,
+            score,
+            total,
+            questionDetails: questionDetails.filter(q => q.topic === topic || topic === "Unknown")
+          })
         });
       } catch (err) {
         console.error('❌ Error saving final quiz score:', err);
