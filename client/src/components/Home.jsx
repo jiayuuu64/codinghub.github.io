@@ -10,6 +10,8 @@ const Home = () => {
   const [recommendations, setRecommendations] = useState([]);
   const [aiQuiz, setAiQuiz] = useState(null);
   const [weakTopics, setWeakTopics] = useState([]);
+  const [loadingQuiz, setLoadingQuiz] = useState(true);
+  const [loadingRecommendations, setLoadingRecommendations] = useState(true);
   const email = localStorage.getItem('email');
   const navigate = useNavigate();
 
@@ -28,20 +30,26 @@ const Home = () => {
           setProgressData(progressRes.data || []);
         }
 
-        // Fetch AI quiz
+        // Fetch personalized quiz
         if (email) {
+          setLoadingQuiz(true);
           const quizRes = await axios.post(`${baseUrl}/quiz-generator/personalized`, { email });
           setAiQuiz(quizRes.data.quiz || []);
           setWeakTopics(quizRes.data.weakTopics || []);
+          setLoadingQuiz(false);
         }
 
         // Fetch recommendations
         if (email) {
+          setLoadingRecommendations(true);
           const recRes = await axios.get(`${baseUrl}/recommendations?email=${email}`);
           setRecommendations(recRes.data || []);
+          setLoadingRecommendations(false);
         }
       } catch (err) {
         console.error('Error fetching data:', err);
+        setLoadingQuiz(false);
+        setLoadingRecommendations(false);
       }
     };
 
@@ -105,7 +113,9 @@ const Home = () => {
 
         <section className="self-eval-section">
           <h2>Challenge Yourself</h2>
-          {weakTopics.length > 0 && aiQuiz?.length > 0 ? (
+          {loadingQuiz ? (
+            <p style={{ color: '#ccc', textAlign: 'center' }}>Loading personalized quiz...</p>
+          ) : weakTopics.length > 0 && aiQuiz?.length > 0 ? (
             <>
               <p style={{ color: '#ccc', marginBottom: '10px', textAlign: 'center' }}>
                 Based on your previous quizzes, you struggled with: <strong>{weakTopics.join(', ')}</strong>. We've generated a quiz just for you.
@@ -123,43 +133,49 @@ const Home = () => {
 
         <section className="recommended-section">
           <h2>Recommended For You</h2>
-          {recommendations.length > 0 && weakTopics.length > 0 && (
-            <p style={{ color: '#ccc', marginBottom: '10px', textAlign: 'center' }}>
-             Based on your recent <strong>Final Quiz</strong>, we've added some helpful videos and articles below to improve your understanding in those courses.
-            </p>
-          )}
-          <div className="recommendation-grid">
-            {recommendations.map((rec, idx) => (
-              <div
-                className="recommendation-card"
-                key={idx}
-                onClick={() => rec.link && window.open(rec.link, '_blank')}
-                style={{ cursor: rec.link ? 'pointer' : 'not-allowed' }}
-              >
-                <img
-                  src={rec.thumbnail}
-                  alt={rec.title}
-                  className="recommendation-thumb"
-                />
-                <div>
-                  <p className="recommendation-type">{rec.type?.toUpperCase()}</p>
-                  <p className="recommendation-title">{rec.title}</p>
-                  {rec.hostname && <p className="recommendation-site">{rec.hostname}</p>}
-                </div>
-                {rec.link ? (
-                  <a href={rec.link} target="_blank" rel="noopener noreferrer">View</a>
-                ) : (
-                  <p className="disabled-link">Link not available</p>
+          {loadingRecommendations ? (
+            <p style={{ color: '#ccc', textAlign: 'center' }}>Loading recommendations...</p>
+          ) : (
+            <>
+              {recommendations.length > 0 && weakTopics.length > 0 && (
+                <p style={{ color: '#ccc', marginBottom: '10px', textAlign: 'center' }}>
+                  Based on your recent <strong>Final Quiz</strong>, we've added some helpful videos and articles below to improve your understanding in those courses.
+                </p>
+              )}
+              <div className="recommendation-grid">
+                {recommendations.map((rec, idx) => (
+                  <div
+                    className="recommendation-card"
+                    key={idx}
+                    onClick={() => rec.link && window.open(rec.link, '_blank')}
+                    style={{ cursor: rec.link ? 'pointer' : 'not-allowed' }}
+                  >
+                    <img
+                      src={rec.thumbnail}
+                      alt={rec.title}
+                      className="recommendation-thumb"
+                    />
+                    <div>
+                      <p className="recommendation-type">{rec.type?.toUpperCase()}</p>
+                      <p className="recommendation-title">{rec.title}</p>
+                      {rec.hostname && <p className="recommendation-site">{rec.hostname}</p>}
+                    </div>
+                    {rec.link ? (
+                      <a href={rec.link} target="_blank" rel="noopener noreferrer">View</a>
+                    ) : (
+                      <p className="disabled-link">Link not available</p>
+                    )}
+                  </div>
+                ))}
+
+                {recommendations.length === 0 && (
+                  <p style={{ color: '#ccc', textAlign: 'center', marginTop: '1rem' }}>
+                    No recommendations yet — complete a quiz to see personalized suggestions!
+                  </p>
                 )}
               </div>
-            ))}
-
-            {recommendations.length === 0 && (
-              <p style={{ color: '#ccc', textAlign: 'center', marginTop: '1rem' }}>
-                No recommendations yet — complete a quiz to see personalized suggestions!
-              </p>
-            )}
-          </div>
+            </>
+          )}
         </section>
       </div>
     </>

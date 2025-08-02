@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/finalquiz.css';
-import { speakText } from '../utils/textToSpeech';
+import { speakText, stopSpeaking } from '../utils/textToSpeech';
 
 const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTitle }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -9,6 +9,9 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
   const [score, setScore] = useState(0);
   const [showAll, setShowAll] = useState(false);
   const [recommendations, setRecommendations] = useState([]);
+  const [loadingRecs, setLoadingRecs] = useState(false);
+  const [readerMode, setReaderMode] = useState(false);
+
   const email = localStorage.getItem('email');
   const currentQn = questions[currentIndex];
 
@@ -17,15 +20,18 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
   };
 
   const handleNext = () => {
-    if (currentIndex < questions.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    }
+    stopSpeaking();
+    if (currentIndex < questions.length - 1) setCurrentIndex(currentIndex + 1);
   };
 
   const handleBack = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
+    stopSpeaking();
+    if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
+  };
+
+  const handleExit = () => {
+    stopSpeaking();
+    onFinish();
   };
 
   const handleSubmit = async () => {
@@ -33,9 +39,11 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
     const confirmSubmit = window.confirm(`You left ${unanswered} question(s) blank. Do you want to submit?`);
     if (!confirmSubmit) return;
 
+    stopSpeaking();
     const correctCount = questions.filter((q, i) => userAnswers[i] === q.answer).length;
     setScore(correctCount);
     setShowResults(true);
+    setLoadingRecs(true);
 
     const topicScores = {};
     const questionDetails = [];
@@ -51,6 +59,7 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
 
       questionDetails.push({
         question: q.question,
+        topic,
         userAnswer: userAns,
         correctAnswer: q.answer,
         wasCorrect: correct
@@ -75,7 +84,10 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
       }
     }
 
-    if (correctCount / questions.length > 0.8) return;
+    if (correctCount / questions.length > 0.8) {
+      setLoadingRecs(false);
+      return;
+    }
 
     try {
       const response = await axios.post('https://codinghub-r3bn.onrender.com/api/ai/recommend', {
@@ -110,10 +122,10 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
       setRecommendations(parsed);
     } catch (err) {
       console.error('Failed to fetch recommendations:', err);
+    } finally {
+      setLoadingRecs(false);
     }
   };
-
-  const passedWell = score / questions.length > 0.8;
 
   const downloadResults = () => {
     const content = questions.map((q, i) => {
@@ -127,44 +139,96 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
     link.click();
   };
 
+  useEffect(() => {
+    let isCancelled = false;
+
+    const speakCurrent = async () => {
+      stopSpeaking();
+      if (!readerMode || showResults || !questions.length) return;
+
+      const qn = questions[currentIndex];
+      await speakText(`Question ${currentIndex + 1}: ${qn.question}`);
+      if (isCancelled) return;
+
+      for (const opt of qn.options) {
+        if (isCancelled) return;
+        await speakText(opt);
+        await new Promise(res => setTimeout(res, 300));
+      }
+    };
+
+    speakCurrent();
+
+    return () => {
+      isCancelled = true;
+      stopSpeaking();
+    };
+  }, [readerMode, currentIndex, showResults]);
+
+  useEffect(() => {
+    if (!readerMode || !showResults) return;
+
+    stopSpeaking();
+
+    let isCancelled = false;
+
+    const speakSummary = async () => {
+      await speakText(`You scored ${score} out of ${questions.length}`);
+      if (isCancelled) return;
+
+      for (let i = 0; i < questions.length; i++) {
+        const q = questions[i];
+        const isCorrect = userAnswers[i] === q.answer;
+        if (!showAll && isCorrect) continue;
+
+        if (isCancelled) return;
+        await speakText(`Question ${i + 1}: ${q.question}`);
+        if (isCancelled) return;
+        await speakText(`Your answer: ${userAnswers[i] || 'Not answered'}`);
+        if (isCancelled) return;
+        await speakText(`Correct answer: ${q.answer}`);
+        if (isCancelled) return;
+        await speakText(`Explanation: ${q.explanation}`);
+      }
+    };
+
+    speakSummary();
+
+    return () => {
+      isCancelled = true;
+      stopSpeaking();
+    };
+  }, [readerMode, showResults]);
+
   return (
     <div className="f-quiz-container">
+      <div className="reader-toggle">
+        <button
+          onClick={() => {
+            stopSpeaking();
+            setReaderMode(prev => !prev);
+          }}
+          className={`reader-btn ${readerMode ? 'on' : 'off'}`}
+        >
+          Reader Mode: {readerMode ? '✓' : '✗'}
+        </button>
+      </div>
+
       {!showResults ? (
         <div className="f-quiz-block">
           <h2 className="f-quiz-title">Final Quiz</h2>
-          <h3 className="f-quiz-question">
-            Q{currentIndex + 1}: {currentQn.question}
-            <button className="speaker-btn" onClick={() => speakText(currentQn.question)} title="Listen">🔊</button>
-          </h3>
+          <h3 className="f-quiz-question">Q{currentIndex + 1}: {currentQn.question}</h3>
           <ul className="f-quiz-options">
-            {questions[currentIndex]?.options.map((option, idx) => (
+            {currentQn.options.map((option, idx) => (
               <li
                 key={idx}
                 className={`f-quiz-option ${userAnswers[currentIndex] === option ? 'selected' : ''}`}
                 onClick={() => handleOptionClick(option)}
-                role="button"
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  color: '#ffed91'
-                }}
               >
-                <span className="option-text">{option}</span>
-                <div
-                  className="option-right"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    speakText(option);
-                  }}
-                  title="Listen to option"
-                >
-                  🔊
-                </div>
+                {option}
               </li>
             ))}
           </ul>
-
           <div className="f-quiz-nav">
             <button onClick={handleBack} disabled={currentIndex === 0}>← Back</button>
             {currentIndex < questions.length - 1 ? (
@@ -176,21 +240,15 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
         </div>
       ) : (
         <div className="f-quiz-results">
-          <h3>Your Score: {score}/{questions.length}</h3>
+          <h3 className="score-title">Your Score: {score}/{questions.length}</h3>
 
-          {passedWell ? (
-            <div className="recom-section">
-              <h4>Great Job!</h4>
-              <p style={{ textAlign: 'center', color: '#ccc' }}>
-                You scored above 80%! Keep up the good work and challenge yourself further!
-              </p>
-              <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-                <button className="submit-btn" onClick={() => window.location.reload()}>
-                  Retry a Harder Quiz
-                </button>
-              </div>
-            </div>
-          ) : recommendations.length > 0 && (
+          {loadingRecs && (
+            <p style={{ color: '#999', fontStyle: 'italic', textAlign: 'center' }}>
+              Loading recommendations...
+            </p>
+          )}
+
+          {!loadingRecs && score / questions.length <= 0.8 && recommendations.length > 0 && (
             <div className="recom-section">
               <h4>✨ Personalized Recommendations:</h4>
               <div className="recom-grid">
@@ -213,13 +271,9 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
             </div>
           )}
 
-          <div className="f-quiz-actions" style={{ marginBottom: '1rem' }}>
-            <button onClick={() => setShowAll(false)} className={!showAll ? 'active-toggle' : ''}>
-              Show Only Wrong
-            </button>
-            <button onClick={() => setShowAll(true)} className={showAll ? 'active-toggle' : ''}>
-              Show All
-            </button>
+          <div className="f-quiz-actions">
+            <button onClick={() => setShowAll(false)} className={!showAll ? 'active-toggle' : ''}>Show Only Wrong</button>
+            <button onClick={() => setShowAll(true)} className={showAll ? 'active-toggle' : ''}>Show All</button>
             <button onClick={downloadResults}>Download Results</button>
           </div>
 
@@ -227,7 +281,6 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
             const userAnswer = userAnswers[i];
             const isCorrect = userAnswer === q.answer;
             if (!showAll && isCorrect) return null;
-
             return (
               <div key={i} className="f-quiz-result-item">
                 <p><strong>Q{i + 1}:</strong> {q.question}</p>
@@ -245,16 +298,14 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
                     </div>
                   );
                 })}
-                <div className="f-quiz-explanation">
-                  <strong>Explanation:</strong> {q.explanation}
-                </div>
+                <div className="f-quiz-explanation"><strong>Explanation:</strong> {q.explanation}</div>
               </div>
             );
           })}
 
           <div className="f-quiz-actions">
             <button onClick={() => window.location.reload()}>Try Again</button>
-            <button onClick={onFinish}>Finish</button>
+            <button onClick={handleExit}>Finish</button>
           </div>
         </div>
       )}
