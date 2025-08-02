@@ -60,6 +60,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import { Configuration, OpenAIApi } from 'openai';
 import QuizHistory from '../db/models/QuizHistory.mjs';
+import User from '../db/models/User.mjs';
 
 dotenv.config();
 const router = express.Router();
@@ -74,6 +75,9 @@ router.post('/personalized', async (req, res) => {
   try {
     const { email } = req.body;
     if (!email) return res.status(400).json({ error: 'Missing email' });
+
+    const user = await User.findOne({ email });
+    const experience = user?.experiencePreference || 'Beginner';
 
     const history = await QuizHistory.find({ email });
 

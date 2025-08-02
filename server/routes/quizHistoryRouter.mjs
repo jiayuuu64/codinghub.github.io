@@ -3,18 +3,23 @@ import QuizHistory from '../db/models/QuizHistory.mjs';
 
 const router = express.Router();
 
-// ✅ Save a quiz result (from frontend to DB)
+// ✅ Save a quiz result (with optional question details)
 router.post('/save', async (req, res) => {
   try {
-    const { email, topic, score, total } = req.body;
+    const { email, topic, score, total, questionDetails } = req.body;
 
-    // Check if any field is missing
     if (!email || !topic || score === undefined || total === undefined) {
       return res.status(400).json({ error: 'Missing fields' });
     }
 
-    // Save the result in the DB
-    const history = new QuizHistory({ email, topic, score, total });
+    const history = new QuizHistory({
+      email,
+      topic,
+      score,
+      total,
+      questionDetails: Array.isArray(questionDetails) ? questionDetails : []
+    });
+
     await history.save();
 
     res.json({ message: 'Saved successfully' });
@@ -23,6 +28,7 @@ router.post('/save', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 router.get('/weak-topics', async (req, res) => {
   try {
