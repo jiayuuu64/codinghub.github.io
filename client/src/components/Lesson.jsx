@@ -3,7 +3,6 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import FinalQuiz from './FinalQuiz';
 import '../styles/Lesson.css';
-import { speakText } from '../utils/textToSpeech';
 
 const Lesson = () => {
   const { lessonId } = useParams();
@@ -62,18 +61,12 @@ const Lesson = () => {
     }
   };
 
-  // const handleOptionSelect = (option) => {
-  //   setSelectedOption(option);
-  //   setIsAnsweredCorrectly(option === currentStep.answer);
-  // };
-
   const handleOptionSelect = async (option) => {
     setSelectedOption(option);
     const isCorrect = option === currentStep.answer;
     setIsAnsweredCorrectly(isCorrect);
 
     const topic = currentStep.topic || "Unknown";
-    const email = localStorage.getItem('email');
 
     try {
       await fetch('https://codinghub-r3bn.onrender.com/api/quiz-history/save', {
@@ -90,7 +83,6 @@ const Lesson = () => {
       console.error('❌ Failed to save quiz history:', err);
     }
   };
-
 
   const handleFinishLesson = async () => {
     if (!email) {
@@ -148,10 +140,7 @@ const Lesson = () => {
           switch (currentStep.type) {
             case 'text':
               return (
-                <div>
-                  <p className="lesson-step-text">{currentStep.text}</p>
-                  <button className="speaker-btn" onClick={() => speakText(currentStep.text)}>🔊</button>
-                </div>
+                <p className="lesson-step-text">{currentStep.text}</p>
               );
             case 'code':
               return (
@@ -178,14 +167,12 @@ const Lesson = () => {
                     </video>
                   )}
                   <p className="lesson-step-text" style={{ marginTop: '1rem' }}>{currentStep.text}</p>
-                  <button className="speaker-btn" onClick={() => speakText(currentStep.text)}>🔊</button>
                 </div>
               );
             case 'text-code':
               return (
                 <div className="lesson-step-text-code">
                   <p className="lesson-step-text">{currentStep.text}</p>
-                  <button className="speaker-btn" onClick={() => speakText(currentStep.text)}>🔊</button>
                   <div className="code-preview-wrapper">
                     <pre className="lesson-step-code">
                       <code>{currentStep.content}</code>
@@ -202,16 +189,7 @@ const Lesson = () => {
             case 'quiz':
               return (
                 <div className="lesson-step-quiz">
-                  <h3 className="quiz-question">
-                    {currentStep.question}
-                    <button
-                      onClick={() => speakText(currentStep.question)}
-                      className="speaker-btn"
-                      title="Listen"
-                    >
-                      🔊
-                    </button>
-                  </h3>
+                  <h3 className="quiz-question">{currentStep.question}</h3>
                   <ul className="quiz-options">
                     {currentStep.options.map((option, idx) => (
                       <li
@@ -220,8 +198,7 @@ const Lesson = () => {
                           ? isAnsweredCorrectly
                             ? 'correct'
                             : 'incorrect'
-                          : ''
-                          }`}
+                          : ''}`}
                         onClick={() => !isAnsweredCorrectly && handleOptionSelect(option)}
                         tabIndex={0}
                         role="button"
@@ -234,16 +211,6 @@ const Lesson = () => {
                       >
                         <span className="option-text">{option}</span>
                         <div className="option-right" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              speakText(option);
-                            }}
-                            className="speaker-btn"
-                            title="Listen to option"
-                          >
-                            🔊
-                          </button>
                           {selectedOption === option && isAnsweredCorrectly && <span className="option-feedback">✓</span>}
                           {selectedOption === option && !isAnsweredCorrectly && <span className="option-feedback">✗</span>}
                         </div>
@@ -252,7 +219,6 @@ const Lesson = () => {
                   </ul>
                 </div>
               );
-
             default:
               return <p>Unknown step type: {currentStep.type}</p>;
           }
