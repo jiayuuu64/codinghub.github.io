@@ -1,16 +1,18 @@
+// === IMPORTS ===
 import User from "../db/models/User.mjs";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../utils/token.mjs";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 
-// Validate password strength
+// === PASSWORD STRENGTH VALIDATION ===
 const validatePasswordStrength = (password) => {
+    // Regex: checks for uppercase, lowercase, digit, special character, min 8 characters
     const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     return strongRegex.test(password) ? 'strong' : 'weak';
 };
 
-// Email sender
+// === SEND PASSWORD RESET EMAIL ===
 const sendPasswordResetEmail = async (email, token) => {
     const resetLink = `https://jiayuuu64.github.io/reset-password?token=${token}`;
 
@@ -34,18 +36,18 @@ const sendPasswordResetEmail = async (email, token) => {
         `
     };
 
-    await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions); // Send the email
 };
 
-// === Password Reset ===
+// === INITIATE PASSWORD RECOVERY ===
 export const initiatePasswordRecovery = async (req, res) => {
     const { email } = req.body;
     if (!email) return res.status(400).json({ message: "Email is required." });
 
     const user = await User.findOne({ email });
     if (user) {
-        const token = crypto.randomBytes(20).toString("hex");
-        const expires = Date.now() + 3600000;
+        const token = crypto.randomBytes(20).toString("hex"); // Generate secure token
+        const expires = Date.now() + 3600000; // 1 hour expiry
 
         await User.updateOne(
             { email },
@@ -55,11 +57,13 @@ export const initiatePasswordRecovery = async (req, res) => {
         await sendPasswordResetEmail(email, token);
     }
 
+    // Always respond the same to prevent email probing
     return res.status(200).json({
         message: "If that email exists, a reset link will be sent.",
     });
 };
 
+// === RESET PASSWORD ===
 export const resetPassword = async (req, res) => {
     const { token, newPassword } = req.body;
 
@@ -74,7 +78,7 @@ export const resetPassword = async (req, res) => {
 
     const user = await User.findOne({
         resetToken: token,
-        resetTokenExpires: { $gt: Date.now() },
+        resetTokenExpires: { $gt: Date.now() }, // Must not be expired
     });
 
     if (!user) return res.status(400).json({ message: "Invalid or expired token." });
@@ -95,10 +99,9 @@ export const resetPassword = async (req, res) => {
     return res.status(200).json({ message: "Password reset successful." });
 };
 
-// === Login/Register ===
+// === LOGIN ===
 export const loginUser = async (req, res) => {
     try {
-
         const { email, password } = req.body;
         const user = await User.findOne({ email });
 
@@ -122,6 +125,7 @@ export const loginUser = async (req, res) => {
     }
 };
 
+// === REGISTER ===
 export const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -155,7 +159,7 @@ export const registerUser = async (req, res) => {
     }
 };
 
-// === Preferences ===
+// === PREFERENCES ===
 export const languagePreference = async (req, res) => {
     const { email, preference } = req.body;
     try {
@@ -224,6 +228,7 @@ export const getUserPreferences = async (req, res) => {
     }
 };
 
+// === AVATAR ===
 export const updateAvatar = async (req, res) => {
     const { email, avatarBase64 } = req.body;
     if (!email || !avatarBase64) {
@@ -244,6 +249,7 @@ export const updateAvatar = async (req, res) => {
     }
 };
 
+// === UPDATE PROFILE ===
 export const updateUserProfile = async (req, res) => {
     const { email, name, languagePreference, experiencePreference, commitmentPreference } = req.body;
     if (!email) {
@@ -264,13 +270,11 @@ export const updateUserProfile = async (req, res) => {
         await user.save();
         res.status(200).json({ message: "Profile updated successfully." });
     } catch (err) {
-        console.error("Update profile error:", err);
         res.status(500).json({ message: "Failed to update profile." });
     }
 };
 
-
-// Change password
+// === CHANGE PASSWORD (AUTHENTICATED) ===
 export const changePassword = async (req, res) => {
     const { email, currentPassword, newPassword, confirmPassword } = req.body;
 
@@ -305,11 +309,11 @@ export const changePassword = async (req, res) => {
 
         res.status(200).json({ message: "Password changed successfully." });
     } catch (err) {
-        console.error("Change password error:", err);
         res.status(500).json({ message: "Failed to change password." });
     }
 };
 
+// === PROGRESS TRACKING ===
 export const completeLesson = async (req, res) => {
   const { courseId } = req.params;
   const { email } = req.query;
@@ -323,12 +327,12 @@ export const completeLesson = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    const courseIdStr = courseId.toString(); // Ensure string comparison
+    const courseIdStr = courseId.toString();
     let progress = user.progress.find(p => p.courseId.toString() === courseIdStr);
 
     if (!progress) {
       progress = {
-        courseId: courseId, // Keep as ObjectId
+        courseId,
         completedLessons: [],
         completedQuiz: false,
         recommendations: []
@@ -347,9 +351,6 @@ export const completeLesson = async (req, res) => {
   }
 };
 
-
-
-
 export const completeQuiz = async (req, res) => {
   const { email, courseId } = req.params;
 
@@ -360,7 +361,7 @@ export const completeQuiz = async (req, res) => {
     let progress = user.progress.find(p => p.courseId.toString() === courseId.toString());
     if (!progress) {
       progress = {
-        courseId: courseId, 
+        courseId, 
         completedLessons: [],
         completedQuiz: true,
         recommendations: []
@@ -376,7 +377,6 @@ export const completeQuiz = async (req, res) => {
     res.status(500).json({ message: 'Failed to update quiz completion', error: err.message });
   }
 };
-
 
 export const getProgress = async (req, res) => {
     const { email, courseId } = req.params;
@@ -399,11 +399,8 @@ export const getAllUserProgress = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Return all progress
     res.status(200).json(user.progress || []);
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch progress', error: err.message });
   }
 };
-
-
