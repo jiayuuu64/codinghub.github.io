@@ -95,34 +95,38 @@ const sqlVideos = [
   { title: "MySQL Full Course - Programming with Mosh", link: "https://www.youtube.com/watch?v=7S_tz1z_5bA" }
 ];
 
-
-
+// Randomly select `n` items from an array
 function getRandomItems(arr, n) {
-  const shuffled = arr.sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, n);
+  const shuffled = arr.sort(() => 0.5 - Math.random()); // Shuffle array
+  return shuffled.slice(0, n); // Return first `n` elements
 }
 
+// === Main Recommendation Route ===
 router.post('/recommend', async (req, res) => {
   const { score, courseTitle, email } = req.body;
 
+  // Validate inputs
   if (score === undefined || !courseTitle || !email) {
     return res.status(400).json({ error: 'Missing score, courseTitle, or email' });
   }
 
   try {
+    // Find user in the database
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ error: 'User not found' });
 
+    // Find course in the database
     const course = await Course.findOne({ title: courseTitle });
     if (!course) return res.status(404).json({ error: 'Course not found' });
 
     let selectedArticles = [];
     let selectedVideos = [];
 
+    // Match course title to content category
     const lower = courseTitle.toLowerCase();
     if (lower.includes('html') || lower.includes('css')) {
-      selectedArticles = getRandomItems(htmlcssArticles, 2);
-      selectedVideos = getRandomItems(htmlcssVideos, 1);
+      selectedArticles = getRandomItems(htmlcssArticles, 2); // 2 articles
+      selectedVideos = getRandomItems(htmlcssVideos, 1);     // 1 video
     } else if (lower.includes('javascript')) {
       selectedArticles = getRandomItems(jsArticles, 2);
       selectedVideos = getRandomItems(jsVideos, 1);
@@ -130,22 +134,28 @@ router.post('/recommend', async (req, res) => {
       selectedArticles = getRandomItems(sqlArticles, 2);
       selectedVideos = getRandomItems(sqlVideos, 1);
     } else {
+      // Default to Python
       selectedArticles = getRandomItems(pythonArticles, 2);
       selectedVideos = getRandomItems(pythonVideos, 1);
     }
 
+    // Format recommendations as strings with emojis
     const recommendationLines = [
       ...selectedVideos.map(v => `📺 Video: "${v.title}" - ${v.link}`),
       ...selectedArticles.map(a => `📰 Article: "${a.title}" - ${a.link}`)
     ];
 
+    // Update user's progress for this course
     const progress = user.progress.find(p => p.courseId?.toString() === course._id.toString());
     if (progress) {
-      progress.finalQuizScore = score;
-      progress.recommendations = recommendationLines;
+      progress.finalQuizScore = score;                    // Save score
+      progress.recommendations = recommendationLines;     // Save recommendations
     }
 
+    // Save changes to user
     await user.save();
+
+    // Return recommendations as response (joined with newline)
     res.status(200).json({ recommendations: recommendationLines.join('\n') });
   } catch (err) {
     console.error('Recommendation Error:', err);

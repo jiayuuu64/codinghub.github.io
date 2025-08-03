@@ -1,27 +1,41 @@
 import express from 'express';
 import User from '../db/models/User.mjs';
 
+// Create an Express router instance
 const router = express.Router();
 
+// === GET /recommendations ===
+// Returns either quiz-based or preference-based learning recommendations for the user
 router.get('/recommendations', async (req, res) => {
   const { email } = req.query;
+
+  // Validate email
   if (!email) return res.status(400).json({ error: 'Email is required' });
 
   try {
+    // Fetch user and populate course references in progress
     const user = await User.findOne({ email }).populate('progress.courseId');
     if (!user) return res.status(404).json({ error: 'User not found' });
 
-    // ✅ STEP 1: Collect quiz-based recommendations
-    const allQuizRecs = user.progress.flatMap(p => p.recommendations || []);
-    const uniqueQuizRecs = [...new Set(allQuizRecs)];
+    // === STEP 1: Check if user has quiz-based recommendations ===
 
+    // Flatten all recommendations across all course progress
+    const allQuizRecs = user.progress.flatMap(p => p.recommendations || []);
+    const uniqueQuizRecs = [...new Set(allQuizRecs)]; // Remove duplicates
+
+    // Parse each recommendation line into structured objects
     const parsed = uniqueQuizRecs.map(line => {
-      const titleMatch = line.match(/"(.+?)"/);
-      const linkMatch = line.match(/https?:\/\/[^\s]+/);
+      const titleMatch = line.match(/"(.+?)"/); // Extract title in quotes
+      const linkMatch = line.match(/https?:\/\/[^\s]+/); // Extract URL
+
       const title = titleMatch ? titleMatch[1] : 'Untitled';
       const link = linkMatch ? linkMatch[0] : null;
+
+      // Determine content type
       const isVideo = line.includes('📺') || (link && link.includes('youtube.com/watch?v='));
       const isArticle = line.includes('📰') || (!isVideo && line?.includes('Article'));
+
+      // Extract YouTube video ID for thumbnail
       const videoId = isVideo && link?.includes('v=') ? link.split('v=')[1].split('&')[0] : null;
 
       return {
@@ -257,9 +271,14 @@ router.get('/recommendations', async (req, res) => {
       ]
     };
 
+    // Use fallback based on language, default to Python if unknown
     const fallback = fallbackMap[lang] || fallbackMap['python'];
+
+    // Return fallback resources
     return res.status(200).json(fallback);
+
   } catch (err) {
+    // Handle unexpected server errors
     console.error('Error fetching recommendations:', err);
     res.status(500).json({ error: 'Internal server error' });
   }

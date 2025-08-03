@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
     required: true
   },
 
-  // ✅ Admin flag
+  // Admin flag
   isAdmin: {
     type: Boolean,
     default: false
@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
   commitmentPreference: String,
   avatar: String,
 
-  // ✅ Progress tracking
+  // Progress tracking
   progress: [{
     courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
     completedLessons: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Lesson' }],

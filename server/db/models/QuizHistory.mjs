@@ -8,7 +8,7 @@ const quizHistorySchema = new mongoose.Schema({
   total: { type: Number, required: true },     // Total number of questions
   timestamp: { type: Date, default: Date.now },// When the quiz was taken
 
-  // ✅ NEW: Store full question-level results
+  // Store full question-level results
   questionDetails: [
     {
       question: { type: String, required: true },

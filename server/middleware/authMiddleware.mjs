@@ -12,7 +12,7 @@ export const authenticateToken = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, APP_SECRET); // ✅ Match signing secret
+    const decoded = jwt.verify(token, APP_SECRET); // Match signing secret
     const user = await User.findById(decoded.id);
 
     if (!user) {

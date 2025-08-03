@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import Lesson from './Lesson.mjs';  // <--- Add this line
 
 const sectionSchema = new mongoose.Schema({
   title: { type: String, required: true },
