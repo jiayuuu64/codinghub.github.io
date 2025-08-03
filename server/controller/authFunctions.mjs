@@ -315,6 +315,9 @@ export const completeLesson = async (req, res) => {
   const { email } = req.query;
   const { lessonId } = req.body;
 
+console.log('✅ Email received:', email);
+  console.log('✅ Lesson ID received:', lessonId);
+
   if (!email) {
     return res.status(400).json({ message: 'Email is required.' });
   }
