@@ -5,32 +5,34 @@ import Navbar from '../components/Navbar';
 import '../styles/Home.css';
 
 const Home = () => {
-  const [courses, setCourses] = useState([]);
-  const [progressData, setProgressData] = useState([]);
-  const [recommendations, setRecommendations] = useState([]);
-  const [aiQuiz, setAiQuiz] = useState(null);
-  const [weakTopics, setWeakTopics] = useState([]);
-  const [loadingQuiz, setLoadingQuiz] = useState(true);
-  const [loadingRecommendations, setLoadingRecommendations] = useState(true);
-  const email = localStorage.getItem('email');
-  const navigate = useNavigate();
+  // === State hooks ===
+  const [courses, setCourses] = useState([]); // All course data
+  const [progressData, setProgressData] = useState([]); // User progress per course
+  const [recommendations, setRecommendations] = useState([]); // AI-based suggestions
+  const [aiQuiz, setAiQuiz] = useState(null); // Personalized quiz questions
+  const [weakTopics, setWeakTopics] = useState([]); // Topics the user is weak in
+  const [loadingQuiz, setLoadingQuiz] = useState(true); // Quiz loading indicator
+  const [loadingRecommendations, setLoadingRecommendations] = useState(true); // Recs loading indicator
+
+  const email = localStorage.getItem('email'); // Retrieve user email from localStorage
+  const navigate = useNavigate(); // For route navigation
 
   useEffect(() => {
     const fetchAll = async () => {
       try {
         const baseUrl = 'https://codinghub-r3bn.onrender.com/api';
 
-        // Fetch courses
+        // === Fetch available courses from backend ===
         const coursesRes = await axios.get(`${baseUrl}/courses`);
         setCourses(coursesRes.data);
 
-        // Fetch user progress
+        // === Fetch user's course progress ===
         if (email) {
           const progressRes = await axios.get(`${baseUrl}/users/${email}/progress`);
           setProgressData(progressRes.data || []);
         }
 
-        // Fetch personalized quiz
+        // === Fetch personalized quiz for weak topics ===
         if (email) {
           setLoadingQuiz(true);
           const quizRes = await axios.post(`${baseUrl}/quiz-generator/personalized`, { email });
@@ -39,7 +41,7 @@ const Home = () => {
           setLoadingQuiz(false);
         }
 
-        // Fetch recommendations
+        // === Fetch AI learning recommendations ===
         if (email) {
           setLoadingRecommendations(true);
           const recRes = await axios.get(`${baseUrl}/recommendations?email=${email}`);
@@ -53,9 +55,10 @@ const Home = () => {
       }
     };
 
-    fetchAll();
+    fetchAll(); // Initial load
   }, [email]);
 
+  // === Merge course + progress data for each course ===
   const mergedData = courses.map(course => {
     const courseProgress = progressData.find(p => p.courseId.toString() === course._id.toString());
     const completed = courseProgress?.completedLessons?.length || 0;
@@ -71,15 +74,19 @@ const Home = () => {
     };
   });
 
+  // === Sort courses by progress, take top 4 ===
   const topCourses = mergedData.sort((a, b) => b.percent - a.percent).slice(0, 4);
   while (topCourses.length < 4) {
+    // Pad with empty cards if < 4
     topCourses.push({ courseId: '', courseName: '', percent: 0, completed: 0, total: 0 });
   }
 
+  // === Navigate to selected course ===
   const handleCourseClick = (courseId) => {
     if (courseId) navigate(`/courses/${courseId}`);
   };
 
+  // === Navigate to Self Evaluation quiz with state ===
   const handleStartQuiz = () => {
     navigate('/self-eval-quiz', { state: { quiz: aiQuiz, weakTopics } });
   };
@@ -87,7 +94,10 @@ const Home = () => {
   return (
     <>
       <Navbar />
+
       <div className="home-container">
+
+        {/* === Section: Progress cards === */}
         <section className="progress-section">
           <h2>Your Progress</h2>
           <div className="progress-cards">
@@ -111,6 +121,7 @@ const Home = () => {
           </div>
         </section>
 
+        {/* === Section: Personalized Quiz === */}
         <section className="self-eval-section">
           <h2>Challenge Yourself</h2>
           {loadingQuiz ? (
@@ -131,17 +142,21 @@ const Home = () => {
           )}
         </section>
 
+        {/* === Section: Recommendations === */}
         <section className="recommended-section">
           <h2>Recommended For You</h2>
           {loadingRecommendations ? (
             <p style={{ color: '#ccc', textAlign: 'center' }}>Loading recommendations...</p>
           ) : (
             <>
+              {/* Show context if user has weak topics */}
               {recommendations.length > 0 && weakTopics.length > 0 && (
                 <p style={{ color: '#ccc', marginBottom: '10px', textAlign: 'center' }}>
                   Based on your recent <strong>Final Quiz</strong>, we've added some helpful videos and articles below to improve your understanding in those courses.
                 </p>
               )}
+
+              {/* Show recommendation cards */}
               <div className="recommendation-grid">
                 {recommendations.map((rec, idx) => (
                   <div
@@ -160,6 +175,7 @@ const Home = () => {
                       <p className="recommendation-title">{rec.title}</p>
                       {rec.hostname && <p className="recommendation-site">{rec.hostname}</p>}
                     </div>
+
                     {rec.link ? (
                       <a href={rec.link} target="_blank" rel="noopener noreferrer">View</a>
                     ) : (
@@ -168,6 +184,7 @@ const Home = () => {
                   </div>
                 ))}
 
+                {/* Show fallback if no recs */}
                 {recommendations.length === 0 && (
                   <p style={{ color: '#ccc', textAlign: 'center', marginTop: '1rem' }}>
                     No recommendations yet — complete a quiz to see personalized suggestions!

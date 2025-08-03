@@ -4,17 +4,21 @@ import '../styles/Login.css';
 import API_URL from '../utils/config';
 
 const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
+    // === State Hooks ===
+    const [email, setEmail] = useState('');             // User email input
+    const [password, setPassword] = useState('');       // User password input
+    const [error, setError] = useState('');             // Error message to display
+    const [loading, setLoading] = useState(false);      // Loading spinner state
 
+    const navigate = useNavigate();                     // React Router navigation hook
+
+    // === Submit login form ===
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
+        e.preventDefault();                             // Prevent default form reload
+        setLoading(true);                               // Show loading spinner
 
         try {
+            // Send login credentials to backend
             const response = await fetch(`${API_URL}/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -24,26 +28,29 @@ const Login = () => {
             const data = await response.json();
 
             if (response.ok) {
-                // ✅ Save login details including isAdmin
+                // ✅ Save login info to localStorage
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('email', data.email);
                 localStorage.setItem('isAdmin', data.isAdmin);
 
-                    if (data.isAdmin) {
-                        navigate('/admin');
-                    } else if (data.languagePreference && data.experiencePreference && data.commitmentPreference) {
-                        navigate('/home');
-                    } else {
-                        navigate('/language-preference');
-                    }
+                // ✅ Route users based on role and onboarding status
+                if (data.isAdmin) {
+                    navigate('/admin');
+                } else if (data.languagePreference && data.experiencePreference && data.commitmentPreference) {
+                    navigate('/home'); // All preferences set → go to dashboard
+                } else {
+                    navigate('/language-preference'); // Incomplete onboarding
+                }
 
                 setLoading(false);
                 setError('');
             } else {
+                // ❌ Login failed
                 setLoading(false);
                 setError(data.message || 'Login failed.');
             }
         } catch (err) {
+            // ❌ Network or server error
             setLoading(false);
             setError('An error occurred. Please try again.');
         }
@@ -52,9 +59,13 @@ const Login = () => {
     return (
         <div className="full-screen-bg" style={{ backgroundImage: `url('./assets/images/codingbg.jpg')` }}>
             <div className="login-container">
+                {/* === App logo and greeting === */}
                 <div className="logo">Coding Hub</div>
                 <h1 className="welcome-text">Welcome back!</h1>
+
+                {/* === Login form === */}
                 <form onSubmit={handleSubmit}>
+                    {/* Email input */}
                     <div className="input-container">
                         <label className="label-left">Email</label>
                         <input
@@ -65,6 +76,8 @@ const Login = () => {
                             required
                         />
                     </div>
+
+                    {/* Password input */}
                     <div className="input-container">
                         <label className="label-left">Password</label>
                         <input
@@ -75,14 +88,20 @@ const Login = () => {
                             required
                         />
                     </div>
+
+                    {/* Show status messages */}
                     {loading && <p className="loading">Logging in, please wait...</p>}
                     {error && <p className="error">{error}</p>}
+
+                    {/* Submit button */}
                     <div className="button-container">
                         <button type="submit" disabled={loading}>
                             {loading ? 'Logging in...' : 'Log in'}
                         </button>
                     </div>
                 </form>
+
+                {/* Additional links */}
                 <p className="link">
                     Don't have an account? <Link to="/signup">Create an account</Link>
                 </p>

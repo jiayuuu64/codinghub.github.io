@@ -8,6 +8,7 @@ const Profile = () => {
     const navigate = useNavigate();
     const email = localStorage.getItem('email');
 
+    // === State Hooks ===
     const [profile, setProfile] = useState({
         name: '',
         avatar: '',
@@ -16,12 +17,14 @@ const Profile = () => {
         commitmentPreference: ''
     });
 
-    const [preview, setPreview] = useState(null);
-    const [courseProgress, setCourseProgress] = useState({ completed: 0, total: 0 });
+    const [preview, setPreview] = useState(null);  // Local preview for new avatar
+    const [courseProgress, setCourseProgress] = useState({ completed: 0, total: 0 });  // Tracks number of completed courses
 
+    // === Fetch user profile and course progress on component mount ===
     useEffect(() => {
         const fetchProfile = async () => {
             try {
+                // Get saved preferences (name, avatar, language, etc.)
                 const response = await axios.get(`${import.meta.env.VITE_API_URL}/user-preferences?email=${email}`);
                 setProfile(response.data);
             } catch (err) {
@@ -32,14 +35,18 @@ const Profile = () => {
         const fetchProgress = async () => {
             try {
                 const baseUrl = import.meta.env.VITE_API_URL;
+
+                // Fetch user's progress per course
                 const progressRes = await axios.get(`${baseUrl}/${email}/progress`);
                 const progressList = progressRes.data || [];
 
+                // Fetch full list of courses with lessons
                 const courseRes = await axios.get(`${baseUrl.replace('/users', '')}/courses`);
                 const courses = courseRes.data;
 
                 let completedCourses = 0;
 
+                // Count how many courses are fully completed
                 courses.forEach(course => {
                     const progress = progressList.find(p => p.courseId === course._id);
                     const totalLessons = course.sections.reduce((sum, sec) => sum + sec.lessons.length, 0);
@@ -62,15 +69,18 @@ const Profile = () => {
         }
     }, [email]);
 
+    // === Handle Avatar Upload ===
     const handleAvatarUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
+        // Validate size < 5MB
         if (file.size > 5 * 1024 * 1024) {
             alert("Please select an image smaller than 5MB.");
             return;
         }
 
+        // Convert image to Base64
         const reader = new FileReader();
         reader.onloadend = async () => {
             const base64String = reader.result;
@@ -81,7 +91,7 @@ const Profile = () => {
                     avatarBase64: base64String
                 });
 
-                setPreview(base64String);
+                setPreview(base64String);  // Update preview locally
                 alert(res.data.message || "Profile picture updated successfully");
             } catch (error) {
                 if (error.response?.status === 413) {
@@ -97,7 +107,9 @@ const Profile = () => {
     return (
         <>
             <Navbar />
+
             <div className="profile-container">
+                {/* === Header with Avatar and Name === */}
                 <div className="profile-header">
                     <div className="avatar-wrapper">
                         <img
@@ -105,6 +117,7 @@ const Profile = () => {
                             alt="avatar"
                             className="avatar"
                         />
+                        {/* Upload Button for Avatar */}
                         <label className="edit-avatar-button">
                             <input type="file" onChange={handleAvatarUpload} accept="image/*" hidden />
                             ✏️ Edit
@@ -114,6 +127,7 @@ const Profile = () => {
                     <p>{email}</p>
                 </div>
 
+                {/* === Preferences Section === */}
                 <section className="preferences-section">
                     <h3>Your Preferences</h3>
                     <div className="preferences-cards">
@@ -132,6 +146,7 @@ const Profile = () => {
                     </div>
                 </section>
 
+                {/* === Course Progress Section === */}
                 <div className="profile-section">
                     <h3>Course Progress</h3>
                     <div className="profile-progress-bar">
@@ -147,8 +162,11 @@ const Profile = () => {
                     <p>{courseProgress.completed} of {courseProgress.total} courses completed</p>
                 </div>
 
+                {/* === Edit Button === */}
                 <div className="profile-footer">
-                    <button className="edit-btn" onClick={() => navigate('/edit-profile')}>Edit Profile</button>
+                    <button className="edit-btn" onClick={() => navigate('/edit-profile')}>
+                        Edit Profile
+                    </button>
                 </div>
             </div>
         </>

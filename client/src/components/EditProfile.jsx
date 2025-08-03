@@ -7,8 +7,9 @@ import axios from 'axios';
 
 const EditProfile = () => {
     const navigate = useNavigate();
-    const email = localStorage.getItem('email');
+    const email = localStorage.getItem('email'); // Get user's email from localStorage
 
+    // State to hold the profile fields
     const [profile, setProfile] = useState({
         name: '',
         email: email,
@@ -17,6 +18,7 @@ const EditProfile = () => {
         commitmentPreference: ''
     });
 
+    // Available options for dropdowns
     const experienceLevels = [
         "Complete Beginner",
         "Some Experience",
@@ -35,6 +37,7 @@ const EditProfile = () => {
         "Python", "JavaScript", "HTML", "SQL", "CSS", "Java", "C++", "PHP", "Dart"
     ];
 
+    // Fetch user's current profile info on component mount
     useEffect(() => {
         const fetchProfile = async () => {
             try {
@@ -53,11 +56,12 @@ const EditProfile = () => {
         fetchProfile();
     }, [email]);
 
+    // Save updated profile info to the backend
     const handleSaveProfile = async () => {
         try {
             await axios.post(`${import.meta.env.VITE_API_URL}/update-profile`, profile);
             alert("Profile updated successfully!");
-            navigate('/profile');
+            navigate('/profile'); // Navigate to profile view after saving
         } catch (err) {
             alert("Failed to update profile.");
             console.error(err);
@@ -67,12 +71,15 @@ const EditProfile = () => {
     return (
         <>
             <Navbar />
+
             <div className="edit-profile-container">
+                {/* Header with back navigation */}
                 <div className="header-with-back">
                     <span className="back-arrow" onClick={() => navigate(-1)}>&larr; Back</span>
                     <h2>Edit Profile</h2>
                 </div>
 
+                {/* Name input */}
                 <label>Name:</label>
                 <input
                     type="text"
@@ -80,6 +87,7 @@ const EditProfile = () => {
                     onChange={(e) => setProfile({ ...profile, name: e.target.value })}
                 />
 
+                {/* Email (read-only) */}
                 <label>Email:</label>
                 <input
                     type="email"
@@ -87,6 +95,7 @@ const EditProfile = () => {
                     disabled
                 />
 
+                {/* Language preference dropdown */}
                 <label>Language Preference:</label>
                 <select
                     value={profile.languagePreference}
@@ -98,6 +107,7 @@ const EditProfile = () => {
                     ))}
                 </select>
 
+                {/* Experience preference dropdown */}
                 <label>Experience Preference:</label>
                 <select
                     value={profile.experiencePreference}
@@ -109,6 +119,7 @@ const EditProfile = () => {
                     ))}
                 </select>
 
+                {/* Commitment preference dropdown */}
                 <label>Commitment Preference:</label>
                 <select
                     value={profile.commitmentPreference}
@@ -120,8 +131,10 @@ const EditProfile = () => {
                     ))}
                 </select>
 
+                {/* Save profile button */}
                 <button className="save-button" onClick={handleSaveProfile}>Save Profile</button>
 
+                {/* Link to change password page */}
                 <p className="change-password-link" onClick={() => navigate('/change-password')}>
                     Change Password?
                 </p>

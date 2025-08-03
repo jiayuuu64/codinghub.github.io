@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
+import confetti from 'canvas-confetti';
 import '../styles/Courses.css';
 
 const Courses = () => {
@@ -11,21 +12,17 @@ const Courses = () => {
   const [expandedCourse, setExpandedCourse] = useState(null);
   const navigate = useNavigate();
 
-  const email = localStorage.getItem('email');
+  const email = localStorage.getItem('email')?.toLowerCase();
   const isAdmin = localStorage.getItem('isAdmin') === 'true';
 
   useEffect(() => {
     const fetchAll = async () => {
       try {
-        const baseUrl = import.meta.env.VITE_API_URL;
-
-        // Fetch courses
-        const courseRes = await axios.get(`${baseUrl.replace('/users', '')}/courses`);
+        const courseRes = await axios.get(`https://codinghub-r3bn.onrender.com/api/courses`);
         setCourses(courseRes.data);
 
-        // Only fetch progress if student
         if (!isAdmin && email) {
-          const progressRes = await axios.get(`${baseUrl}/${email}/progress`);
+          const progressRes = await axios.get(`https://codinghub-r3bn.onrender.com/api/progress/user/${encodeURIComponent(email)}`);
           setProgressData(progressRes.data || []);
         }
 
@@ -66,6 +63,28 @@ const Courses = () => {
       sections: course.sections
     };
   });
+
+  // 🎉 Confetti triggered only once per course
+  useEffect(() => {
+    if (!isAdmin && progressData.length > 0) {
+      const shownConfettiCourses = JSON.parse(localStorage.getItem('confettiShown') || '[]');
+
+      const newlyCompleted = mergedData.find(
+        course => course.percent === 100 && !shownConfettiCourses.includes(course.courseId)
+      );
+
+      if (newlyCompleted) {
+        confetti({
+          particleCount: 120,
+          spread: 70,
+          origin: { y: 0.6 },
+        });
+
+        const updated = [...shownConfettiCourses, newlyCompleted.courseId];
+        localStorage.setItem('confettiShown', JSON.stringify(updated));
+      }
+    }
+  }, [progressData]);
 
   const handleCourseClick = (courseId) => {
     if (!isAdmin && courseId) {

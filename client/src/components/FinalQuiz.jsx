@@ -3,60 +3,71 @@ import axios from 'axios';
 import '../styles/finalquiz.css';
 import { speakText, stopSpeaking } from '../utils/textToSpeech';
 
+// FinalQuiz component receives props from parent
 const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTitle }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [showResults, setShowResults] = useState(false);
-  const [score, setScore] = useState(0);
-  const [showAll, setShowAll] = useState(false);
-  const [recommendations, setRecommendations] = useState([]);
-  const [loadingRecs, setLoadingRecs] = useState(false);
-  const [readerMode, setReaderMode] = useState(false);
+  // === State Setup ===
+  const [currentIndex, setCurrentIndex] = useState(0); // Current question index
+  const [showResults, setShowResults] = useState(false); // Whether results screen is visible
+  const [score, setScore] = useState(0); // Final score after submission
+  const [showAll, setShowAll] = useState(false); // Toggle to show all answers vs only incorrect ones
+  const [recommendations, setRecommendations] = useState([]); // Array of AI recommendations
+  const [loadingRecs, setLoadingRecs] = useState(false); // Show loading state while waiting for recs
+  const [readerMode, setReaderMode] = useState(false); // Whether Reader Mode is enabled
 
-  const email = localStorage.getItem('email');
-  const currentQn = questions[currentIndex];
+  const email = localStorage.getItem('email'); // Retrieve email from local storage
+  const currentQn = questions[currentIndex]; // Get the current question object
 
+  // === User selects an answer option ===
   const handleOptionClick = (option) => {
-    setUserAnswers((prev) => ({ ...prev, [currentIndex]: option }));
+    setUserAnswers((prev) => ({ ...prev, [currentIndex]: option })); // Save answer in userAnswers
   };
 
+  // === Navigate to next question ===
   const handleNext = () => {
-    stopSpeaking();
+    stopSpeaking(); // Stop TTS if active
     if (currentIndex < questions.length - 1) setCurrentIndex(currentIndex + 1);
   };
 
+  // === Navigate to previous question ===
   const handleBack = () => {
     stopSpeaking();
     if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
   };
 
+  // === Exit quiz (parent handler) ===
   const handleExit = () => {
     stopSpeaking();
     onFinish();
   };
 
+  // === Submit quiz ===
   const handleSubmit = async () => {
-    const unanswered = questions.length - Object.keys(userAnswers).length;
+    const unanswered = questions.length - Object.keys(userAnswers).length; // Count unanswered
     const confirmSubmit = window.confirm(`You left ${unanswered} question(s) blank. Do you want to submit?`);
     if (!confirmSubmit) return;
 
     stopSpeaking();
+
     const correctCount = questions.filter((q, i) => userAnswers[i] === q.answer).length;
-    setScore(correctCount);
-    setShowResults(true);
-    setLoadingRecs(true);
+    setScore(correctCount); // Set score
+    setShowResults(true); // Toggle to result view
+    setLoadingRecs(true); // Show loading for recommendations
 
-    const topicScores = {};
-    const questionDetails = [];
+    const topicScores = {}; // Object to track per-topic performance
+    const questionDetails = []; // Array of detailed result per question
 
+    // Loop through each question to calculate score and breakdown
     questions.forEach((q, i) => {
-      const topic = q.topic || "Unknown";
+      const topic = q.topic || "Unknown"; // Default topic
       const userAns = userAnswers[i] || '';
       const correct = userAns === q.answer;
 
+      // Init topic score object
       if (!topicScores[topic]) topicScores[topic] = { score: 0, total: 0 };
       topicScores[topic].score += correct ? 1 : 0;
       topicScores[topic].total += 1;
 
+      // Push question details
       questionDetails.push({
         question: q.question,
         topic,
@@ -66,6 +77,7 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
       });
     });
 
+    // Save each topic result to backend
     for (const [topic, { score, total }] of Object.entries(topicScores)) {
       try {
         await fetch('https://codinghub-r3bn.onrender.com/api/quiz-history/save', {
@@ -84,26 +96,35 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
       }
     }
 
+    // Skip fetching AI recommendations if user passes (score > 80%)
     if (correctCount / questions.length > 0.8) {
-      setLoadingRecs(false);
+      setLoadingRecs(false); // No need to load recommendations
       return;
     }
 
+    // Fetch personalized AI learning resources using LangChain backend
     try {
       const response = await axios.post('https://codinghub-r3bn.onrender.com/api/ai/recommend', {
-        score: correctCount,
-        courseTitle,
-        email,
+        score: correctCount,       // User's score
+        courseTitle,               // Course name/title
+        email,                     // User's email
       });
 
+      // Extract recommendation string and convert it into an array of suggestions
       const lines = response.data.recommendations.split('\n').filter(line => line.trim() !== '');
+
+      // Parse each line into structured info: title, link, type, and thumbnail
       const parsed = lines.map((line) => {
-        const titleMatch = line.match(/"(.+?)"/);
-        const linkMatch = line.match(/https?:\/\/[^\s]+/);
+        const titleMatch = line.match(/"(.+?)"/); // Match title in quotes
+        const linkMatch = line.match(/https?:\/\/[^\s]+/); // Match URL
         const title = titleMatch ? titleMatch[1] : 'Untitled';
         const link = linkMatch ? linkMatch[0] : null;
+
+        // Determine type of recommendation
         const isVideo = line.includes('📺') || (link && link.includes('youtube.com/watch?v='));
         const isArticle = line.includes('📰') || (!isVideo && line.includes('Article'));
+
+        // Extract YouTube video ID if available
         const videoId = isVideo && link?.includes('v=') ? link.split('v=')[1].split('&')[0] : null;
 
         return {
@@ -112,21 +133,23 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
           link,
           hostname: link ? new URL(link).hostname.replace('www.', '') : '',
           thumbnail: isVideo && videoId
-            ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+            ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` // YouTube preview
             : isArticle && link
-              ? `https://www.google.com/s2/favicons?sz=128&domain_url=${encodeURIComponent(link)}`
-              : 'https://via.placeholder.com/160x90?text=Resource'
+              ? `https://www.google.com/s2/favicons?sz=128&domain_url=${encodeURIComponent(link)}` // Article icon
+              : 'https://via.placeholder.com/160x90?text=Resource' // Fallback image
         };
       });
 
-      setRecommendations(parsed);
+      setRecommendations(parsed); // Save to state for rendering
     } catch (err) {
-      console.error('Failed to fetch recommendations:', err);
+      console.error('Failed to fetch recommendations:', err); // Error logging
     } finally {
-      setLoadingRecs(false);
+      setLoadingRecs(false); // Hide loading indicator
     }
+
   };
 
+  // === Download quiz result as .txt ===
   const downloadResults = () => {
     const content = questions.map((q, i) => {
       return `Q${i + 1}: ${q.question}\nYour Answer: ${userAnswers[i] || 'Not Answered'}\nCorrect Answer: ${q.answer}\nExplanation: ${q.explanation}\n\n`;
@@ -139,37 +162,42 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
     link.click();
   };
 
+  // Auto reads current question and options aloud if readerMode is on
   useEffect(() => {
-    let isCancelled = false;
+    let isCancelled = false; // Used to stop speech if user navigates early
 
     const speakCurrent = async () => {
-      stopSpeaking();
+      stopSpeaking(); // Always stop previous TTS before starting new
+
+      // Skip if not in Reader Mode or quiz is already submitted
       if (!readerMode || showResults || !questions.length) return;
 
       const qn = questions[currentIndex];
       await speakText(`Question ${currentIndex + 1}: ${qn.question}`);
       if (isCancelled) return;
 
+      // Read each option aloud one by one with delay
       for (const opt of qn.options) {
         if (isCancelled) return;
         await speakText(opt);
-        await new Promise(res => setTimeout(res, 300));
+        await new Promise(res => setTimeout(res, 300)); // Add slight pause
       }
     };
 
     speakCurrent();
 
     return () => {
-      isCancelled = true;
-      stopSpeaking();
+      isCancelled = true; // Prevent leftover speech on unmount/change
+      stopSpeaking();     // Stop all ongoing speech immediately
     };
-  }, [readerMode, currentIndex, showResults]);
+  }, [readerMode, currentIndex, showResults]); // Re-run when index or mode changes
 
+
+  // After submission, read score and breakdown aloud if Reader Mode is on
   useEffect(() => {
     if (!readerMode || !showResults) return;
 
-    stopSpeaking();
-
+    stopSpeaking(); // Stop any leftover TTS
     let isCancelled = false;
 
     const speakSummary = async () => {
@@ -179,15 +207,11 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
       for (let i = 0; i < questions.length; i++) {
         const q = questions[i];
         const isCorrect = userAnswers[i] === q.answer;
-        if (!showAll && isCorrect) continue;
+        if (!showAll && isCorrect) continue; // Skip if showing only wrong
 
-        if (isCancelled) return;
         await speakText(`Question ${i + 1}: ${q.question}`);
-        if (isCancelled) return;
         await speakText(`Your answer: ${userAnswers[i] || 'Not answered'}`);
-        if (isCancelled) return;
         await speakText(`Correct answer: ${q.answer}`);
-        if (isCancelled) return;
         await speakText(`Explanation: ${q.explanation}`);
       }
     };
@@ -195,13 +219,15 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
     speakSummary();
 
     return () => {
-      isCancelled = true;
+      isCancelled = true; // Cancel if component unmounts
       stopSpeaking();
     };
   }, [readerMode, showResults]);
 
+
   return (
     <div className="f-quiz-container">
+      {/* === Reader Mode Toggle === */}
       <div className="reader-toggle">
         <button
           onClick={() => {
@@ -214,6 +240,7 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
         </button>
       </div>
 
+      {/* === QUIZ SCREEN === */}
       {!showResults ? (
         <div className="f-quiz-block">
           <h2 className="f-quiz-title">Final Quiz</h2>
@@ -229,6 +256,8 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
               </li>
             ))}
           </ul>
+
+          {/* Navigation buttons */}
           <div className="f-quiz-nav">
             <button onClick={handleBack} disabled={currentIndex === 0}>← Back</button>
             {currentIndex < questions.length - 1 ? (
@@ -238,6 +267,8 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
             )}
           </div>
         </div>
+
+        // === RESULT SCREEN ===
       ) : (
         <div className="f-quiz-results">
           <h3 className="score-title">Your Score: {score}/{questions.length}</h3>
@@ -248,6 +279,7 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
             </p>
           )}
 
+          {/* Show recs if failed */}
           {!loadingRecs && score / questions.length <= 0.8 && recommendations.length > 0 && (
             <div className="recom-section">
               <h4>✨ Personalized Recommendations:</h4>
@@ -271,16 +303,19 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
             </div>
           )}
 
+          {/* Result actions and toggles */}
           <div className="f-quiz-actions">
             <button onClick={() => setShowAll(false)} className={!showAll ? 'active-toggle' : ''}>Show Only Wrong</button>
             <button onClick={() => setShowAll(true)} className={showAll ? 'active-toggle' : ''}>Show All</button>
             <button onClick={downloadResults}>Download Results</button>
           </div>
 
+          {/* List of all (or incorrect) questions with answers and explanations */}
           {questions.map((q, i) => {
             const userAnswer = userAnswers[i];
             const isCorrect = userAnswer === q.answer;
             if (!showAll && isCorrect) return null;
+
             return (
               <div key={i} className="f-quiz-result-item">
                 <p><strong>Q{i + 1}:</strong> {q.question}</p>
@@ -303,6 +338,7 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
             );
           })}
 
+          {/* Final action buttons */}
           <div className="f-quiz-actions">
             <button onClick={() => window.location.reload()}>Try Again</button>
             <button onClick={handleExit}>Finish</button>
