@@ -4,7 +4,7 @@ import {
   completeQuiz,
   getProgress,
   getAllUserProgress
-} from '../controllers/authFunctions.mjs';
+} from '../controller/authFunctions.mjs';
 
 const router = express.Router();
 
