@@ -5,7 +5,7 @@ import '../styles/finalquiz.css';
 import { speakText, stopSpeaking } from '../utils/textToSpeech';
 import { parseQuizText } from '../utils/parseQuizText';
 
-const API = 'http://localhost:10000/api';
+const API = 'https://codinghub-r3bn.onrender.com/api';
 const norm = (s) => (s || '').toLowerCase().replace(/\s+/g, ' ').trim();
 
 const SelfEvalQuiz = () => {
