@@ -1,34 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';                       // ✅ show navbar in loading/empty states
 import '../styles/finalquiz.css';
 import { speakText, stopSpeaking } from '../utils/textToSpeech';
+import { parseQuizText } from '../utils/parseQuizText';
 
-const parseQuizText = (text) => {
-  const questions = text.split(/\n(?=\d+\.)/).map((qBlock) => {
-    const qMatch = qBlock.match(/^\d+\.\s*(.*?)\n/i);
-    const question = qMatch?.[1]?.trim() || '';
-    const options = [];
-    const optionRegex = /[A-D]\.\s*(.*)/g;
-    let match;
-    while ((match = optionRegex.exec(qBlock))) {
-      options.push(match[1].trim());
-    }
-    const answerMatch = qBlock.match(/Answer:\s*(.*)/i);
-    const explanationMatch = qBlock.match(/Explanation:\s*(.*)/i);
-    return {
-      question,
-      options,
-      answer: answerMatch?.[1]?.trim() || '',
-      explanation: explanationMatch?.[1]?.trim() || ''
-    };
-  });
-  return questions.filter(q => q.question && q.options.length === 4);
-};
+const API = 'http://localhost:10000/api';
+const norm = (s) => (s || '').toLowerCase().replace(/\s+/g, ' ').trim();
 
 const SelfEvalQuiz = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const rawQuiz = location.state?.quiz;
+  const mode = location.state?.mode || 'adaptive';   // (optional) 'adaptive' | 'review'
+
   const [quizData, setQuizData] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState({});
@@ -36,124 +20,147 @@ const SelfEvalQuiz = () => {
   const [score, setScore] = useState(0);
   const [showAll, setShowAll] = useState(false);
   const [readerMode, setReaderMode] = useState(false);
-  const [playCompleteAnimation, setPlayCompleteAnimation] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (!rawQuiz) navigate('/');
-    else setQuizData(parseQuizText(rawQuiz));
-  }, [rawQuiz, navigate]);
+  const resetStateWithText = (text) => {
+    const parsed = parseQuizText(text || '');
+    setQuizData(parsed);
+    setCurrentIndex(0);
+    setUserAnswers({});
+    setShowResults(false);
+    setScore(0);
+  };
+
+  const fetchQuiz = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      const email = localStorage.getItem('email')?.toLowerCase();
+      const url = `${API}/quiz-generator/personalized`;
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, mode })
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`POST ${url} -> ${res.status} ${res.statusText}\n${text.slice(0,200)}`);
+      }
+      const data = await res.json();
+      if (!data.quiz || !data.quiz.trim()) {
+        setQuizData([]);
+        setError(data.message || 'No questions returned.');
+        return;
+      }
+      resetStateWithText(data.quiz);
+    } catch (e) {
+      console.error('Failed to fetch quiz', e);
+      setError('Failed to fetch a new quiz. Please try again.');
+      setQuizData([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { fetchQuiz(); }, []);
 
   const currentQn = quizData[currentIndex];
 
-  const handleOptionClick = (option) => {
-    setUserAnswers((prev) => ({ ...prev, [currentIndex]: option }));
-  };
+  const handleOptionClick = (option) => setUserAnswers((prev) => ({ ...prev, [currentIndex]: option }));
+  const handleNext = () => { stopSpeaking(); if (currentIndex < quizData.length - 1) setCurrentIndex(currentIndex + 1); };
+  const handleBack = () => { stopSpeaking(); if (currentIndex > 0) setCurrentIndex(currentIndex - 1); };
+  const handleExit = () => { stopSpeaking(); navigate('/home'); };
 
-  const handleNext = () => {
-    stopSpeaking();
-    if (currentIndex < quizData.length - 1) setCurrentIndex(currentIndex + 1);
-  };
-
-  const handleBack = () => {
-    stopSpeaking();
-    if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
-  };
-
-  const handleExit = async () => {
-    stopSpeaking();
-    navigate('/home');
-  };
-
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const unanswered = quizData.length - Object.keys(userAnswers).length;
-    const confirmSubmit = window.confirm(`You left ${unanswered} question(s) blank. Do you want to submit?`);
-    if (!confirmSubmit) return;
+    if (!window.confirm(`You left ${unanswered} question(s) blank. Submit?`)) return;
 
     stopSpeaking();
-    const correctCount = quizData.filter((q, i) => userAnswers[i] === q.answer).length;
+    const correctCount = quizData.filter((q, i) => norm(userAnswers[i]) === norm(q.answer)).length;
     setScore(correctCount);
     setShowResults(true);
-    setPlayCompleteAnimation(true);
+
+    // ✅ Save per-topic so weak topics update immediately
+    try {
+      const email = localStorage.getItem('email')?.toLowerCase();
+      const byTopic = new Map();
+      quizData.forEach((q, i) => {
+        const t = (q.topic || 'Mixed').trim();
+        const wasCorrect = norm(userAnswers[i] || '') === norm(q.answer);
+        if (!byTopic.has(t)) byTopic.set(t, { score: 0, total: 0, items: [] });
+        const entry = byTopic.get(t);
+        entry.total += 1;
+        if (wasCorrect) entry.score += 1;
+        entry.items.push({
+          question: q.question,
+          userAnswer: userAnswers[i] || '',
+          correctAnswer: q.answer,
+          wasCorrect
+        });
+      });
+
+      for (const [topic, v] of byTopic.entries()) {
+        await fetch(`${API}/quiz-history/save`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            topic,
+            score: v.score,
+            total: v.total,
+            questionDetails: v.items
+          })
+        });
+      }
+    } catch (e) {
+      console.warn('Saving per-topic history failed (non-blocking):', e);
+    }
   };
 
-  const downloadResults = () => {
-    const lines = [`Self Evaluation Score: ${score}/${quizData.length}\n`];
-    quizData.forEach((q, i) => {
-      const userAns = userAnswers[i] || "Not answered";
-      lines.push(`Q${i + 1}: ${q.question}`);
-      lines.push(`Your Answer: ${userAns}`);
-      lines.push(`Correct Answer: ${q.answer}`);
-      lines.push(`Explanation: ${q.explanation}\n`);
-    });
-    const blob = new Blob([lines.join("\n")], { type: "text/plain" });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'self-eval-results.txt';
-    link.click();
+  const handleTryAgain = () => {
+    stopSpeaking();
+    setError('');
+    setQuizData([]);
+    setLoading(true);
+    fetchQuiz();
   };
 
-  useEffect(() => {
-    let isCancelled = false;
+  // ---- LOADING: match Courses page look (navbar + blue bg + centered white text)
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <div className="courses-container">
+          <h2 className="courses-heading">Self Evaluation Quiz</h2>
+          <p style={{ color: 'white', textAlign: 'center' }}>Loading quiz...</p>
+        </div>
+      </>
+    );
+  }
 
-    const readCurrent = async () => {
-      if (!readerMode || showResults || quizData.length === 0) return;
-
-      stopSpeaking();
-      const qn = quizData[currentIndex];
-
-      await speakText(`Question ${currentIndex + 1}: ${qn.question}`);
-      if (isCancelled) return;
-
-      for (const opt of qn.options) {
-        if (isCancelled) return;
-        await speakText(opt);
-        await new Promise(res => setTimeout(res, 300));
-      }
-    };
-
-    readCurrent();
-
-    return () => {
-      isCancelled = true;
-      stopSpeaking();
-    };
-  }, [readerMode, currentIndex, showResults]);
-
-  useEffect(() => {
-    let isCancelled = false;
-
-    const readSummary = async () => {
-      if (!readerMode || !showResults) return;
-
-      stopSpeaking();
-      await speakText(`Your score is ${score} out of ${quizData.length}`);
-      if (isCancelled) return;
-
-      for (let i = 0; i < quizData.length; i++) {
-        const q = quizData[i];
-        const isCorrect = userAnswers[i] === q.answer;
-        if (!showAll && isCorrect) continue;
-
-        if (isCancelled) return;
-        await speakText(`Question ${i + 1}: ${q.question}`);
-        if (isCancelled) return;
-        await speakText(`Your answer: ${userAnswers[i] || 'Not answered'}`);
-        if (isCancelled) return;
-        await speakText(`Correct answer: ${q.answer}`);
-        if (isCancelled) return;
-        await speakText(`Explanation: ${q.explanation}`);
-      }
-    };
-
-    readSummary();
-
-    return () => {
-      isCancelled = true;
-      stopSpeaking();
-    };
-  }, [readerMode, showResults]);
-
-  if (!quizData.length) return <p style={{ padding: "2rem", color: "#fff" }}>Loading quiz...</p>;
+  // ---- EMPTY/ERROR: same look as loading
+  if (!loading && !quizData.length) {
+    return (
+      <>
+        <Navbar />
+        <div className="courses-container">
+          <h2 className="courses-heading">Self Evaluation Quiz</h2>
+          <p style={{ color: 'white', textAlign: 'center' }}>
+            {error || 'We couldn’t load any questions.'}
+          </p>
+          <div style={{ textAlign: 'center', marginTop: 12 }}>
+            <button onClick={handleTryAgain} className="self-eval-button" style={{ marginRight: 8 }}>
+              Try Again
+            </button>
+            <button onClick={handleExit} className="self-eval-button" style={{ background: '#666' }}>
+              Back
+            </button>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <div className="lesson-fullscreen">
@@ -161,54 +168,44 @@ const SelfEvalQuiz = () => {
         <button className="lesson-exit-button" onClick={handleExit}>✕ Exit</button>
         <div className="lesson-progress-bar-wrapper">
           <div className="lesson-progress-bar">
-            {quizData.map((_, index) => {
-              let stepClass = userAnswers[index] ? 'answered' : showResults ? 'skipped' : 'not-visited';
-              return <div key={index} className={`lesson-progress-step ${stepClass}`}></div>;
+            {quizData.map((_, idx) => {
+              const state = userAnswers[idx] ? 'answered' : showResults ? 'skipped' : 'not-visited';
+              return <div key={idx} className={`lesson-progress-step ${state}`}></div>;
             })}
           </div>
         </div>
       </div>
 
-
-
       <div className="f-quiz-container">
         <div className="reader-toggle">
           <button
-            onClick={() => {
-              if (readerMode) {
-                stopSpeaking();
-                setReaderMode(false);
-              } else {
-                setReaderMode(true);
-              }
-            }}
+            onClick={() => { if (readerMode) { stopSpeaking(); setReaderMode(false); } else { setReaderMode(true); } }}
             className={`reader-btn ${readerMode ? 'on' : 'off'}`}
           >
             Reader Mode: {readerMode ? '✓' : '✗'}
           </button>
         </div>
+
         {!showResults ? (
           <div className="f-quiz-block">
             <h2 className="f-quiz-title">Self Evaluation Quiz</h2>
             <h3 className="f-quiz-question">Q{currentIndex + 1}: {currentQn.question}</h3>
             <ul className="f-quiz-options">
-              {currentQn.options.map((option, idx) => (
+              {currentQn.options.map((opt, i) => (
                 <li
-                  key={idx}
-                  className={`f-quiz-option ${userAnswers[currentIndex] === option ? 'selected' : ''}`}
-                  onClick={() => handleOptionClick(option)}
+                  key={i}
+                  className={`f-quiz-option ${userAnswers[currentIndex] === opt ? 'selected' : ''}`}
+                  onClick={() => handleOptionClick(opt)}
                 >
-                  {option}
+                  {opt}
                 </li>
               ))}
             </ul>
             <div className="f-quiz-nav">
               <button onClick={handleBack} disabled={currentIndex === 0}>← Back</button>
-              {currentIndex < quizData.length - 1 ? (
-                <button onClick={handleNext}>Next →</button>
-              ) : (
-                <button onClick={handleSubmit}>Submit</button>
-              )}
+              {currentIndex < quizData.length - 1
+                ? <button onClick={handleNext}>Next →</button>
+                : <button onClick={handleSubmit}>Submit</button>}
             </div>
           </div>
         ) : (
@@ -218,37 +215,39 @@ const SelfEvalQuiz = () => {
             <div className="f-quiz-actions" style={{ marginBottom: '1rem' }}>
               <button onClick={() => setShowAll(false)} className={!showAll ? 'active-toggle' : ''}>Show Only Wrong</button>
               <button onClick={() => setShowAll(true)} className={showAll ? 'active-toggle' : ''}>Show All</button>
-              <button onClick={downloadResults}>Download Results</button>
+              <button onClick={handleTryAgain}>Try Again</button>
+              <button onClick={handleExit}>Finish</button>
             </div>
 
             {quizData.map((q, i) => {
-              const userAnswer = userAnswers[i];
-              const isCorrect = userAnswer === q.answer;
-              if (!showAll && isCorrect) return null;
+              const ua = userAnswers[i];
+              const correctIdx = q.options.findIndex(opt => norm(opt) === norm(q.answer));
+              if (!showAll && norm(ua) === norm(q.answer)) return null;
+
               return (
                 <div key={i} className="f-quiz-result-item">
                   <p><strong>Q{i + 1}:</strong> {q.question}</p>
                   {q.options.map((opt, j) => {
-                    const isAnswer = opt === q.answer;
-                    const isSelected = userAnswer === opt;
+                    const isAnswer = j === correctIdx;
+                    const isSelected = norm(ua || '') === norm(opt);
                     return (
-                      <div key={j}
-                        className={`f-quiz-option ${isAnswer ? 'correct' : ''} ${isSelected && !isAnswer ? 'incorrect' : ''} ${isSelected ? 'selected' : ''}`}>
+                      <div
+                        key={j}
+                        className={`f-quiz-option ${isAnswer ? 'correct' : ''} ${isSelected && !isAnswer ? 'incorrect' : ''} ${isSelected ? 'selected' : ''}`}
+                      >
                         {opt}
                         {isAnswer && <span className="tick">✓</span>}
                         {isSelected && !isAnswer && <span className="cross">✗</span>}
                       </div>
                     );
                   })}
+                  {correctIdx === -1 && (
+                    <div className="f-quiz-explanation"><strong>Correct answer: </strong>{q.answer}</div>
+                  )}
                   <div className="f-quiz-explanation"><strong>Explanation:</strong> {q.explanation}</div>
                 </div>
               );
             })}
-
-            <div className="f-quiz-actions">
-              <button onClick={() => window.location.reload()}>Try Again</button>
-              <button onClick={handleExit}>Finish</button>
-            </div>
           </div>
         )}
       </div>

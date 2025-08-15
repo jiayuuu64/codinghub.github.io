@@ -5,6 +5,8 @@ import Navbar from './Navbar';
 import confetti from 'canvas-confetti';
 import '../styles/Courses.css';
 
+const API = 'https://codinghub-r3bn.onrender.com/api';
+
 const Courses = () => {
   const [courses, setCourses] = useState([]);
   const [progressData, setProgressData] = useState([]);
@@ -18,11 +20,11 @@ const Courses = () => {
   useEffect(() => {
     const fetchAll = async () => {
       try {
-        const courseRes = await axios.get(`https://codinghub-r3bn.onrender.com/api/courses`);
+        const courseRes = await axios.get(`${API}/courses`);
         setCourses(courseRes.data);
 
         if (!isAdmin && email) {
-          const progressRes = await axios.get(`https://codinghub-r3bn.onrender.com/api/progress/user/${encodeURIComponent(email)}`);
+          const progressRes = await axios.get(`${API}/users/${encodeURIComponent(email)}/progress`);
           setProgressData(progressRes.data || []);
         }
 
@@ -46,9 +48,7 @@ const Courses = () => {
       };
     }
 
-    const courseProgress = progressData.find(p =>
-      p.courseId.toString() === course._id.toString()
-    );
+    const courseProgress = progressData.find(p => String(p.courseId) === String(course._id));
     const completed = courseProgress?.completedLessons?.length || 0;
     const total = course.sections.reduce((sum, section) => sum + section.lessons.length, 0);
     const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
@@ -64,27 +64,19 @@ const Courses = () => {
     };
   });
 
-  // 🎉 Confetti triggered only once per course
   useEffect(() => {
     if (!isAdmin && progressData.length > 0) {
       const shownConfettiCourses = JSON.parse(localStorage.getItem('confettiShown') || '[]');
-
       const newlyCompleted = mergedData.find(
-        course => course.percent === 100 && !shownConfettiCourses.includes(course.courseId)
+        c => c.percent === 100 && !shownConfettiCourses.includes(c.courseId)
       );
-
       if (newlyCompleted) {
-        confetti({
-          particleCount: 120,
-          spread: 70,
-          origin: { y: 0.6 },
-        });
-
+        confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
         const updated = [...shownConfettiCourses, newlyCompleted.courseId];
         localStorage.setItem('confettiShown', JSON.stringify(updated));
       }
     }
-  }, [progressData]);
+  }, [progressData]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCourseClick = (courseId) => {
     if (!isAdmin && courseId) {
@@ -94,11 +86,27 @@ const Courses = () => {
     }
   };
 
-  const getCourseLogo = (title) => {
+  const handleDeleteCourse = async (courseId) => {
+    if (window.confirm("Are you sure you want to delete this course? This action cannot be undone.")) {
+      try {
+        await axios.delete(`${API}/courses/${courseId}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+        alert('✅ Course deleted successfully!');
+        setCourses(prev => prev.filter(course => course._id !== courseId));
+      } catch (err) {
+        alert('❌ Failed to delete course: ' + (err.response?.data?.error || err.message));
+      }
+    }
+  };
+
+  const getCourseLogo = (title = '') => {
     const lower = title.toLowerCase();
     if (lower.includes('python')) return 'https://img.icons8.com/color/48/python.png';
     if (lower.includes('html')) return 'https://img.icons8.com/color/48/html-5.png';
+    if (lower.includes('css')) return 'https://img.icons8.com/color/48/css3.png';
     if (lower.includes('javascript')) return 'https://img.icons8.com/color/48/javascript.png';
+    if (lower.includes('sql')) return 'https://img.icons8.com/color/48/database.png';
     return 'https://img.icons8.com/color/48/classroom.png';
   };
 
@@ -107,39 +115,29 @@ const Courses = () => {
       <Navbar />
       <div className="courses-container">
         <h2 className="courses-heading">All Courses</h2>
+
         {loading ? (
           <p style={{ color: 'white', textAlign: 'center' }}>Loading courses...</p>
         ) : (
           <div className="course-cards">
-            {mergedData.map((course, idx) => (
+            {mergedData.map(course => (
               <div
                 className="course-card-catalog"
-                key={course.courseId}
+                key={course.courseId || Math.random()}
                 onClick={() => handleCourseClick(course.courseId)}
               >
+                {/* Main content */}
                 <img
                   src={getCourseLogo(course.courseName)}
                   alt="course logo"
                   className="course-card-logo"
                 />
-                <div className="course-card-info">
+
+                <div className="course-card-info" style={{ flex: 1, minWidth: 0 }}>
                   <p className="course-card-title">{course.courseName}</p>
                   <p className="course-card-description"><em>{course.description}</em></p>
 
-                  {/* Student Progress Bar */}
-                  {!isAdmin && (
-                    <div className="progress-container">
-                      <div className="progress-bar-wrapper">
-                        <div
-                          className="progress-bar-fill"
-                          style={{ width: `${course.percent}%` }}
-                        ></div>
-                      </div>
-                      <p className="progress-percentage">{course.percent}% completed</p>
-                    </div>
-                  )}
-
-                  {/* Admin Section Preview */}
+                  {/* Admin-only preview + delete */}
                   {isAdmin && expandedCourse === course.courseId && (
                     <div className="admin-preview">
                       {course.sections?.map((section, sIdx) => (
@@ -155,13 +153,30 @@ const Courses = () => {
                     </div>
                   )}
 
-                  {/* Toggle Preview for Admin */}
                   {isAdmin && (
-                    <p className="admin-preview-toggle">
-                      {expandedCourse === course.courseId ? '🔼 Collapse Preview' : '🔽 Expand Preview'}
-                    </p>
+                    <>
+                      <p className="admin-preview-toggle">
+                        {expandedCourse === course.courseId ? '🔼 Collapse Preview' : '🔽 Expand Preview'}
+                      </p>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleDeleteCourse(course.courseId); }}
+                        className="delete-button"
+                      >
+                        Delete
+                      </button>
+                    </>
                   )}
                 </div>
+
+                {/* Footer: full-width bar on top, label below (aligned) */}
+                {!isAdmin && (
+                  <div className="card-progress-footer">
+                    <div className="progress-bar-wrapper">
+                      <div className="progress-bar-fill" style={{ width: `${course.percent}%` }} />
+                    </div>
+                    <span className="progress-percentage">{course.percent}% completed</span>
+                  </div>
+                )}
               </div>
             ))}
           </div>

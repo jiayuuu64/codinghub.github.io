@@ -1,108 +1,107 @@
 body {
-    background-color: #515BBC;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
+  background-color: #515BBC;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
 }
 
 .home-container {
-    padding: 40px 60px;
-    background-color: #32458D;
-    min-height: 100vh;
-    color: white;
+  padding: 40px 60px;
+  background-color: #32458D;
+  min-height: 100vh;
+  color: white;
 }
 
 /* ====== SECTION HEADINGS ====== */
 .progress-section h2,
-.courses-section h2 {
-    font-size: 26px;
-    margin-bottom: 20px;
+.courses-section h2,
+.recommended-section h2 {
+  font-size: 26px;
+  margin-bottom: 20px;
 }
 
-
-/* ====== CARD GRIDS ====== */
-.progress-cards,
-.course-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 24px;
+/* ====== GRID ====== */
+.progress-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
 }
 
-/* ====== CARD STYLING ====== */
-.progress-card {
-    background-color: #2a3872;
-    border-radius: 16px;
-    padding: 24px 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 160px;
-    position: relative;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease;
+/* ====== CARD (matches Courses card layout, but no description) ====== */
+.home-card {
+  position: relative;           /* for footer */
+  background-color: #2a3872;
+  border-radius: 16px;
+  padding: 30px 24px 90px;      /* bottom room for footer */
+  display: flex;                /* logo left, content right */
+  align-items: flex-start;
+  gap: 16px;
+  min-height: 160px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease;
+}
+.home-card:hover { transform: translateY(-4px); }
+
+.home-card-logo {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  object-fit: contain;
 }
 
-.progress-card:hover {
-    transform: translateY(-4px);
+.home-card-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
 }
 
-/* ====== BADGE (TOP RIGHT ICON) ====== */
-.course-badge {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 32px;
-    height: 32px;
+/* same size as Courses title */
+.home-card-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+  line-height: 1.25;
 }
 
-/* ====== COURSE INFO ====== */
-.course-type {
-    font-size: 12px;
-    font-weight: bold;
-    color: #7fbaff;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
+/* ====== Footer (edge-to-edge bar then label below, left aligned) ====== */
+.home-card-progress-footer {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 16px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
 }
 
-.course-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin: 4px 0 12px;
+.home-progress-bar-wrapper {
+  width: 100%;
+  height: 14px;
+  background-color: #d9d9d9;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 0;
 }
 
-/* ====== PROGRESS BAR ====== */
-.progress-bar {
-    background-color: #ccc;
-    border-radius: 10px;
-    overflow: hidden;
-    height: 8px;
-    margin-bottom: 8px;
+.home-progress-bar-fill {
+  height: 100%;
+  background-color: #4caf50;     /* same white fill used elsewhere */
+  transition: width 0.4s ease-in-out;
+  border-radius: inherit;
 }
 
-.progress {
-    height: 100%;
-    background-color: #ffffff;
-    transition: width 0.4s ease-in-out;
-    border-radius: 10px;
+.home-progress-percentage {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-align: left;
 }
 
-/* ====== PROGRESS FOOTER ====== */
-.progress-info {
-    display: flex;
-    justify-content: space-between;
-    font-size: 13px;
-    color: #ddd;
-}
-
-/* ====== RECOMMENDED / COURSE CARD BASE ====== */
-.course-card {
-    background-color: #2a3872;
-    border-radius: 16px;
-    padding: 24px;
-    height: 160px;
-    color: white;
-}
-
+/* ====== Recommendations ====== */
 .recommendation-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -120,15 +119,12 @@ body {
   flex-direction: column;
   justify-content: space-between;
   position: relative;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   transition: transform 0.2s ease;
   overflow: hidden;
   cursor: pointer;
 }
-
-.recommendation-card:hover {
-  transform: translateY(-4px);
-}
+.recommendation-card:hover { transform: translateY(-4px); }
 
 .recommendation-thumb {
   position: absolute;
@@ -172,84 +168,37 @@ body {
   margin-top: 6px;
 }
 
-.disabled-link {
-  font-size: 13px;
-  color: #999;
-}
-
-
-
+.disabled-link { font-size: 13px; color: #999; }
 
 /* ====== RESPONSIVE ====== */
-@media (max-width: 768px) {
-    .home-container {
-        padding: 20px;
-    }
-
-    .progress-section h2,
-    .recommended-section h2,
-    .courses-section h2 {
-        font-size: 22px;
-    }
-
-    .progress-card,
-    .recommended-card,
-    .course-card {
-        height: auto;
-    }
-
-    .progress-info {
-        font-size: 12px;
-    }
-
-    .recommended-section {
-        margin-top: 40px;
-    }
-
-    .recommendation-grid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  }
-
-  .recommendation-title {
-    font-size: 16px;
-  }
-
-  .recommendation-thumb {
-    top: 12px;
-    right: 12px;
-    width: 28px;
-    height: 28px;
-  }
-
+@media (max-width: 1200px) {
+  .progress-cards { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 900px) {
+  .progress-cards { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .progress-cards { grid-template-columns: 1fr; }
 }
 
+/* Self-eval section */
 .self-eval-section h2 {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    font-size: 26px
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 26px;
 }
-
-.self-eval-section {
-    margin-top: 40px;
-    margin-bottom: 20px;
-
-}
-
+.self-eval-section { margin-top: 40px; margin-bottom: 20px; }
 .self-eval-button {
-    background-color: #6345be;
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 12px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    display: inline-block;
-    margin: 0;
-    /* ✅ remove unexpected spacing */
+  background-color: #6345be;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: inline-block;
+  margin: 0;
 }
-
-.self-eval-button:hover {
-    background-color: #8b5cf6;
-}
+.self-eval-button:hover { background-color: #8b5cf6; }

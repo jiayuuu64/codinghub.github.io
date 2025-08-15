@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios'; 
 import FinalQuiz from './FinalQuiz'; 
 import '../styles/Lesson.css'; 
+import { toYouTubeEmbed } from '../utils/media';
 
 
 const Lesson = () => {
@@ -162,19 +163,36 @@ const Lesson = () => {
                   <code>{currentStep.content}</code>
                 </pre>
               );
-            case 'video':
-              return currentStep.content.includes('youtube.com') ? (
-                <iframe className="lesson-step-video" src={currentStep.content} title="YouTube video" allowFullScreen></iframe>
-              ) : (
-                <video controls className="lesson-step-video">
-                  <source src={currentStep.content} type="video/mp4" />
-                </video>
-              );
-            case 'text-video':
+            case 'video': {
+              const embed = toYouTubeEmbed(currentStep.content);
+              return embed ? (
+                  <iframe
+                    className="lesson-step-video"
+                    src={embed}
+                    title="YouTube video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    referrerPolicy="strict-origin-when-cross-origin"
+                  />
+                ) : (
+                  <video controls className="lesson-step-video">
+                    <source src={currentStep.content} type="video/mp4" />
+                  </video>
+                );
+              }
+            case 'text-video': {
+              const embed = toYouTubeEmbed(currentStep.content);
               return (
                 <div className="lesson-step-text-video">
-                  {currentStep.content.includes('youtube.com') ? (
-                    <iframe className="lesson-step-video" src={currentStep.content} title="YouTube video" allowFullScreen></iframe>
+                  {embed ? (
+                    <iframe
+                      className="lesson-step-video"
+                      src={embed}
+                      title="YouTube video"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      referrerPolicy="strict-origin-when-cross-origin"
+                    />
                   ) : (
                     <video controls className="lesson-step-video">
                       <source src={currentStep.content} type="video/mp4" />
@@ -182,7 +200,7 @@ const Lesson = () => {
                   )}
                   <p className="lesson-step-text" style={{ marginTop: '1rem' }}>{currentStep.text}</p>
                 </div>
-              );
+              ); }
             case 'text-code':
               return (
                 <div className="lesson-step-text-code">

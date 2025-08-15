@@ -87,6 +87,14 @@
   flex: 1 1 300px;
 }
 
+.lesson-step-video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 12px;
+  display: block;
+}
+
 .lesson-step-text-code {
   width: 100%;
   display: flex;

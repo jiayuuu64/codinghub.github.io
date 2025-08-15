@@ -10,29 +10,36 @@
   margin-bottom: 30px;
 }
 
+/* ==== Grid: 4 per row (responsive) ==== */
 .course-cards {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
 }
+@media (max-width: 1200px) { .course-cards { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 900px)  { .course-cards { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px)  { .course-cards { grid-template-columns: 1fr; } }
 
+/* ==== Card ==== */
 .course-card-catalog {
-  width: 320px; /* 🔧 Match progress card width */
+  position: relative;          /* for footer */
+  width: 100%;
+  box-sizing: border-box;
   background-color: #2a3872;
   border-radius: 16px;
-  padding: 24px;
+  padding: 20px 24px 60px;    /* more bottom space so description isn't cramped */
   display: flex;
   align-items: flex-start;
-  gap: 20px;
+  gap: 16px;
   color: white;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  min-height: 180px;
 }
-
 .course-card-catalog:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 
 .course-card-logo {
@@ -44,48 +51,86 @@
 .course-card-info {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  flex: 1;
+  min-width: 0;
 }
 
 .course-card-title {
   font-size: 20px;
   font-weight: bold;
-  margin-bottom: 6px;
+  margin: 0 0 8px 0;
 }
 
+/* Full description + breathing room above footer */
 .course-card-description {
   font-size: 14px;
   color: #ccc;
-  max-width: 90%;
+  margin: 0 0 20px 0;    /* space before footer */
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .courses-container {
-    padding: 20px;
-  }
+/* ==== Footer (stacked: bar then label) ==== */
+.card-progress-footer {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 16px;
 
-  .courses-heading {
-    font-size: 26px;
-  }
-
-  .course-card-catalog {
-    width: 100%;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .course-card-logo {
-    margin-bottom: 10px;
-  }
-
-  .course-card-title {
-    font-size: 18px;
-  }
-
-  .course-card-description {
-    font-size: 13px;
-  }
+  display: flex;
+  flex-direction: column;   /* bar on top, label below */
+  align-items: stretch;     /* left edges aligned */
+  gap: 8px;                 /* spacing between bar and label */
 }
 
+/* Full-width bar */
+.progress-bar-wrapper {
+  width: 100%;
+  height: 14px;
+  background-color: #d9d9d9;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 0;
+}
 
+.progress-bar-fill {
+  height: 100%;
+  background-color: #4caf50;   /* green progress */
+  transition: width 0.4s ease-in-out;
+  border-radius: inherit;
+}
+
+/* Label below the bar, aligned left */
+.progress-percentage {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  margin-left: 25px;
+}
+
+/* ==== Admin delete button ==== */
+.delete-button {
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  background-color: #8A1F1F;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  max-width: 120px;
+  display: inline-block;
+  white-space: nowrap;
+  margin-right: 30px;
+}
+.delete-button:hover { background-color: darkred; }
+
+/* ==== Mobile tweaks ==== */
+@media (max-width: 600px) {
+  .course-card-catalog { flex-direction: column; }
+  .course-card-logo { margin-bottom: 10px; }
+  .course-card-title { font-size: 18px; }
+  .progress-percentage { font-size: 13px; }
+}
