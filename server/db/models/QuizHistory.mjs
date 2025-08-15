@@ -1,24 +1,27 @@
 import mongoose from 'mongoose';
 
-// This defines the structure for a saved quiz attempt
-const quizHistorySchema = new mongoose.Schema({
-  email: { type: String, required: true },     // Who took the quiz
-  topic: { type: String, required: true },     // Topic of the quiz
-  score: { type: Number, required: true },     // Number of correct answers
-  total: { type: Number, required: true },     // Total number of questions
-  timestamp: { type: Date, default: Date.now },// When the quiz was taken
+const questionDetailSchema = new mongoose.Schema({
+  question: { type: String, required: true },
+  userAnswer: { type: String },
+  correctAnswer: { type: String },
+  wasCorrect: { type: Boolean },
+  // NEW
+  questionHash: { type: String },
+  templateHash: { type: String },
+}, { _id: false });
 
-  // Store full question-level results
-  questionDetails: [
-    {
-      question: { type: String, required: true },
-      userAnswer: { type: String },
-      correctAnswer: { type: String },
-      wasCorrect: { type: Boolean }
-    }
-  ]
+const quizHistorySchema = new mongoose.Schema({
+  email: { type: String, required: true },
+  topic: { type: String, required: true },
+  score: { type: Number, required: true },
+  total: { type: Number, required: true },
+  timestamp: { type: Date, default: Date.now },
+  questionDetails: [questionDetailSchema]
 });
 
-const QuizHistory = mongoose.model('QuizHistory', quizHistorySchema);
+// fast lookups for “have we asked this exact/template before?”
+quizHistorySchema.index({ email: 1, 'questionDetails.questionHash': 1 });
+quizHistorySchema.index({ email: 1, 'questionDetails.templateHash': 1 });
 
+const QuizHistory = mongoose.model('QuizHistory', quizHistorySchema);
 export default QuizHistory;

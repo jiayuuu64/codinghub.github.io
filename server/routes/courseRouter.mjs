@@ -1,5 +1,6 @@
 import express from 'express';
 import Course from '../db/models/Course.mjs';
+import Lesson from '../db/models/Lesson.mjs';
 import { authenticateToken, requireAdmin } from '../middleware/authMiddleware.mjs';
 
 const router = express.Router();
@@ -14,7 +15,9 @@ router.get('/', async (req, res) => {
       throw new Error('⚠️ Course model is not defined or improperly imported');
     }
 
-    const courses = await Course.find();
+    const courses = await Course.find().populate({
+      path: 'sections.lessons'
+    });
 
     if (!courses || courses.length === 0) {
       console.log('ℹ️ No courses found in the database');
@@ -74,14 +77,27 @@ router.post('/:id/sections', authenticateToken, requireAdmin, async (req, res) =
   }
 });
 
+// DELETE /api/courses/:id – Delete a specific course
 router.delete('/:id', async (req, res) => {
   try {
-    await Course.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Course deleted' });
+    const courseId = req.params.id;
+
+    // Find the course by ID
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({ error: 'Course not found' });
+    }
+
+    await Lesson.deleteMany({ courseId });
+
+    // Delete the course itself
+    await Course.findByIdAndDelete(courseId);
+
+    res.json({ message: 'Course and associated data deleted successfully' });
   } catch (err) {
+    console.error('❌ Error in DELETE /api/courses/:id:', err.message);
     res.status(500).json({ error: err.message });
   }
 });
-
 
 export default router;
