@@ -9,20 +9,23 @@ const API = 'https://codinghub-r3bn.onrender.com/api';
 const norm = (s) => (s || '').toLowerCase().replace(/\s+/g, ' ').trim();
 
 const SelfEvalQuiz = () => {
-  const location = useLocation();
+  const location = useLocation(); // reads route state
   const navigate = useNavigate();
   const mode = location.state?.mode || 'adaptive';   // (optional) 'adaptive' | 'review'
 
-  const [quizData, setQuizData] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [userAnswers, setUserAnswers] = useState({});
-  const [showResults, setShowResults] = useState(false);
-  const [score, setScore] = useState(0);
-  const [showAll, setShowAll] = useState(false);
-  const [readerMode, setReaderMode] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // useState: lets you store component data (e.g quiz questions, answers, scores)
+  // useEffect: runs side effects (fetching quiz questions, when component loads)
+  const [quizData, setQuizData] = useState([]); // parsed quiz questions
+  const [currentIndex, setCurrentIndex] = useState(0); // which question is the user on
+  const [userAnswers, setUserAnswers] = useState({}); // stores what the user clicked per question
+  const [showResults, setShowResults] = useState(false); // whether we're on quiz mode or results mode
+  const [score, setScore] = useState(0); // total correct answers
+  const [showAll, setShowAll] = useState(false); // show all answers or only wrong ones
+  const [readerMode, setReaderMode] = useState(false); // enable text-to-speech
+  const [loading, setLoading] = useState(false); // is quiz loading?
   const [error, setError] = useState('');
 
+  // Takes GPT's raw quiz text, parses it, resets the whole quiz state to start fresh
   const resetStateWithText = (text) => {
     const parsed = parseQuizText(text || '');
     setQuizData(parsed);
@@ -32,6 +35,8 @@ const SelfEvalQuiz = () => {
     setScore(0);
   };
 
+  // Calls backend route /quiz-generator/personalized with the logged-in user's email 
+  // Asks backend to generate a personalized quiz based on weak topics
   const fetchQuiz = async () => {
     try {
       setLoading(true);
@@ -65,18 +70,22 @@ const SelfEvalQuiz = () => {
 
   useEffect(() => { fetchQuiz(); }, []);
 
+  // Picks the question the user is currently on
   const currentQn = quizData[currentIndex];
 
+  // Saves the selected answer for the current question
   const handleOptionClick = (option) => setUserAnswers((prev) => ({ ...prev, [currentIndex]: option }));
   const handleNext = () => { stopSpeaking(); if (currentIndex < quizData.length - 1) setCurrentIndex(currentIndex + 1); };
   const handleBack = () => { stopSpeaking(); if (currentIndex > 0) setCurrentIndex(currentIndex - 1); };
   const handleExit = () => { stopSpeaking(); navigate('/home'); };
 
+  // When the user clicks submit -> warns if some questions unanswered
   const handleSubmit = async () => {
     const unanswered = quizData.length - Object.keys(userAnswers).length;
     if (!window.confirm(`You left ${unanswered} question(s) blank. Submit?`)) return;
 
     stopSpeaking();
+    // Calculates how many answers were correct -> updates score -> show results page
     const correctCount = quizData.filter((q, i) => norm(userAnswers[i]) === norm(q.answer)).length;
     setScore(correctCount);
     setShowResults(true);
@@ -100,6 +109,8 @@ const SelfEvalQuiz = () => {
         });
       });
 
+      // Sends per-topic results to backend (quiz-history/save)
+      // This updates weak topics so adaptive quizzes improve over time
       for (const [topic, v] of byTopic.entries()) {
         await fetch(`${API}/quiz-history/save`, {
           method: 'POST',
@@ -118,6 +129,7 @@ const SelfEvalQuiz = () => {
     }
   };
 
+  // Resets everything and fetches a new quiz
   const handleTryAgain = () => {
     stopSpeaking();
     setError('');
