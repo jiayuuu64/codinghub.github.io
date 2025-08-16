@@ -30,7 +30,7 @@ router.post('/', authenticateToken, requireAdmin, async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const formattedSteps = steps.map(step => {
+    const formattedSteps = steps.map(step => { // Loops through each step in the lesson and normalises its structure before saving
       if (step.type === 'quiz') {
         return {
           type: 'quiz',
@@ -48,10 +48,12 @@ router.post('/', authenticateToken, requireAdmin, async (req, res) => {
         };
       }
     });
-
+    // Creates a new lesson document
     const lesson = new Lesson({ title, steps: formattedSteps });
+    // Saves the lesson in the Lesson collection
     await lesson.save();
 
+    // Finds the parent course
     const course = await Course.findById(courseId);
     if (!course) {
       return res.status(404).json({ error: 'Course not found' });
@@ -61,6 +63,7 @@ router.post('/', authenticateToken, requireAdmin, async (req, res) => {
       return res.status(404).json({ error: 'Section not found' });
     }
 
+    // Adds the new lesson's ID into the right section of the course
     course.sections[sectionIndex].lessons.push(lesson._id);
     await course.save();
 

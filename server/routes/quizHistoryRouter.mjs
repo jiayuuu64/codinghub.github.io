@@ -1,6 +1,7 @@
 import express from 'express';
 import QuizHistory from '../db/models/QuizHistory.mjs';
 import { questionHash, templateHash } from '../utils/hashing.mjs';
+// Imports helper functions that make hashes (fingerprints) of questions, used for tracking/reducing duplicates
 
 const router = express.Router();
 
@@ -11,11 +12,12 @@ router.post('/save', async (req, res) => {
       return res.status(400).json({ error: 'Missing fields' });
     }
 
+    // If questionDetails is an array, map through each question
     const details = Array.isArray(questionDetails) ? questionDetails.map(q => ({
       ...q,
-      questionHash: questionHash(q.question || ''),
-      templateHash: templateHash(q.question || ''),
-    })) : [];
+      questionHash: questionHash(q.question || ''), // Add a questionHash (unique fingerprint of exact text)
+      templateHash: templateHash(q.question || ''), // Add a templateHash (maybe detects duplicates even if the wording changes)
+    })) : []; // If no array, fall back to empty list
 
     await new QuizHistory({ email, topic, score, total, questionDetails: details }).save();
     res.json({ message: 'Saved successfully' });
@@ -32,6 +34,7 @@ router.get('/weak-topics', async (req, res) => {
 
     const history = await QuizHistory.find({ email });
 
+    // Builds an object tallying total score vs total questions for each topic
     const topicScores = {};
     for (const { topic, score, total } of history) {
       if (!topicScores[topic]) topicScores[topic] = { score: 0, total: 0 };
@@ -39,6 +42,7 @@ router.get('/weak-topics', async (req, res) => {
       topicScores[topic].total += total;
     }
 
+    // Filters topcis where accuracy < 70% -> calls them weak topics
     const weakTopics = Object.entries(topicScores)
       .filter(([_, v]) => v.total > 0 && (v.score / v.total) < 0.7)
       .map(([topic]) => topic);
