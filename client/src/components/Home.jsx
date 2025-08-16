@@ -163,7 +163,7 @@ const Home = () => {
           ) : cleanedTopics.length > 0 ? (
             <>
               <p style={{ color: '#ccc', marginBottom: 10, textAlign: 'center' }}>
-                You’re currently weaker in: <strong>{topicsLine}</strong>.
+                Based on the quizzes you have taken in past lessons, you’re currently weaker in: <strong>{topicsLine}</strong>.
               </p>
               <button className="self-eval-button" onClick={handleStartQuiz}>
                 Start Personalized Quiz
