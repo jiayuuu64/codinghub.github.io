@@ -31,7 +31,7 @@ const AdminRoute = ({ children }) => {
     const isAuth = isAuthenticated();
 
     if (!isAuth) return <Navigate to="/" />;
-    if (!isAdmin) return <Navigate to="/home" />;
+    if (!isAdmin) return <Navigate to="/" />;
 
     return children;
 };

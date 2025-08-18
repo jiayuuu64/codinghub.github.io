@@ -21,15 +21,15 @@ const SelfEvalQuiz = () => {
   const [showResults, setShowResults] = useState(false); // whether we're on quiz mode or results mode
   const [score, setScore] = useState(0); // total correct answers
   const [showAll, setShowAll] = useState(false); // show all answers or only wrong ones
-  const [readerMode, setReaderMode] = useState(false); // enable text-to-speech
+  const [readerMode, setReaderMode] = useState(false); // enable -speech
   const [loading, setLoading] = useState(false); // is quiz loading?
   const [error, setError] = useState('');
 
   // Takes GPT's raw quiz text, parses it, resets the whole quiz state to start fresh
   const resetStateWithText = (text) => {
     const parsed = parseQuizText(text || '');
-    setQuizData(parsed);
-    setCurrentIndex(0);
+    setQuizData(parsed); // The raw quiz text from GPT is parsed into structured objects (question, options, correct answer, explanation)
+    setCurrentIndex(0); // which React then renders into the quiz UI
     setUserAnswers({});
     setShowResults(false);
     setScore(0);

@@ -103,6 +103,8 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
     }
 
     // Fetch personalized AI learning resources using LangChain backend
+    // After a learner finishes the final quiz, we calculate their score
+    // If they score below 80% we trigger an API call to our LangChain backend
     try {
       const response = await axios.post('https://codinghub-r3bn.onrender.com/api/ai/recommend', {
         score: correctCount,       // User's score
@@ -110,6 +112,7 @@ const FinalQuiz = ({ questions, onFinish, userAnswers, setUserAnswers, courseTit
         email,                     // User's email
       });
 
+      // LangChain is used to select and format relevant articles and videos
       // Extract recommendation string and convert it into an array of suggestions
       const lines = response.data.recommendations.split('\n').filter(line => line.trim() !== '');
 
