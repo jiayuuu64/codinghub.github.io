@@ -40,6 +40,9 @@ router.post('/personalized', async (req, res) => {
     for (const { topic, score, total } of history) {
       if (!topic) continue; // Skip if no topic recorded
       if (!topicScores[topic]) topicScores[topic] = { score: 0, total: 0 }; // If this is the first time seeing this topic, initialise counters
+
+      // This looks at the user's past quiz history, tallies scores per topic, marks any topic where accuracy is <70% as 'weak'
+
       topicScores[topic].score += Number(score) || 0;
       topicScores[topic].total += Number(total) || 0; // Add scores and totals for that topic
     }

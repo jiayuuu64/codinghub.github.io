@@ -102,8 +102,12 @@ function getRandomItems(arr, n) {
 }
 
 // === Main Recommendation Route ===
+// Format the AI's output into neat, structured text
+// Chain steps together: get the quiz score, select resource type, generate recommendations
+// Not fully agentic (it does not go out and fetch new resources on its own)
+// This route is called when a user finishes a quiz
 router.post('/recommend', async (req, res) => {
-  const { score, courseTitle, email } = req.body;
+  const { score, courseTitle, email } = req.body; // We take their quiz score, course title and email
 
   // Validate inputs
   if (score === undefined || !courseTitle || !email) {
@@ -112,7 +116,7 @@ router.post('/recommend', async (req, res) => {
 
   try {
     // Find user in the database
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }); 
     if (!user) return res.status(404).json({ error: 'User not found' });
 
     // Find course in the database
@@ -123,6 +127,7 @@ router.post('/recommend', async (req, res) => {
     let selectedVideos = [];
 
     // Match course title to content category
+    // Select relevant articles and videos
     const lower = courseTitle.toLowerCase();
     if (lower.includes('html') || lower.includes('css')) {
       selectedArticles = getRandomItems(htmlcssArticles, 2); // 2 articles
